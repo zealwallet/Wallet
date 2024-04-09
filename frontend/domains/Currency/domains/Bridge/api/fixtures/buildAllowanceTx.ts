@@ -1,0 +1,8 @@
+export const buildAllowanceTxEthereumUSDC: unknown = {
+    success: true,
+    result: {
+        data: '0x095ea7b30000000000000000000000003a23f943181408eac424116af7b7790c94cb97a50000000000000000000000000000000000000000000000000000000005f5e100',
+        to: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+        from: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
+    },
+}

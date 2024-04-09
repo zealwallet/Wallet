@@ -1,0 +1,26 @@
+export const erc20TransactionByHash: unknown = {
+    jsonrpc: '2.0',
+    id: 652110130,
+    result: {
+        blockHash:
+            '0x09291154906749404dfe2bd0f9236cea36d74280432d25fb579a5a84633c7045',
+        blockNumber: '0x2aaf1ab',
+        from: '0x61640a8d48bca205ba91b16b0b7745e7abc61084',
+        gas: '0xfbf6',
+        gasPrice: '0x2bef828cc8',
+        maxFeePerGas: '0x43f6883acc',
+        maxPriorityFeePerGas: '0x12dbf9ea00',
+        hash: '0xa3b072cff5d0c01aeaa61079fa98cb8e373da077ab19cd903e864753038559fd',
+        input: '0xa9059cbb00000000000000000000000061640a8d48bca205ba91b16b0b7745e7abc6108400000000000000000000000000000000000000000000000000000000000f4240',
+        nonce: '0x18f',
+        to: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
+        transactionIndex: '0x7',
+        value: '0x0',
+        type: '0x2',
+        accessList: [],
+        chainId: '0x89',
+        v: '0x0',
+        r: '0xf06f928f8ae881bb113301f199e39be4ffc6007ee8facfe524bade62b1668c12',
+        s: '0x3295a90b6c2f900876e2c13135d7dad4560652bb43f28fe60acd0771ab369777',
+    },
+}

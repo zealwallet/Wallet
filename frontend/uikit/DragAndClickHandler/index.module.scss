@@ -1,0 +1,24 @@
+.DragHandle {
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 28px;
+}
+
+.Base {
+    display: flex;
+    box-sizing: border-box;
+
+    font-family: inherit;
+
+    font-size: inherit;
+    color: inherit;
+
+    font-weight: inherit;
+
+    text-decoration: none;
+    font-style: inherit;
+
+    border: none;
+    padding: 0;
+}

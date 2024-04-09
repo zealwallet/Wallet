@@ -1,0 +1,12 @@
+name: "Setup Java and Android SDK"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-java@v3
+      with:
+        java-version: "17"
+        distribution: "temurin"
+        cache: gradle
+    - uses: android-actions/setup-android@v3
+      with:
+        cmdline-tools-version: 9862592

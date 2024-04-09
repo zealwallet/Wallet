@@ -1,0 +1,51 @@
+{
+  "name": "zeal",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "private",
+  "private": true,
+  "workspaces": [
+    "frontend/api",
+    "frontend/eslint-config",
+    "frontend/eslint-plugin-zeal-domains",
+    "frontend/mobile",
+    "frontend/domains",
+    "frontend/my-app",
+    "frontend/toolkit",
+    "frontend/uikit",
+    "frontend/wallet",
+    "frontend/top-up-dapp",
+    "frontend/passkeys"
+  ],
+  "scripts": {
+    "start": "run-p start:wallet start:top-up-dapp",
+    "start:wallet": "yarn workspace wallet start",
+    "start:top-up-dapp": "yarn workspace top-up-dapp start",
+    "build:dev": "run-p build:dev:wallet build:dev:top-up-dapp",
+    "build:dev:wallet": "yarn workspace wallet tsc && yarn workspace wallet build:dev",
+    "build:dev:top-up-dapp": "yarn workspace top-up-dapp build:dev",
+    "build:prod": "run-p build:prod:wallet build:prod:top-up-dapp",
+    "build:prod:wallet": "yarn workspace wallet tsc && yarn workspace wallet build:prod",
+    "build:prod:top-up-dapp": "yarn workspace top-up-dapp build:prod",
+    "test": "yarn workspace wallet test",
+    "test:ci": "yarn workspace wallet test:ci",
+    "lint": "yarn workspaces foreach --recursive --parallel --from 'frontend/*' run lint",
+    "compress:dev": "yarn workspace wallet compress:dev",
+    "compress:prod": "yarn workspace wallet compress:prod",
+    "inject-sourcemaps-debug-id:wallet": "yarn workspace wallet inject-sourcemaps-debug-id",
+    "inject-sourcemaps-debug-id:top-up-dapp": "yarn workspace top-up-dapp inject-sourcemaps-debug-id",
+    "upload-sourcemaps:top-up-dapp": "yarn workspace top-up-dapp upload-sourcemaps",
+    "release:wallet": "yarn workspace wallet release",
+    "postinstall": "husky"
+  },
+  "packageManager": "yarn@4.1.1",
+  "devDependencies": {
+    "@types/react-transition-group": "^4.4.10",
+    "husky": "9.0.11",
+    "npm-run-all": "4.1.5"
+  },
+  "dependencies": {
+    "@trezor/connect-plugin-ethereum": "9.0.3",
+    "react-transition-group": "^4.4.5"
+  }
+}

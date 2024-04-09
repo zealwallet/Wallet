@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        maven {
+            credentials {
+                username = System.getenv("GITHUB_USER") ?: "$githubPackagesUsername"
+                password = System.getenv("GITHUB_TOKEN") ?: "$githubPackagesToken"
+            }
+            url "https://maven.pkg.github.com/zealwallet/openapi-generator"
+        }
+        gradlePluginPortal()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.namespace == 'org.openapi') {
+                useModule("org.openapitools:openapi-generator-gradle-plugin:6.2.1.5")
+            }
+        }
+    }
+}
+rootProject.name = 'zeal'
+
+include('backend:core')
+include('backend:wallet-api')
+include('backend:data:common')
+include('backend:data:bronze')
+include('backend:data:gold-metrics')
+include('backend:data:gold-tokens')
+include('backend:data:dev')

@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "waderyan.gitblame",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "arcanis.vscode-zipfs",
+        "dbaeumer.vscode-eslint"
+    ]
+}

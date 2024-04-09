@@ -1,0 +1,40 @@
+{
+    "cli": {
+        "version": ">= 5.4.0"
+    },
+    "build": {
+        "base": {
+            "node": "20.8.0"
+        },
+        "local": {
+            "extends": "base",
+            "developmentClient": true,
+            "distribution": "internal",
+            "env": {
+                "ZEAL_ENV": "local"
+            },
+            "android": {
+                "gradleCommand": ":app:assembleDebug"
+            }
+        },
+        "development": {
+            "extends": "base",
+            "distribution": "internal",
+            "env": {
+                "ZEAL_ENV": "development"
+            },
+            "android": {
+                "gradleCommand": ":app:assembleRelease"
+            }
+        },
+        "production": {
+            "extends": "base",
+            "env": {
+                "ZEAL_ENV": "production"
+            }
+        }
+    },
+    "submit": {
+        "production": {}
+    }
+}

@@ -1,0 +1,20 @@
+name: "Setup node and yarn env with cache"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: ".nvmrc"
+    - run: corepack enable
+      shell: bash
+    - uses: actions/cache@v4
+      id: yarn-cache
+      with:
+        path: |
+          **/node_modules
+          .yarn/cache
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}${{ hashFiles('**/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - run: yarn
+      shell: bash

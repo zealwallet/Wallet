@@ -1,0 +1,18 @@
+[submodule "smart-contracts/lib/openzeppelin-contracts"]
+	path = smart-contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "smart-contracts/lib/safe-contracts"]
+	path = smart-contracts/lib/safe-contracts
+	url = https://github.com/safe-global/safe-contracts
+[submodule "smart-contracts/lib/FreshCryptoLib"]
+	path = smart-contracts/lib/FreshCryptoLib
+	url = https://github.com/rdubois-crypto/FreshCryptoLib
+[submodule "smart-contracts/lib/account-abstraction"]
+	path = smart-contracts/lib/account-abstraction
+	url = https://github.com/eth-infinitism/account-abstraction
+[submodule "smart-contracts/lib/forge-std"]
+	path = smart-contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "smart-contracts/lib/safe-modules"]
+	path = smart-contracts/lib/safe-modules
+	url = https://github.com/safe-global/safe-modules

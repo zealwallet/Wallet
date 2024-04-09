@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html class="layout" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Bold.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Medium.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Regular.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-SemiBold.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <style>
+            @font-face {
+                font-family: 'Lexend';
+                font-display: swap;
+                font-weight: 400;
+                src: url('/fonts/Lexend-Regular.ttf');
+            }
+
+            @font-face {
+                font-family: 'Lexend';
+                font-display: swap;
+                font-weight: 500;
+                src: url('/fonts/Lexend-Medium.ttf');
+            }
+
+            @font-face {
+                font-family: 'Lexend';
+                font-display: swap;
+                font-weight: 600;
+                src: url('/fonts/Lexend-SemiBold.ttf');
+            }
+
+            @font-face {
+                font-family: 'Lexend';
+                font-display: swap;
+                font-weight: 700;
+                src: url('/fonts/Lexend-Bold.ttf');
+            }
+
+            *,
+            html,
+            body {
+                font-family: Lexend, sans-serif !important;
+            }
+
+            button {
+                cursor: pointer;
+            }
+        </style>
+
+        <title>Zeal</title>
+    </head>
+    <body class="layout">
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div class="layout" id="root"></div>
+
+        <script
+            src="allow_only_zwidget.js"
+            type="application/javascript"
+        ></script>
+    </body>
+</html>

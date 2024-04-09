@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="layout" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <title>Zeal</title>
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Bold.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Medium.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Regular.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-SemiBold.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <style>
+            @keyframes bounce {
+                0% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-5px);
+                }
+                100% {
+                    transform: translateY(0);
+                }
+            }
+
+            .bouncing {
+                animation-name: bounce;
+                animation-duration: 1s;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+            }
+
+            .zeal {
+                background-image: url('zeal_world.svg');
+                position: fixed;
+                left: 45px;
+                top: 45px;
+                width: 71px;
+                height: 28px;
+            }
+
+            .layout {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    288.09deg,
+                    #ffffff -0.39%,
+                    #e4e7eb 100.87%
+                );
+            }
+
+            iframe {
+                width: 360px;
+                height: 600px;
+                border: none;
+                box-shadow: 0px 2px 20px rgba(27, 44, 53, 0.08);
+                border-radius: 12px;
+            }
+
+            .pin-widget {
+                position: fixed;
+                top: 15px;
+                right: 15px;
+                pointer-events: none;
+            }
+
+            .pin-widget-arrow {
+                position: absolute;
+                top: 15px;
+                left: 12px;
+                pointer-events: none;
+            }
+
+            .hidden {
+                display: none;
+            }
+        </style>
+        <script type="text/javascript" src="/vendor/confetti.min.js"></script>
+        <script
+            async
+            src="page_entrypoint.js"
+            type="application/javascript"
+        ></script>
+    </head>
+    <body class="layout">
+        <div class="zeal"></div>
+
+        <div class="pin-widget hidden">
+            <img src="./svgs/pin-widget-body.svg" />
+            <img
+                class="pin-widget-arrow bouncing"
+                src="./svgs/pin-widget-arrow.svg"
+            />
+        </div>
+    </body>
+</html>

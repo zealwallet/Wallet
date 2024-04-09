@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="layout" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="icon" type="image/x-icon" href="favicon.png" />
+        <title>Zeal Top Up</title>
+
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Bold.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Medium.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-Regular.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="preload"
+            as="font"
+            href="/fonts/Lexend-SemiBold.ttf"
+            type="font/ttf"
+            crossorigin="anonymous"
+        />
+        <style>
+            @font-face {
+                font-family: 'Lexend';
+                font-display: swap;
+                font-weight: 400;
+                src: url('/fonts/Lexend-Regular.ttf');
+            }
+
+            @font-face {
+                font-family: 'Lexend';
+                font-display: swap;
+                font-weight: 500;
+                src: url('/fonts/Lexend-Medium.ttf');
+            }
+
+            @font-face {
+                font-family: 'Lexend';
+                font-display: swap;
+                font-weight: 600;
+                src: url('/fonts/Lexend-SemiBold.ttf');
+            }
+
+            @font-face {
+                font-family: 'Lexend';
+                font-display: swap;
+                font-weight: 700;
+                src: url('/fonts/Lexend-Bold.ttf');
+            }
+
+            *,
+            html,
+            body {
+                font-family: Lexend, sans-serif !important;
+            }
+
+            body {
+                margin: 0;
+                -webkit-font-smoothing: antialiased !important;
+                -moz-osx-font-smoothing: grayscale !important;
+                width: 100%;
+                height: 100%;
+                display: flex;
+            }
+
+            button {
+                cursor: pointer;
+            }
+            .zeal {
+                background-image: url('zeal-world.svg');
+                position: fixed;
+                left: 45px;
+                top: 45px;
+                width: 71px;
+                height: 28px;
+            }
+
+            .layout {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+                background: linear-gradient(
+                    288.09deg,
+                    #ffffff -0.39%,
+                    #e4e7eb 100.87%
+                );
+            }
+
+            .app-version {
+                position: absolute;
+                bottom: -25px;
+                color: rgb(154, 165, 177);
+                font-weight: 400;
+                line-height: 15px;
+                font-size: 12px;
+            }
+
+            .container {
+                position: relative;
+                display: flex;
+                justify-content: center;
+            }
+
+            #root {
+                width: 360px;
+                height: 600px;
+                border: none;
+                box-shadow: 0 2px 20px rgba(27, 44, 53, 0.08);
+                border-radius: 12px;
+            }
+
+            wcm-modal {
+                z-index: 99999;
+            }
+        </style>
+    </head>
+    <body class="layout">
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div class="zeal"></div>
+        <div class="container">
+            <div class="layout" id="root"></div>
+            <div class="app-version"></div>
+        </div>
+    </body>
+</html>

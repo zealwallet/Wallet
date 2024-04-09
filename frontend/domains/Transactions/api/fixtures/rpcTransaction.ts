@@ -1,0 +1,26 @@
+export const rpcTransaction: unknown = {
+    jsonrpc: '2.0',
+    id: 971847005,
+    result: {
+        blockHash:
+            '0xf55541efd20e75581003ede463fc8670604c9bc5886bb353ce69f3e011e38ca6',
+        blockNumber: '0x2cfc113',
+        from: '0x61640a8d48bca205ba91b16b0b7745e7abc61084',
+        gas: '0x3043e',
+        gasPrice: '0x1fcb95ca7c',
+        maxFeePerGas: '0x341b32cda2',
+        maxPriorityFeePerGas: '0xc1b710800',
+        hash: '0xcd308cf650ed6e5947c944272d9babd9a9f315890ac26ce564c499bdec892b88',
+        input: '0x42842e0e00000000000000000000000061640a8d48bca205ba91b16b0b7745e7abc610840000000000000000000000002b5da0943d4bb11c6be776de3af9e9c31e24605c0000000000000000000000000000000000000000000000000000000000002f81',
+        nonce: '0x24a',
+        to: '0x30517529cb5c16f686c6d0b48faae5d250d43005',
+        transactionIndex: '0x1e',
+        value: '0x0',
+        type: '0x2',
+        accessList: [],
+        chainId: '0x89',
+        v: '0x0',
+        r: '0x982dbadf824eef6e402d35970655e396dc17f58d9acef976329b5495a550d734',
+        s: '0x32fc90aecd1d668e27c27b60396010abceed3476c416daa46278b3135e7cd4e0',
+    },
+}

@@ -1,0 +1,1 @@
+yarn workspaces foreach --recursive --from 'frontend/*' run lint-staged

@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.build.json",
+
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@zeal/*": ["frontend/*"],
+            "src/*": ["./src/*"]
+        },
+        "noEmit": true
+    }
+}

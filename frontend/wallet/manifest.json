@@ -1,0 +1,69 @@
+{
+  "short_name": "Zeal",
+  "name": "Zeal Wallet",
+  "description": "The Ethereum DeFi wallet with free bank transfers",
+  "version": "0.5.1",
+  "manifest_version": 3,
+  "minimum_chrome_version": "107",
+  "permissions": ["storage", "identity"],
+  "host_permissions": ["https://www.googleapis.com/*"],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk2gDsPQyIlEwIESeaxYTvVhT0ZbH0Wnw6E6mvKIShY7RsFDGJ7GhkkHswUdQuAMCfZTkyL3FEQbPjCachu2wv9mkcGP+vAT8C3+qvtUIkdh0+qdJcvIw7ZpwKgHMCUkcHpO4OCEWACDEiUiNDw2yVDQOYeysWecQXOjlnnL0GJ+iEmzO+ruH/rtgTwTcOfdFINV+8XOgXesbIGLQFJeTP/S4HJoKmTK10HyKxiXFApZdeOrp0GW+Eo3f3QNmdJfKAZuksHIMU8OxElEm081riSmWRF4r9/IjYOYJizJSc4yU9sJQxXMrU1vm96LWqc7PjDhYlR7jC4BLv5aoQaIA6QIDAQAB",
+  "oauth2": {
+    "client_id": "1002320678938-qet9emn7ebpf16jteud36btbuldr920m.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.appdata",
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["zwidget.html"],
+      "matches": ["https://*/*"],
+      "use_dynamic_url": true
+    }
+  ],
+  "content_scripts": [
+    {
+      "js": ["content_script.js"],
+      "matches": ["https://*/*"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "js": ["./vendor/trezor-web-extension-content-script.min.js"],
+      "matches": [
+        "*://connect.trezor.io/8/popup.html",
+        "*://connect.trezor.io/9/popup.html"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "index.html?type=extension&mode=popup",
+    "default_icon": {
+      "16": "action-16.png",
+      "32": "action-32.png",
+      "48": "action-48.png",
+      "128": "action-128.png"
+    }
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "windows": "Alt+Z",
+        "mac": "Alt+Z",
+        "chromeos": "Alt+Z",
+        "linux": "Alt+Z"
+      }
+    }
+  },
+  "icons": {
+    "16": "page-16.png",
+    "32": "page-32.png",
+    "48": "page-48.png",
+    "128": "page-128.png"
+  }
+}

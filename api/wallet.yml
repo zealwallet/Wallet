@@ -1,0 +1,4297 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: Portfolio API
+paths:
+  /wallet/portfolio/{address}/:
+    get:
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: forceRefresh
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Search results matching criteria.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Portfolio"
+        "500":
+          description: Zapper is unavailable or there's a mapping error.
+      tags:
+        - Portfolio
+
+  /wallet/transaction/activity/{address}/:
+    get:
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: network
+          required: false
+          schema:
+            $ref: "#/components/schemas/Network"
+        - in: query
+          name: scam
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: timestampLessThan
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Transaction history for the given address.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionActivity"
+        "500":
+          description: DeBank is unavailable or there's a mapping error.
+      tags:
+        - TransactionActivity
+  /wallet/rpc/:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      summary: Proxies requests to RPC node
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RpcNodeRequest"
+      responses:
+        "200":
+          description: Response from RPC Node
+          content:
+            application/json:
+              schema:
+                title: RpcNodeResponse
+                oneOf:
+                  - $ref: "#/components/schemas/RpcNodeSuccessResponse"
+                  - $ref: "#/components/schemas/RpcNodeErrorResponse"
+        "500":
+          description: RPC Node provider responded with an error or other internal error
+      tags:
+        - Node RPC
+  /wallet/rpc/bundler/:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      summary: Proxies requests to bundler RPC node
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RpcNodeRequest"
+      responses:
+        "200":
+          description: Response from RPC Node
+          content:
+            application/json:
+              schema:
+                title: RpcNodeResponse
+                oneOf:
+                  - $ref: "#/components/schemas/RpcNodeSuccessResponse"
+                  - $ref: "#/components/schemas/RpcNodeErrorResponse"
+        "500":
+          description: Bundler RPC node provider responded with an error or other internal error
+      tags:
+        - Bundler RPC node
+
+  /wallet/rpc/paymaster/:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      summary: Proxies requests to paymaster RPC node
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RpcNodeRequest"
+      responses:
+        "200":
+          description: Response from RPC Node
+          content:
+            application/json:
+              schema:
+                title: RpcNodeResponse
+                oneOf:
+                  - $ref: "#/components/schemas/RpcNodeSuccessResponse"
+                  - $ref: "#/components/schemas/RpcNodeErrorResponse"
+        "500":
+          description: Paymaster RPC node provider responded with an error or other internal error
+      tags:
+        - Paymaster RPC node
+
+  /wallet/unblock/:
+    post:
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnblockPath"
+      summary: Unblock API url path with all the query parameters
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Response from Unblock API
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Unblock
+    put:
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnblockPath"
+      summary: Unblock API url path with all the query parameters
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Response from Unblock API
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Unblock
+    patch:
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnblockPath"
+      summary: Unblock API url path with all the query parameters
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Response from Unblock API
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Unblock
+    get:
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnblockPath"
+      summary: Unblock API url path with all the query parameters
+      responses:
+        "200":
+          description: Response from Unblock API
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Unblock
+
+  /wallet/unblock/webhook/:
+    get:
+      summary: Returns all the payload received by the webhook for a given user
+      responses:
+        "200":
+          description: Unblock items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Unblock
+
+  /wallet/smart-wallet/unblock/webhook/:
+    get:
+      summary: Returns all the payload received by the webhook for a given address
+      parameters:
+        - in: query
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Unblock items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Smart Wallet
+
+  /wallet/smart-wallet/unblock/:
+    post:
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnblockPath"
+      summary: Unblock API url path with all the query parameters
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Response from Unblock API
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Smart Wallet
+    put:
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnblockPath"
+      summary: Unblock API url path with all the query parameters
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Response from Unblock API
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Smart Wallet
+    patch:
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnblockPath"
+      summary: Unblock API url path with all the query parameters
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Response from Unblock API
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Smart Wallet
+    get:
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UnblockPath"
+      summary: Unblock API url path with all the query parameters
+      responses:
+        "200":
+          description: Response from Unblock API
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Authorization header is missing or invalid
+        "500":
+          description: Unblock responded with an error or other internal error
+      tags:
+        - Smart Wallet
+  /wallet/smart-wallet/unblock/{recoveryId}/recover:
+    post:
+      parameters:
+        - in: path
+          name: recoveryId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecoveredUnblockUser"
+          description: Unblock user has been recovered
+      tags:
+        - Smart Wallet
+
+  /wallet/rate/default/{network}/{address}/:
+    get:
+      parameters:
+        - in: path
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Rate of a given cryptocurrency in default currency (USD)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FxRateResponse"
+        "404":
+          description: Rate can't be found for a given crypto currency
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        "500":
+          description: Coingecko is not available or other internal error
+      tags:
+        - Rate
+
+  /wallet/rate/crypto:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/CryptoFxRateRequest"
+      responses:
+        "200":
+          description: Exchange rate of the given cryptocurrency pairs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FxRateCryptoResponse"
+        "404":
+          description: Rate can't be found for a given crypto currency pairs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+        "500":
+          description: Coingecko is not available or other internal error
+      tags:
+        - Rate
+
+  /wallet/transaction/simulate/:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendTransactionParameters"
+      responses:
+        "200":
+          description: Result of transaction simulation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimulateTransactionResponse"
+        "500":
+          description: Tenderly is not available other internal error
+      tags:
+        - Transaction Simulation
+
+  /wallet/user-ops-transaction/simulate:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendUserOpParameters"
+      responses:
+        "200":
+          description: Result of transaction simulation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimulateTransactionResponse"
+        "500":
+          description: Tenderly is not available other internal error
+      tags:
+        - User Operation Transaction
+
+  /wallet/safe-transaction/simulate/:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendTransactionParameters"
+      responses:
+        "200":
+          description: Result of transaction simulation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimulateTransactionResponse"
+        "500":
+          description: Tenderly is not available other internal error
+      tags:
+        - Safe Transaction Simulation
+
+  /wallet/fee/gas-abstraction-forecast/:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SimulatedGasEstimate"
+      responses:
+        "200":
+          description: Result of fee estimates from relayer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GasAbstractionFeeForecast"
+        "500":
+          description: Gas price estimation 3rd party provider is unavailable or another internal error
+      tags:
+        - Gas Abstraction Fee Forecast
+
+  /wallet/sign-message/simulate/:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      requestBody:
+        required: true
+        content:
+          # not necessary json object like in case Permit or Permit2 but can be any random string
+          text/plain:
+            schema:
+              type: string
+      responses:
+        "200":
+          description: Result of message signing simulation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimulateMessageSigningResponse"
+      tags:
+        - Sign Message Simulation
+  /wallet/rpc-sign-message/simulate/:
+    post:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RpcNodeRequest"
+      responses:
+        "200":
+          description: Result of message signing simulation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimulateMessageSigningResponse"
+      tags:
+        - Sign Message Simulation
+  /wallet/transaction/{hash}/result:
+    get:
+      parameters:
+        - in: query
+          name: network
+          required: true
+          schema:
+            $ref: "#/components/schemas/Network"
+        - in: path
+          name: hash
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Result of completed transaction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmittedTransactionResultResponse"
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+          description: Transaction is in failed state
+        "500":
+          description: Internal error
+      tags:
+        - Transaction Simulation
+
+  /wallet/user-ops-transaction/result:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserOpsTransactionResultRequest"
+      responses:
+        "200":
+          description: Result of completed transaction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmittedTransactionResultResponse"
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+          description: Transaction is in failed state
+        "500":
+          description: Internal error
+      tags:
+        - User Operation Transaction
+
+  /wallet/user-ops-transaction/fee:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserOpsFinalFeeRequest"
+      responses:
+        "200":
+          description: Result of completed transaction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserOpsFinalFee"
+        "500":
+          description: Internal error
+      tags:
+        - User Operation Transaction
+
+  /wallet/fee/forecast:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeesForecastRequest"
+      responses:
+        "200":
+          description: Standard, Fast, Instant gas price estimations based on current network state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeesForecastResponse"
+        "500":
+          description: Gas price estimation 3rd party provider is unavailable or another internal error
+      tags:
+        - Fee Forecast
+
+  /wallet/safetychecks/connection/:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DAppSiteInfo"
+      responses:
+        "200":
+          description: List of safety checks for connection with DApp
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionSafetyChecksResponse"
+        "500":
+          description: Internal error while performing connection safetychecks
+      tags:
+        - Connection Safety Check
+
+  /wallet/metrics:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserEvent"
+      responses:
+        "200":
+          description: User event has been submitted
+        "500":
+          description: Internal error while performing user event submission
+      tags:
+        - Metrics
+
+  /wallet/currencies/bridge:
+    get:
+      responses:
+        "200":
+          description: Map of all possible bridges on all known networks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BridgeCurrenciesResponse"
+        "500":
+          description: Internal error while fetching bridge currencies
+      tags:
+        - Bridge Currencies
+
+  /wallet/approvals/{address}:
+    get:
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of all token approval for the address
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApprovalsResponse"
+        "500":
+          description: Internal error while fetching approvals
+      tags:
+        - Approvals
+
+  /wallet/smart-wallet:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSmartWalletRequest"
+      responses:
+        "200":
+          description: Smart wallet has been created
+      tags:
+        - Smart Wallet
+
+  /wallet/notifications/registration:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationRegistrationRequest"
+      responses:
+        "200":
+          description: Notification registration has been created
+      tags:
+        - Notifications
+  /wallet/currencies:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CurrenciesRequest"
+      responses:
+        "200":
+          description: List of currencies
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrenciesResponse"
+      tags:
+        - Currencies
+  /wallet/rewards/campaign:
+    get:
+      responses:
+        "200":
+          description: Returns currently active Rewards campaign
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewardsCampaignResponse"
+      tags:
+        - Rewards
+  /wallet/rewards/inviter/{address}/code:
+    get:
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns inviter code for the given address
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewardsInviterCodeResponse"
+      tags:
+        - Rewards
+  /wallet/rewards/inviter/{address}/invitees:
+    get:
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Returns information about invitees for a given inviter address
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewardsInviteesResponse"
+      tags:
+        - Rewards
+  /wallet/rewards/code/redeem:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RewardsCodeRedeemRequest"
+      responses:
+        "200":
+          description: Redeems inviter code for invitee address
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RewardsCodeRedeemResponse"
+        "422":
+          description: Inviter code is invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorResponse"
+      tags:
+        - Rewards
+components:
+  schemas:
+    RewardsCampaignResponse:
+      required:
+        - name
+        - status
+        - startDate
+        - endDate
+        - inviteesLimit
+        - completedInvitees
+      properties:
+        name:
+          type: string
+        startDate:
+          type: integer
+          format: timestamp
+        endDate:
+          type: integer
+          format: timestamp
+        inviteesLimit:
+          type: integer
+        completedInvitees:
+          type: integer
+        status:
+          $ref: "#/components/schemas/RewardsCampaignStatus"
+    RewardsCampaignStatus:
+      type: string
+      enum:
+        - Active
+        - Completed
+        - Paid
+    RewardsInviterCodeResponse:
+      required:
+        - code
+      properties:
+        code:
+          type: string
+    RewardsInviteesResponse:
+      required:
+        - inviteesWithUnblockedTransfers
+        - inviteesWithVerifiedIdentity
+        - inviteesWithCompletedTransactions
+        - campaign
+      properties:
+        inviteesWithUnblockedTransfers:
+          type: integer
+        inviteesWithVerifiedIdentity:
+          type: integer
+        inviteesWithCompletedTransactions:
+          type: integer
+        campaign:
+          $ref: "#/components/schemas/RewardsCampaignResponse"
+    RewardsCodeRedeemRequest:
+      required:
+        - code
+        - invitee
+      properties:
+        code:
+          type: string
+        invitee:
+          type: string
+          format: address
+    RewardsCodeRedeemResponse:
+      type: object
+    CurrenciesRequest:
+      type: array
+      items:
+        $ref: "#/components/schemas/CurrenciesNetworkAddresses"
+    CurrenciesNetworkAddresses:
+      type: object
+      required:
+        - network
+        - addresses
+      properties:
+        network:
+          $ref: "#/components/schemas/Network"
+        addresses:
+          type: array
+          items:
+            type: string
+            format: address
+    CurrenciesResponse:
+      type: object
+      required:
+        - currencies
+      properties:
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+    RecoveredUnblockUser:
+      type: object
+      required:
+        - unblockUserId
+      properties:
+        unblockUserId:
+          type: string
+          nullable: true
+    CreateSmartWalletRequest:
+      type: object
+      required:
+        - address
+        - recoveryId
+        - xyCoordinates
+      properties:
+        address:
+          type: string
+          format: address
+        recoveryId:
+          type: string
+        xyCoordinates:
+          type: string
+
+    UnblockPath:
+      type: string
+      enum:
+        - "/auth/login"
+        - "/user/kyc/applicant"
+        - "/user"
+        - "/user/kyc/applicant/token"
+        - "/user/transactions"
+        - "/user/wallet/polygon"
+        - "/user/bank-account/unblock"
+        - "/user/bank-account/remote"
+        - "/user/token-preferences"
+        - "/auth/otp"
+
+    UserEvent:
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/PortfolioLoadingEvent"
+        - $ref: "#/components/schemas/PortfolioLoadingFailedEvent"
+        - $ref: "#/components/schemas/ConnectionRequestedEvent"
+        - $ref: "#/components/schemas/ConnectionToggledToMetamaskEvent"
+        - $ref: "#/components/schemas/TransactionRequestedEvent"
+        - $ref: "#/components/schemas/TransactionSubmittedEvent"
+        - $ref: "#/components/schemas/WalletUninstalledEvent"
+        - $ref: "#/components/schemas/AddFundsFromAnyWalletEvent"
+        - $ref: "#/components/schemas/TopUpDappOpenedEvent"
+        - $ref: "#/components/schemas/TopUpTransactionSubmittedEvent"
+        - $ref: "#/components/schemas/TransactionReplacementRequestedEvent"
+        - $ref: "#/components/schemas/DAppConnectedEvent"
+        - $ref: "#/components/schemas/DAppOpenedEvent"
+
+    BridgeCurrenciesResponse:
+      type: object
+      required:
+        - currencies
+        - supportedCurrencies
+        - lastUpdated
+      properties:
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+        supportedCurrencies:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/NetworkCurrencies"
+        lastUpdated:
+          type: integer
+          format: timestamp
+          nullable: true
+
+    NetworkCurrencies:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/BridgeCurrencyDetails"
+
+    BridgeCurrencyDetails:
+      type: object
+      properties:
+        from:
+          type: array
+          items:
+            type: string
+        to:
+          type: array
+          items:
+            type: string
+        canRefuel:
+          type: boolean
+
+    PortfolioLoadingEvent:
+      type: object
+      required:
+        - type
+        - installationId
+        - keystoreType
+        - keystoreId
+      properties:
+        type:
+          enum:
+            - PortfolioLoadingEvent
+          x-excluded-property: "true"
+        installationId:
+          type: string
+        keystoreId:
+          type: string
+        keystoreType:
+          $ref: "#/components/schemas/KeystoreType"
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    PortfolioLoadingFailedEvent:
+      type: object
+      required:
+        - type
+        - installationId
+        - keystoreType
+        - keystoreId
+      properties:
+        type:
+          enum:
+            - PortfolioLoadingFailedEvent
+          x-excluded-property: "true"
+        installationId:
+          type: string
+        keystoreId:
+          type: string
+        keystoreType:
+          $ref: "#/components/schemas/KeystoreType"
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    TransactionRequestedEvent:
+      type: object
+      required:
+        - type
+        - installationId
+        - network
+        - keystoreType
+        - source
+        - keystoreId
+      properties:
+        type:
+          enum:
+            - TransactionRequestedEvent
+          x-excluded-property: "true"
+        keystoreId:
+          type: string
+        installationId:
+          type: string
+        network:
+          type: string
+        keystoreType:
+          $ref: "#/components/schemas/KeystoreType"
+        source:
+          $ref: "#/components/schemas/TransactionEventSource"
+          nullable: true
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    TransactionSubmittedEvent:
+      type: object
+      required:
+        - type
+        - network
+        - installationId
+        - keystoreType
+        - source
+        - keystoreId
+      properties:
+        type:
+          enum:
+            - TransactionSubmittedEvent
+          x-excluded-property: "true"
+        network:
+          type: string
+        installationId:
+          type: string
+        keystoreId:
+          type: string
+        keystoreType:
+          $ref: "#/components/schemas/KeystoreType"
+        source:
+          $ref: "#/components/schemas/TransactionEventSource"
+          nullable: true
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    TransactionReplacementRequestedEvent:
+      type: object
+      required:
+        - type
+        - network
+        - installationId
+        - keystoreType
+        - source
+        - replacementType
+        - keystoreId
+      properties:
+        type:
+          enum:
+            - TransactionReplacementRequestedEvent
+          x-excluded-property: "true"
+        network:
+          type: string
+        installationId:
+          type: string
+        keystoreId:
+          type: string
+        keystoreType:
+          $ref: "#/components/schemas/KeystoreType"
+        source:
+          $ref: "#/components/schemas/TransactionEventSource"
+          nullable: true
+        replacementType:
+          $ref: "#/components/schemas/TransactionReplacementType"
+          nullable: true
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    TransactionEventSource:
+      type: string
+      enum:
+        - "zwidget"
+        - "bridge"
+        - "bridgeApprove"
+        - "swap"
+        - "swapApprove"
+        - "send"
+        - "offramp"
+        - "transactionRequestWidget"
+
+    TransactionReplacementType:
+      type: string
+      enum:
+        - "cancel"
+        - "speedup"
+
+    WalletUninstalledEvent:
+      type: object
+      required:
+        - type
+        - installationId
+      properties:
+        type:
+          enum:
+            - WalletUninstalledEvent
+          x-excluded-property: "true"
+        installationId:
+          type: string
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    AddFundsFromAnyWalletEvent:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - AddFundsFromAnyWalletEvent
+          x-excluded-property: "true"
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    DAppOpenedEvent:
+      type: object
+      required:
+        - type
+        - host
+      properties:
+        type:
+          enum:
+            - DAppOpenedEvent
+          x-excluded-property: "true"
+        host:
+          type: string
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    DAppConnectedEvent:
+      type: object
+      required:
+        - type
+        - host
+      properties:
+        type:
+          enum:
+            - DAppConnectedEvent
+          x-excluded-property: "true"
+        host:
+          type: string
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    TopUpDappOpenedEvent:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - TopUpDappOpenedEvent
+          x-excluded-property: "true"
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    TopUpTransactionSubmittedEvent:
+      type: object
+      required:
+        - type
+        - network
+      properties:
+        type:
+          enum:
+            - TopUpTransactionSubmittedEvent
+          x-excluded-property: "true"
+        network:
+          type: string
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    ConnectionRequestedEvent:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - ConnectionRequestedEvent
+          x-excluded-property: "true"
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    ConnectionToggledToMetamaskEvent:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - ConnectionToggledToMetamaskEvent
+          x-excluded-property: "true"
+      x-implements: [it.zeal.wallet.client.dto.UserEventDto]
+
+    KeystoreType:
+      type: string
+      enum:
+        - Ledger
+        - Trezor
+        - SecretPhrase
+        - PrivateKey
+        - Contact
+        - Safe
+
+    ConnectionSafetyChecksResponse:
+      type: object
+      required:
+        - dAppInfo
+        - checks
+      properties:
+        dAppInfo:
+          $ref: "#/components/schemas/DAppSiteInfo"
+        checks:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConnectionSafetyCheck"
+
+    ConnectionSafetyCheck:
+      type: object
+      discriminator:
+        propertyName: type
+      x-custom-discriminator: "true"
+      oneOf:
+        - $ref: "#/components/schemas/SuspiciousCharactersCheckFailed"
+        - $ref: "#/components/schemas/SuspiciousCharactersCheckPassed"
+        - $ref: "#/components/schemas/BlacklistCheckFailed"
+        - $ref: "#/components/schemas/BlacklistCheckPassed"
+        - $ref: "#/components/schemas/DAppVerificationCheckFailed"
+        - $ref: "#/components/schemas/DAppVerificationCheckPassed"
+
+    SuspiciousCharactersCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - suspiciousPart
+      properties:
+        type:
+          enum:
+            - SuspiciousCharactersCheck
+          x-excluded-property: "true"
+        suspiciousPart:
+          $ref: "#/components/schemas/Range"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+      x-implements: [it.zeal.wallet.client.dto.ConnectionSafetyCheckDto]
+      x-custom-discriminator-value: SuspiciousCharactersCheck
+
+    SuspiciousCharactersCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+      properties:
+        type:
+          enum:
+            - SuspiciousCharactersCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+      x-implements: [it.zeal.wallet.client.dto.ConnectionSafetyCheckDto]
+      x-custom-discriminator-value: SuspiciousCharactersCheck
+
+    DAppVerificationCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - checkSource
+      properties:
+        type:
+          enum:
+            - DAppVerificationCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: [it.zeal.wallet.client.dto.ConnectionSafetyCheckDto]
+      x-custom-discriminator-value: DAppVerificationCheck
+
+    DAppVerificationCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - verificationUrl
+        - source
+        - checkSource
+      properties:
+        type:
+          enum:
+            - DAppVerificationCheck
+          x-excluded-property: "true"
+        verificationUrl:
+          type: string
+          nullable: true
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+        source:
+          type: string
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: [it.zeal.wallet.client.dto.ConnectionSafetyCheckDto]
+      x-custom-discriminator-value: DAppVerificationCheck
+
+    BlacklistCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - checkSource
+      properties:
+        type:
+          enum:
+            - BlacklistCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: [it.zeal.wallet.client.dto.ConnectionSafetyCheckDto]
+      x-custom-discriminator-value: BlacklistCheck
+
+    BlacklistCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - checkSource
+      properties:
+        type:
+          enum:
+            - BlacklistCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: [it.zeal.wallet.client.dto.ConnectionSafetyCheckDto]
+      x-custom-discriminator-value: BlacklistCheck
+
+    SafetyCheckSeverity:
+      type: string
+      enum:
+        - Caution
+        - Danger
+
+    SafetyCheckFailedState:
+      type: string
+      enum:
+        - Failed
+
+    SafetyCheckPassedState:
+      type: string
+      enum:
+        - Passed
+
+    DAppSiteInfo:
+      type: object
+      required:
+        - hostname
+        - avatar
+        - title
+      properties:
+        hostname:
+          type: string
+        avatar:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+
+    Range:
+      type: object
+      required:
+        - start
+        - end
+      properties:
+        start:
+          type: integer
+        end:
+          type: integer
+
+    TransactionSafetyCheck:
+      type: object
+      discriminator:
+        propertyName: type
+      x-custom-discriminator: "true"
+      oneOf:
+        - $ref: "#/components/schemas/TransactionSimulationCheckFailed"
+        - $ref: "#/components/schemas/TransactionSimulationCheckPassed"
+        - $ref: "#/components/schemas/TokenVerificationCheckFailed"
+        - $ref: "#/components/schemas/TokenVerificationCheckPassed"
+        - $ref: "#/components/schemas/SmartContractedBlacklistCheckFailed"
+        - $ref: "#/components/schemas/SmartContractBlacklistCheckPassed"
+        - $ref: "#/components/schemas/NftCollectionCheckPassed"
+        - $ref: "#/components/schemas/NftCollectionCheckFailed"
+        - $ref: "#/components/schemas/P2pReceiverTypeCheckPassed"
+        - $ref: "#/components/schemas/P2pReceiverTypeCheckFailed"
+        - $ref: "#/components/schemas/ApprovalSpenderTypeCheckPassed"
+        - $ref: "#/components/schemas/ApprovalSpenderTypeCheckFailed"
+
+    TransactionSimulationCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - message
+        - checkSource
+      properties:
+        type:
+          enum:
+            - TransactionSimulationCheck
+          x-excluded-property: "true"
+        message:
+          type: string
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: [it.zeal.wallet.client.dto.TransactionSafetyCheckDto]
+      x-custom-discriminator-value: TransactionSimulationCheck
+
+    TransactionSimulationCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - simulationUrl
+        - checkSource
+      properties:
+        type:
+          enum:
+            - TransactionSimulationCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+        simulationUrl:
+          type: string
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: [it.zeal.wallet.client.dto.TransactionSafetyCheckDto]
+      x-custom-discriminator-value: TransactionSimulationCheck
+    SafetyCheckSource:
+      type: object
+      required:
+        - source
+        - url
+      properties:
+        source:
+          enum:
+            - BlockAid
+            - Tenderly
+            - Alchemy
+            - DappRadar
+            - DefiLlama
+            - Zeal
+            - Rarible
+            - CoinGecko
+        url:
+          type: string
+          nullable: true
+
+    TokenVerificationCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - currencyId
+        - checkSource
+      properties:
+        type:
+          enum:
+            - TokenVerificationCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+        currencyId:
+          type: string
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: TransactionSafetyCheckDto, SignMessageSafetyCheckDto
+      x-custom-discriminator-value: TokenVerificationCheck
+
+    TokenVerificationCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - currencyId
+        - checkSource
+      properties:
+        type:
+          enum:
+            - TokenVerificationCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+        currencyId:
+          type: string
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: TransactionSafetyCheckDto, SignMessageSafetyCheckDto
+      x-custom-discriminator-value: TokenVerificationCheck
+
+    SmartContractBlacklistCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - checkSource
+      properties:
+        type:
+          enum:
+            - SmartContractBlacklistCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: TransactionSafetyCheckDto, SignMessageSafetyCheckDto
+      x-custom-discriminator-value: SmartContractBlacklistCheck
+
+    SmartContractedBlacklistCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - checkSource
+      properties:
+        type:
+          enum:
+            - SmartContractBlacklistCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: TransactionSafetyCheckDto, SignMessageSafetyCheckDto
+      x-custom-discriminator-value: SmartContractBlacklistCheck
+
+    NftCollectionCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - nftCollectionAddress
+        - source
+        - checkSource
+      properties:
+        type:
+          enum:
+            - NftCollectionCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+        nftCollectionAddress:
+          type: string
+        source:
+          type: string
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: [it.zeal.wallet.client.dto.TransactionSafetyCheckDto]
+      x-custom-discriminator-value: NftCollectionCheck
+
+    P2pReceiverTypeCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+      properties:
+        type:
+          enum:
+            - P2pReceiverTypeCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+      x-implements: [it.zeal.wallet.client.dto.TransactionSafetyCheckDto]
+      x-custom-discriminator-value: P2pReceiverTypeCheck
+
+    P2pReceiverTypeCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+      properties:
+        type:
+          enum:
+            - P2pReceiverTypeCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+      x-implements: [it.zeal.wallet.client.dto.TransactionSafetyCheckDto]
+      x-custom-discriminator-value: P2pReceiverTypeCheck
+
+    ApprovalSpenderTypeCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+      properties:
+        type:
+          enum:
+            - ApprovalSpenderTypeCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+      x-implements: TransactionSafetyCheckDto, SignMessageSafetyCheckDto
+      x-custom-discriminator-value: ApprovalSpenderTypeCheck
+
+    ApprovalSpenderTypeCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+      properties:
+        type:
+          enum:
+            - ApprovalSpenderTypeCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+      x-implements: TransactionSafetyCheckDto, SignMessageSafetyCheckDto
+      x-custom-discriminator-value: ApprovalSpenderTypeCheck
+
+    ApprovalExpirationLimitCheckPassed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+      properties:
+        type:
+          enum:
+            - ApprovalExpirationLimitCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckPassedState"
+      x-implements: SignMessageSafetyCheckDto
+      x-custom-discriminator-value: ApprovalExpirationLimitCheck
+
+    ApprovalExpirationLimitCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+      properties:
+        type:
+          enum:
+            - ApprovalExpirationLimitCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+      x-implements: SignMessageSafetyCheckDto
+      x-custom-discriminator-value: ApprovalExpirationLimitCheck
+
+    NftCollectionCheckFailed:
+      type: object
+      required:
+        - type
+        - severity
+        - state
+        - nftCollectionAddress
+        - source
+        - checkSource
+      properties:
+        type:
+          enum:
+            - NftCollectionCheck
+          x-excluded-property: "true"
+        severity:
+          $ref: "#/components/schemas/SafetyCheckSeverity"
+        state:
+          $ref: "#/components/schemas/SafetyCheckFailedState"
+        nftCollectionAddress:
+          type: string
+        source:
+          type: string
+        checkSource:
+          $ref: "#/components/schemas/SafetyCheckSource"
+      x-implements: [it.zeal.wallet.client.dto.TransactionSafetyCheckDto]
+      x-custom-discriminator-value: NftCollectionCheck
+
+    SendTransactionParameters:
+      type: object
+      required:
+        - from
+        - data
+      properties:
+        from:
+          type: string
+          format: address
+        to:
+          type: string
+          format: address
+          nullable: true
+        data:
+          type: string
+          format: transaction-data
+        value:
+          type: string
+          format: transaction-value
+          nullable: true
+        gas:
+          $ref: "#/components/schemas/Hexadecimal"
+          nullable: true
+
+    SendUserOpParameters:
+      type: object
+      required:
+        - sender
+        - nonce
+        - initCode
+        - callData
+        - callGasLimit
+        - verificationGasLimit
+        - preVerificationGas
+        - maxFeePerGas
+        - maxPriorityFeePerGas
+        - paymasterAndData
+        - signature
+      properties:
+        sender:
+          type: string
+          format: address
+        nonce:
+          type: string
+          format: hex
+        initCode:
+          type: string
+          format: hex
+          nullable: true
+        callData:
+          type: string
+          format: hex
+        callGasLimit:
+          type: string
+          format: hex
+          nullable: true
+        verificationGasLimit:
+          type: string
+          format: hex
+          nullable: true
+        preVerificationGas:
+          type: string
+          format: hex
+          nullable: true
+        maxFeePerGas:
+          type: string
+          format: hex
+          nullable: true
+        maxPriorityFeePerGas:
+          type: string
+          format: hex
+          nullable: true
+        paymasterAndData:
+          type: string
+          format: hex
+          nullable: true
+        signature:
+          type: string
+          format: hex
+          nullable: true
+
+    FxRateResponse:
+      type: object
+      required:
+        - rate
+        - currencies
+      properties:
+        rate:
+          $ref: "#/components/schemas/FxRate"
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+
+    FxRateCryptoResponse:
+      type: object
+      required:
+        - rate
+        - currencies
+      properties:
+        rate:
+          type: array
+          items:
+            $ref: "#/components/schemas/FxRate"
+        currencies:
+            $ref: "#/components/schemas/Currencies"
+
+    SubmittedTransactionResultResponse:
+      type: object
+      required:
+        - transaction
+        - currencies
+      properties:
+        transaction:
+          $ref: "#/components/schemas/SimulatedTransaction"
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+
+    SimulateMessageSigningResponse:
+      type: object
+      required:
+        - message
+        - currencies
+        - checks
+      properties:
+        message:
+          $ref: "#/components/schemas/SimulatedSignMessage"
+        checks:
+          type: array
+          items:
+            $ref: "#/components/schemas/SignMessageSafetyCheck"
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+
+    SimulatedSignMessage:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/PermitSignMessage"
+        - $ref: "#/components/schemas/DaiPermitSignMessage"
+        - $ref: "#/components/schemas/Permit2SignMessage"
+        - $ref: "#/components/schemas/UnknownSignMessage"
+    PermitSignMessage:
+      type: object
+      required:
+        - type
+        - allowance
+        - approveTo
+      properties:
+        type:
+          enum:
+            - PermitSignMessage
+          x-excluded-property: "true"
+        allowance:
+          $ref: "#/components/schemas/PermitAllowance"
+          # it's not necessary smart contract it might be eoa as well,
+          # maybe we need to reconsider types here as well for transaction simulation
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+      x-implements: SimulatedSignMessageDto
+    DaiPermitSignMessage:
+      type: object
+      required:
+        - type
+        - allowance
+        - approveTo
+      properties:
+        type:
+          enum:
+            - DaiPermitSignMessage
+          x-excluded-property: "true"
+        allowance:
+          $ref: "#/components/schemas/PermitAllowance"
+          # it's not necessary smart contract it might be eoa as well,
+          # maybe we need to reconsider types here as well for transaction simulation
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+      x-implements: SimulatedSignMessageDto
+    Permit2SignMessage:
+      type: object
+      required:
+        - type
+        - allowances
+        - approveTo
+      properties:
+        type:
+          enum:
+            - Permit2SignMessage
+          x-excluded-property: "true"
+        allowances:
+          type: array
+          items:
+            $ref: "#/components/schemas/PermitAllowance"
+          # it's not necessary smart contract it might be eoa as well,
+          # maybe we need to reconsider types here as well for transaction simulation
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+      x-implements: SimulatedSignMessageDto
+    PermitAllowance:
+      type: object
+      required:
+        - amount
+        - unlimitedAmountValue
+        - expiration
+        - infiniteExpirationValue
+      properties:
+        amount:
+          $ref: "#/components/schemas/ApprovalAmount"
+        unlimitedAmountValue:
+          type: string
+          format: bigint
+        expiration:
+          $ref: "#/components/schemas/Expiration"
+        infiniteExpirationValue:
+          type: string
+          format: bigint
+    Expiration:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/FiniteExpiration"
+        - $ref: "#/components/schemas/InfiniteExpiration"
+    FiniteExpiration:
+      type: object
+      required:
+        - type
+        - timestamp
+      properties:
+        type:
+          enum:
+            - FiniteExpiration
+          x-excluded-property: "true"
+        timestamp:
+          type: integer
+          format: timestamp
+      x-implements: ExpirationDto
+    InfiniteExpiration:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - InfiniteExpiration
+          x-excluded-property: "true"
+      x-implements: ExpirationDto
+    UnknownSignMessage:
+      type: object
+      required:
+        - type
+        - rawMessage
+      properties:
+        type:
+          enum:
+            - UnknownSignMessage
+          x-excluded-property: "true"
+        rawMessage:
+          type: string
+      x-implements: SimulatedSignMessageDto
+    SignMessageSafetyCheck:
+      type: object
+      discriminator:
+        propertyName: type
+      x-custom-discriminator: "true"
+      oneOf:
+        - $ref: "#/components/schemas/TokenVerificationCheckFailed"
+        - $ref: "#/components/schemas/TokenVerificationCheckPassed"
+        - $ref: "#/components/schemas/SmartContractedBlacklistCheckFailed"
+        - $ref: "#/components/schemas/SmartContractBlacklistCheckPassed"
+        - $ref: "#/components/schemas/ApprovalSpenderTypeCheckPassed"
+        - $ref: "#/components/schemas/ApprovalSpenderTypeCheckFailed"
+        - $ref: "#/components/schemas/ApprovalExpirationLimitCheckPassed"
+        - $ref: "#/components/schemas/ApprovalExpirationLimitCheckFailed"
+
+    SimulateTransactionResponse:
+      type: object
+      required:
+        - transaction
+        - currencies
+        - checks
+      properties:
+        transaction:
+          $ref: "#/components/schemas/SimulatedTransaction"
+        checks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionSafetyCheck"
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+
+    FeesForecastRequest:
+      type: object
+      required:
+        - gasEstimate
+        - gasLimit
+        - address
+        - selectedPreset
+        - network
+        - sendTransactionParams
+      properties:
+        sendTransactionParams:
+          $ref: "#/components/schemas/SendTransactionParameters"
+        network:
+          $ref: "#/components/schemas/Network"
+        gasEstimate:
+          $ref: "#/components/schemas/Hexadecimal"
+        gasLimit:
+          $ref: "#/components/schemas/Hexadecimal"
+        address:
+          type: string
+        selectedPreset:
+          $ref: "#/components/schemas/FeesForecastSelectedPreset"
+
+    FeesForecastSelectedPreset:
+      discriminator:
+        propertyName: type
+      x-custom-discriminator: "true"
+      oneOf:
+        - $ref: "#/components/schemas/FeesForecastRequestSelectedZealPredefinedSlow"
+        - $ref: "#/components/schemas/FeesForecastRequestSelectedZealPredefinedNormal"
+        - $ref: "#/components/schemas/FeesForecastRequestSelectedZealPredefinedFast"
+        - $ref: "#/components/schemas/FeesForecastRequestSelectedPresetCustom"
+
+    FeesForecastRequestSelectedZealPredefinedSlow:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - Slow
+          x-excluded-property: "true"
+      x-implements: [it.zeal.wallet.client.dto.FeesForecastSelectedPresetDto]
+      x-custom-discriminator-value: Slow
+
+    FeesForecastRequestSelectedZealPredefinedNormal:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - Normal
+          x-excluded-property: "true"
+      x-implements: [it.zeal.wallet.client.dto.FeesForecastSelectedPresetDto]
+      x-custom-discriminator-value: Normal
+
+    FeesForecastRequestSelectedZealPredefinedFast:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - Fast
+          x-excluded-property: "true"
+      x-implements: [it.zeal.wallet.client.dto.FeesForecastSelectedPresetDto]
+      x-custom-discriminator-value: Fast
+
+    FeesForecastRequestSelectedPresetCustom:
+      type: object
+      required:
+        - type
+        - fee
+      properties:
+        type:
+          enum:
+            - Custom
+          x-excluded-property: "true"
+        fee:
+          $ref: "#/components/schemas/CustomPresetRequestFee"
+      x-implements: [it.zeal.wallet.client.dto.FeesForecastSelectedPresetDto]
+      x-custom-discriminator-value: Custom
+
+    CustomPresetRequestFee:
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/LegacyCustomPresetRequestFee"
+        - $ref: "#/components/schemas/Eip1559CustomPresetRequestFee"
+
+    LegacyCustomPresetRequestFee:
+      type: object
+      required:
+        - type
+        - gasPrice
+      properties:
+        type:
+          enum:
+            - LegacyCustomPresetRequestFee
+          x-excluded-property: true
+        gasPrice:
+          $ref: "#/components/schemas/Hexadecimal"
+      x-implements: [it.zeal.wallet.client.dto.CustomPresetRequestFeeDto]
+
+    Eip1559CustomPresetRequestFee:
+      type: object
+      required:
+        - type
+        - maxPriorityFee
+        - maxBaseFee
+      properties:
+        type:
+          enum:
+            - Eip1559CustomPresetRequestFee
+          x-excluded-property: true
+        maxPriorityFee:
+          $ref: "#/components/schemas/Hexadecimal"
+        maxBaseFee:
+          $ref: "#/components/schemas/Hexadecimal"
+      x-implements: [it.zeal.wallet.client.dto.CustomPresetRequestFeeDto]
+
+    FeesForecastResponse:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/FeesForecastResponseLegacyFee"
+        - $ref: "#/components/schemas/FeesForecastResponseEip1559Fee"
+
+    GasAbstractionFeeForecast:
+      type: object
+      required:
+        - currencies
+        - feeOptions
+      properties:
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+        feeOptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/GasAbstractionFeeOption"
+
+    GasAbstractionFeeOption:
+      type: object
+      required:
+        - feeInTokenCurrency
+      properties:
+        feeInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+          nullable: true
+        feeInTokenCurrency:
+          $ref: "#/components/schemas/Money"
+
+    FeesForecastResponseLegacyFee:
+      type: object
+      required:
+        - type
+        - slow
+        - normal
+        - fast
+        - custom
+        - balanceInNativeCurrency
+        - nonce
+        - currencies
+        - networkState
+      properties:
+        type:
+          enum:
+            - FeesForecastResponseLegacyFee
+          x-excluded-property: true
+        slow:
+          $ref: "#/components/schemas/LegacyFee"
+        normal:
+          $ref: "#/components/schemas/LegacyFee"
+        fast:
+          $ref: "#/components/schemas/LegacyFee"
+        custom:
+          nullable: true
+          $ref: "#/components/schemas/LegacyFee"
+        nonce:
+          type: integer
+        networkState:
+          $ref: "#/components/schemas/LegacyNetworkState"
+        balanceInNativeCurrency:
+          $ref: "#/components/schemas/Money"
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+      x-implements: [it.zeal.wallet.client.dto.FeesForecastResponseDto]
+
+    FeesForecastResponseEip1559Fee:
+      type: object
+      required:
+        - type
+        - slow
+        - normal
+        - fast
+        - custom
+        - balanceInNativeCurrency
+        - nonce
+        - networkState
+        - currencies
+      properties:
+        type:
+          enum:
+            - FeesForecastResponseEip1559Fee
+          x-excluded-property: true
+        slow:
+          $ref: "#/components/schemas/Eip1559Fee"
+        normal:
+          $ref: "#/components/schemas/Eip1559Fee"
+        fast:
+          $ref: "#/components/schemas/Eip1559Fee"
+        custom:
+          nullable: true
+          $ref: "#/components/schemas/Eip1559Fee"
+        nonce:
+          type: integer
+        networkState:
+          $ref: "#/components/schemas/Eip1559NetworkState"
+        balanceInNativeCurrency:
+          $ref: "#/components/schemas/Money"
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+      x-implements: [it.zeal.wallet.client.dto.FeesForecastResponseDto]
+
+    NetworkState:
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/Eip1559NetworkState"
+        - $ref: "#/components/schemas/LegacyNetworkState"
+
+    LegacyNetworkState:
+      type: object
+      required:
+        - type
+        - durationMs
+        - minGasPrice
+        - maxGasPrice
+      properties:
+        type:
+          enum:
+            - LegacyNetworkState
+          x-excluded-property: true
+        durationMs:
+          type: integer
+        minGasPrice:
+          $ref: "#/components/schemas/Hexadecimal"
+        maxGasPrice:
+          $ref: "#/components/schemas/Hexadecimal"
+      x-implements: [it.zeal.wallet.client.dto.NetworkStateDto]
+
+    Eip1559NetworkState:
+      type: object
+      required:
+        - type
+        - durationMs
+        - minPriorityFee
+        - maxPriorityFee
+        - baseFee
+      properties:
+        type:
+          enum:
+            - Eip1559NetworkState
+          x-excluded-property: true
+        durationMs:
+          type: integer
+        minPriorityFee:
+          $ref: "#/components/schemas/Hexadecimal"
+        maxPriorityFee:
+          $ref: "#/components/schemas/Hexadecimal"
+        baseFee:
+          $ref: "#/components/schemas/Hexadecimal"
+      x-implements: [it.zeal.wallet.client.dto.NetworkStateDto]
+
+    TransactionFees:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/Eip1559TransactionFees"
+        - $ref: "#/components/schemas/LegacyTransactionFees"
+
+    Eip1559TransactionFees:
+      type: object
+      required:
+        - type
+        - standard
+        - fast
+        - instant
+      properties:
+        type:
+          enum:
+            - Eip1559TransactionFees
+          x-excluded-property: "true"
+        standard:
+          $ref: "#/components/schemas/Eip1559Fee"
+        fast:
+          $ref: "#/components/schemas/Eip1559Fee"
+        instant:
+          $ref: "#/components/schemas/Eip1559Fee"
+      x-implements: [it.zeal.wallet.client.dto.TransactionFeesDto]
+
+    LegacyTransactionFees:
+      type: object
+      required:
+        - type
+        - standard
+        - fast
+        - instant
+      properties:
+        type:
+          enum:
+            - LegacyTransactionFee
+          x-excluded-property: "true"
+        standard:
+          $ref: "#/components/schemas/LegacyFee"
+        fast:
+          $ref: "#/components/schemas/LegacyFee"
+        instant:
+          $ref: "#/components/schemas/LegacyFee"
+      x-implements: [it.zeal.wallet.client.dto.TransactionFeesDto]
+
+    EstimatedFee:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/LegacyFee"
+        - $ref: "#/components/schemas/Eip1559Fee"
+
+    LegacyFee:
+      type: object
+      required:
+        - type
+        - gasPrice
+        - priceInDefaultCurrency
+        - maxPriceInDefaultCurrency
+        - priceInNativeCurrency
+        - maxPriceInNativeCurrency
+        - forecastDuration
+      properties:
+        type:
+          enum:
+            - LegacyFee
+          x-excluded-property: "true"
+        gasPrice:
+          $ref: "#/components/schemas/Hexadecimal"
+        priceInDefaultCurrency:
+          nullable: true
+          $ref: "#/components/schemas/Money"
+        maxPriceInDefaultCurrency:
+          nullable: true
+          $ref: "#/components/schemas/Money"
+        priceInNativeCurrency:
+          $ref: "#/components/schemas/Money"
+        maxPriceInNativeCurrency:
+          $ref: "#/components/schemas/Money"
+        forecastDuration:
+          $ref: "#/components/schemas/ForecastDuration"
+      x-implements: [it.zeal.wallet.client.dto.EstimatedFeeDto]
+
+    ForecastDuration:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/WithinForecast"
+        - $ref: "#/components/schemas/OutsideOfForecast"
+
+    OutsideOfForecast:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          enum:
+            - OutsideOfForecast
+          x-excluded-property: true
+      x-implements: [it.zeal.wallet.client.dto.ForecastDurationDto]
+    WithinForecast:
+      type: object
+      required:
+        - type
+        - durationMs
+      properties:
+        type:
+          enum:
+            - WithinForecast
+          x-excluded-property: true
+        durationMs:
+          type: integer
+      x-implements: [it.zeal.wallet.client.dto.ForecastDurationDto]
+    Eip1559Fee:
+      type: object
+      required:
+        - type
+        - maxPriorityFeePerGas
+        - maxFeePerGas
+        - baseFee
+        - forecastDuration
+        - priceInNativeCurrency
+        - maxPriceInNativeCurrency
+        - priceInDefaultCurrency
+        - maxPriceInDefaultCurrency
+      properties:
+        type:
+          enum:
+            - Eip1559Fee
+          x-excluded-property: "true"
+        maxPriorityFeePerGas:
+          $ref: "#/components/schemas/Hexadecimal"
+        maxFeePerGas:
+          $ref: "#/components/schemas/Hexadecimal"
+        baseFee:
+          $ref: "#/components/schemas/Hexadecimal"
+        forecastDuration:
+          $ref: "#/components/schemas/ForecastDuration"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+          nullable: true
+        maxPriceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+          nullable: true
+        priceInNativeCurrency:
+          $ref: "#/components/schemas/Money"
+        maxPriceInNativeCurrency:
+          $ref: "#/components/schemas/Money"
+      x-implements: [it.zeal.wallet.client.dto.EstimatedFeeDto]
+
+    SimulatedTransaction:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/ApprovalTransaction"
+        - $ref: "#/components/schemas/UnknownTransaction"
+        - $ref: "#/components/schemas/FailedTransaction"
+        - $ref: "#/components/schemas/NftCollectionApprovalTransaction"
+        - $ref: "#/components/schemas/SingleNftApprovalTransaction"
+        - $ref: "#/components/schemas/P2PTransaction"
+        - $ref: "#/components/schemas/P2PNftTransaction"
+
+    GasEstimate:
+      type: object
+      required:
+        - type
+        - gas
+      properties:
+        type:
+          enum:
+            - GasEstimate
+          x-excluded-property: "true"
+        gas:
+          $ref: "#/components/schemas/Hexadecimal"
+      x-implements: [it.zeal.wallet.client.dto.SimulatedGasEstimateDto]
+
+    OptimisticRollupGasEstimate:
+      type: object
+      required:
+        - type
+        - l1Gas
+        - l2Gas
+      properties:
+        type:
+          enum:
+            - OptimisticRollupGasEstimate
+          x-excluded-property: "true"
+        l1Gas:
+          $ref: "#/components/schemas/Hexadecimal"
+        l2Gas:
+          $ref: "#/components/schemas/Hexadecimal"
+      x-implements: [it.zeal.wallet.client.dto.SimulatedGasEstimateDto]
+
+    SimulatedGasEstimate:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/GasEstimate"
+        - $ref: "#/components/schemas/OptimisticRollupGasEstimate"
+
+    UserOpFeeEstimateRequest:
+      type: object
+      required:
+        - erc20GasEstimates
+        - nativeTokenGasEstimate
+        - maxFeePerGas
+      properties:
+        nativeTokenGasEstimate:
+          $ref: "#/components/schemas/UserOpTokenGasEstimate"
+        erc20GasEstimates:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserOpTokenGasEstimate"
+        maxFeePerGas:
+          $ref: "#/components/schemas/Hexadecimal"
+
+    UserOpTokenGasEstimate:
+      type: object
+      required:
+          - tokenAddress
+          - gasEstimate
+      properties:
+        tokenAddress:
+          type: string
+          format: address
+        gasEstimate:
+          $ref: "#/components/schemas/Hexadecimal"
+
+    ApprovalTransaction:
+      type: object
+      required:
+        - type
+        - amount
+        - gas
+        - approveTo
+        - simulatedGas
+      properties:
+        type:
+          enum:
+            - ApprovalTransaction
+          x-excluded-property: "true"
+        amount:
+          $ref: "#/components/schemas/ApprovalAmount"
+        gas:
+          $ref: "#/components/schemas/Hexadecimal"
+        simulatedGas:
+          $ref: "#/components/schemas/SimulatedGasEstimate"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+      x-implements: [it.zeal.wallet.client.dto.SimulatedTransactionDto]
+
+    ApprovalAmount:
+      type: object
+      required:
+        - amount
+        - type
+      properties:
+        amount:
+          $ref: "#/components/schemas/Money"
+        type:
+          $ref: "#/components/schemas/ApprovalType"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+          nullable: true
+
+    ApprovalType:
+      type: string
+      enum:
+        - Limited
+        - Unlimited
+    UnknownTransaction:
+      type: object
+      required:
+        - type
+        - method
+        - tokens
+        - nfts
+        - gas
+        - simulatedGas
+      properties:
+        type:
+          enum:
+            - UnknownTransaction
+          x-excluded-property: "true"
+        method:
+          type: string
+        smartContract:
+          $ref: "#/components/schemas/SmartContract"
+          nullable: true
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionToken"
+        nfts:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionNft"
+        gas:
+          $ref: "#/components/schemas/Hexadecimal"
+        simulatedGas:
+          $ref: "#/components/schemas/SimulatedGasEstimate"
+      x-implements: [it.zeal.wallet.client.dto.SimulatedTransactionDto]
+
+    FailedTransaction:
+      type: object
+      required:
+        - type
+        - method
+      properties:
+        type:
+          enum:
+            - FailedTransaction
+          x-excluded-property: "true"
+        method:
+          type: string
+        smartContract:
+          $ref: "#/components/schemas/SmartContract"
+          nullable: true
+      x-implements: [it.zeal.wallet.client.dto.SimulatedTransactionDto]
+
+    SingleNftApprovalTransaction:
+      type: object
+      required:
+        - type
+        - gas
+        - nft
+        - approveTo
+        - simulatedGas
+      properties:
+        type:
+          enum:
+            - SingleNftApprovalTransaction
+          x-excluded-property: "true"
+        gas:
+          $ref: "#/components/schemas/Hexadecimal"
+        simulatedGas:
+          $ref: "#/components/schemas/SimulatedGasEstimate"
+        nft:
+          $ref: "#/components/schemas/Nft"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+      x-implements: [it.zeal.wallet.client.dto.SimulatedTransactionDto]
+
+    NftCollectionApprovalTransaction:
+      type: object
+      required:
+        - type
+        - gas
+        - nftCollectionInfo
+        - approveTo
+        - simulatedGas
+      properties:
+        type:
+          enum:
+            - NftCollectionApprovalTransaction
+          x-excluded-property: "true"
+        gas:
+          $ref: "#/components/schemas/Hexadecimal"
+        simulatedGas:
+          $ref: "#/components/schemas/SimulatedGasEstimate"
+        nftCollectionInfo:
+          $ref: "#/components/schemas/TransactionNftCollectionInfo"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+      x-implements: [it.zeal.wallet.client.dto.SimulatedTransactionDto]
+    P2PTransaction:
+      type: object
+      required:
+        - type
+        - gas
+        - token
+        - toAddress
+        - simulatedGas
+      properties:
+        type:
+          enum:
+            - P2PTransaction
+          x-excluded-property: "true"
+        gas:
+          $ref: "#/components/schemas/Hexadecimal"
+        simulatedGas:
+          $ref: "#/components/schemas/SimulatedGasEstimate"
+        token:
+          $ref: "#/components/schemas/TransactionToken"
+        toAddress:
+          type: string
+      x-implements: [it.zeal.wallet.client.dto.SimulatedTransactionDto]
+    P2PNftTransaction:
+      type: object
+      required:
+        - type
+        - gas
+        - nft
+        - toAddress
+        - simulatedGas
+      properties:
+        type:
+          enum:
+            - P2PNftTransaction
+          x-excluded-property: "true"
+        gas:
+          $ref: "#/components/schemas/Hexadecimal"
+        simulatedGas:
+          $ref: "#/components/schemas/SimulatedGasEstimate"
+        nft:
+          $ref: "#/components/schemas/TransactionNft"
+        toAddress:
+          type: string
+      x-implements: [it.zeal.wallet.client.dto.SimulatedTransactionDto]
+    TransactionNftCollectionInfo:
+      type: object
+      required:
+        - name
+        - address
+        - network
+      properties:
+        name:
+          type: string
+          nullable: true
+        address:
+          type: string
+          format: address
+        network:
+          $ref: "#/components/schemas/Network"
+    TransactionNft:
+      type: object
+      required:
+        - nft
+        - amount
+        - direction
+      properties:
+        nft:
+          $ref: "#/components/schemas/Nft"
+        direction:
+          $ref: "#/components/schemas/TransactionDirection"
+        amount:
+          type: string
+          format: bigint
+    Nft:
+      type: object
+      required:
+        - tokenId
+        - name
+        - image
+        - decimals
+        - collectionInfo
+      properties:
+        tokenId:
+          $ref: "#/components/schemas/Hexadecimal"
+        name:
+          type: string
+          nullable: true
+        image:
+          type: string
+          nullable: true
+        decimals:
+          type: integer
+        collectionInfo:
+          $ref: "#/components/schemas/TransactionNftCollectionInfo"
+    SmartContract:
+      type: object
+      required:
+        - address
+        - network
+        - name
+        - logo
+        - website
+      properties:
+        address:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+        name:
+          type: string
+          nullable: true
+        logo:
+          type: string
+          nullable: true
+        website:
+          type: string
+          nullable: true
+    GenericErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+
+    Hexadecimal:
+      type: string
+      format: hexadecimal
+
+    RpcNodeRequest:
+      type: object
+      required:
+        - jsonrpc
+        - method
+        - params
+        - id
+      description: Request body that will be sent to
+      properties:
+        jsonrpc:
+          type: string
+          default: "2.0"
+        method:
+          type: string
+        params:
+          type: array
+          items: {}
+        id:
+          $ref: "#/components/schemas/AnyType"
+
+    RpcNodeSuccessResponse:
+      type: object
+      required:
+        - jsonrpc
+        - result
+        - id
+      description: Proxies requests to RPC node
+      properties:
+        jsonrpc:
+          $ref: "#/components/schemas/RpcVersion"
+        result:
+          $ref: "#/components/schemas/AnyType"
+        id:
+          $ref: "#/components/schemas/RpcRequestId"
+
+    RpcNodeErrorResponse:
+      type: object
+      required:
+        - jsonrpc
+        - error
+        - id
+      description: Proxies requests to RPC node
+      properties:
+        jsonrpc:
+          $ref: "#/components/schemas/RpcVersion"
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
+        id:
+          $ref: "#/components/schemas/RpcRequestId"
+
+    RpcVersion:
+      type: string
+      description: "Version of JSON RPC protocol, should always be 2.0"
+
+    RpcRequestId:
+      description: Identifier that helps client to map request and response
+      oneOf:
+        - type: number
+        - type: string
+
+    AnyType:
+      description: "Can be anything: string, number, array, object, etc., including `null`"
+
+    Currency:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/FiatCurrency"
+        - $ref: "#/components/schemas/CryptoCurrency"
+
+    FiatCurrency:
+      required:
+        - type
+        - id
+        - symbol
+        - code
+        - fraction
+        - rateFraction
+        - icon
+        - name
+      properties:
+        type:
+          enum:
+            - FiatCurrency
+          x-excluded-property: "true"
+        id:
+          type: string
+        symbol:
+          type: string
+        code:
+          type: string
+        fraction:
+          type: integer
+          format: int32
+        rateFraction:
+          type: integer
+          format: int32
+        icon:
+          type: string
+        name:
+          type: string
+      x-implements: [it.zeal.wallet.client.dto.CurrencyDto]
+
+    CryptoCurrency:
+      required:
+        - type
+        - id
+        - address
+        - network
+        - symbol
+        - code
+        - fraction
+        - rateFraction
+        - icon
+        - name
+      properties:
+        type:
+          enum:
+            - CryptoCurrency
+          x-excluded-property: "true"
+        id:
+          type: string
+        symbol:
+          type: string
+        code:
+          type: string
+        fraction:
+          type: integer
+          format: int32
+        rateFraction:
+          type: integer
+          format: int32
+        icon:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+      x-implements: [it.zeal.wallet.client.dto.CurrencyDto]
+
+    Money:
+      type: object
+      required:
+        - amount
+        - currencyId
+      properties:
+        amount:
+          type: string
+          format: bigint
+        currencyId:
+          type: string
+
+    FxRate:
+      type: object
+      required:
+        - base
+        - quote
+        - rate
+      properties:
+        base:
+          type: string
+        quote:
+          type: string
+        rate:
+          type: string
+          format: bigint
+
+    Network:
+      type: string
+      enum:
+        - "Ethereum"
+        - "Arbitrum"
+        - "zkSync"
+        - "BSC"
+        - "Polygon"
+        - "PolygonZkevm"
+        - "Fantom"
+        - "Optimism"
+        - "Base"
+        - "Gnosis"
+        - "Celo"
+        - "Avalanche"
+        - "Cronos"
+        - "EthereumGoerli"
+        - "EthereumSepolia"
+        - "PolygonMumbai"
+        - "BscTestnet"
+        - "AvalancheFuji"
+        - "OptimismGoerli"
+        - "FantomTestnet"
+        - "ArbitrumGoerli"
+        - "Aurora"
+        - "AuroraTestnet"
+
+    Token:
+      type: object
+      required:
+        - network
+        - address
+        - rate
+        - balance
+        - priceInDefaultCurrency
+        - marketData
+        - scam
+      properties:
+        network:
+          $ref: "#/components/schemas/Network"
+        address:
+          type: string
+        rate:
+          $ref: "#/components/schemas/FxRate"
+        balance:
+          $ref: "#/components/schemas/Money"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        marketData:
+          $ref: "#/components/schemas/MarketData"
+          nullable: true
+        scam:
+          type: boolean
+
+    App:
+      type: object
+      required:
+        - name
+        - icon
+        - network
+        - priceInDefaultCurrency
+        - tokenNames
+        - tokens
+        - url
+        - protocols
+      properties:
+        name:
+          type: string
+        icon:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        tokenNames:
+          type: array
+          items:
+            type: string
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        url:
+          type: string
+          nullable: true
+        protocols:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppProtocol"
+    AppProtocol:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/CommonAppProtocol"
+        - $ref: "#/components/schemas/LockedTokenAppProtocol"
+        - $ref: "#/components/schemas/LendingAppProtocol"
+        - $ref: "#/components/schemas/VestingAppProtocol"
+        - $ref: "#/components/schemas/UnknownAppProtocol"
+    CommonAppProtocol:
+      type: object
+      required:
+        - type
+        - priceInDefaultCurrency
+        - suppliedTokens
+        - borrowedTokens
+        - rewardTokens
+        - category
+        - description
+      properties:
+        type:
+          enum:
+            - CommonAppProtocol
+          x-excluded-property: "true"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        suppliedTokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        borrowedTokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        rewardTokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        category:
+          type: string
+        description:
+          type: string
+          nullable: true
+      x-implements: AppProtocolDto
+    LockedTokenAppProtocol:
+      type: object
+      required:
+        - type
+        - priceInDefaultCurrency
+        - lockedTokens
+        - rewardTokens
+        - unlockAt
+        - category
+        - description
+      properties:
+        type:
+          enum:
+            - LockedTokenAppProtocol
+          x-excluded-property: "true"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        lockedTokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        rewardTokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        unlockAt:
+          type: integer
+          format: timestamp
+        category:
+          type: string
+        description:
+          type: string
+          nullable: true
+      x-implements: AppProtocolDto
+    LendingAppProtocol:
+      type: object
+      required:
+        - type
+        - priceInDefaultCurrency
+        - suppliedTokens
+        - borrowedTokens
+        - rewardTokens
+        - category
+        - healthFactor
+      properties:
+        type:
+          enum:
+            - LendingAppProtocol
+          x-excluded-property: "true"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        suppliedTokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        borrowedTokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        rewardTokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        category:
+          type: string
+        healthFactor:
+          type: number
+      x-implements: AppProtocolDto
+    VestingAppProtocol:
+      type: object
+      required:
+        - type
+        - priceInDefaultCurrency
+        - vestedToken
+        - claimableToken
+        - category
+      properties:
+        type:
+          enum:
+            - VestingAppProtocol
+          x-excluded-property: "true"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        vestedToken:
+          $ref: "#/components/schemas/AppToken"
+        claimableToken:
+          $ref: "#/components/schemas/AppToken"
+        category:
+          type: string
+      x-implements: AppProtocolDto
+    UnknownAppProtocol:
+      type: object
+      required:
+        - type
+        - priceInDefaultCurrency
+        - tokens
+        - nfts
+        - category
+      properties:
+        type:
+          enum:
+            - UnknownAppProtocol
+          x-excluded-property: "true"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppToken"
+        nfts:
+          type: array
+          items:
+            $ref: "#/components/schemas/AppNft"
+        category:
+          type: string
+      x-implements: AppProtocolDto
+    AppToken:
+      type: object
+      required:
+        - name
+        - network
+        - address
+        - balance
+        - priceInDefaultCurrency
+      properties:
+        name:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+        address:
+          type: string
+        balance:
+          $ref: "#/components/schemas/Money"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+          nullable: true
+    AppNft:
+      type: object
+      required:
+        - tokenId
+        - network
+        - name
+        - amount
+        - decimals
+        - priceInDefaultCurrency
+        - uri
+      properties:
+        tokenId:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+        name:
+          type: string
+          nullable: true
+        amount:
+          type: string
+          format: bigint
+        decimals:
+          type: integer
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+          nullable: true
+        uri:
+          type: string
+          nullable: true
+    PortfolioNftCollection:
+      type: object
+      required:
+        - name
+        - priceInDefaultCurrency
+        - mintAddress
+        - network
+        - standard
+        - nfts
+      properties:
+        name:
+          type: string
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        mintAddress:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+        standard:
+          $ref: "#/components/schemas/NftStandard"
+        nfts:
+          type: array
+          items:
+            $ref: "#/components/schemas/PortfolioNft"
+    NftStandard:
+      type: string
+      enum:
+        - "Erc721"
+        - "Erc1155"
+    PortfolioNft:
+      type: object
+      required:
+        - tokenId
+        - name
+        - priceInDefaultCurrency
+        - uri
+        - standard
+        - scam
+      properties:
+        uri:
+          type: string
+          nullable: true
+        name:
+          type: string
+        tokenId:
+          type: string
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+        standard:
+          $ref: "#/components/schemas/NftStandard"
+        scam:
+          type: boolean
+
+    Portfolio:
+      type: object
+      required:
+        - currencies
+        - tokens
+        - apps
+        - nftCollections
+      properties:
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/Token"
+        apps:
+          type: array
+          items:
+            $ref: "#/components/schemas/App"
+        nftCollections:
+          type: array
+          items:
+            $ref: "#/components/schemas/PortfolioNftCollection"
+
+    TransactionHistory:
+      type: object
+      required:
+        - transactions
+        - currencies
+      properties:
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/HistoryTransaction"
+        continueFromTimestamp:
+          type: integer
+          format: timestamp
+          nullable: true
+    TransactionActivity:
+      type: object
+      required:
+        - transactions
+        - currencies
+      properties:
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityTransaction"
+        continueFromTimestamp:
+          type: integer
+          format: timestamp
+          nullable: true
+
+    TransactionStatus:
+      type: string
+      enum:
+        - "Completed"
+        - "Failed"
+
+    TransactionDirection:
+      type: string
+      enum:
+        - "Send"
+        - "Receive"
+
+    TransactionToken:
+      type: object
+      required:
+        - direction
+        - amount
+        - priceInDefaultCurrency
+      properties:
+        direction:
+          $ref: "#/components/schemas/TransactionDirection"
+        amount:
+          $ref: "#/components/schemas/Money"
+        priceInDefaultCurrency:
+          nullable: true
+          $ref: "#/components/schemas/Money"
+
+    HistoryTransaction:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/EoaTransaction"
+        - $ref: "#/components/schemas/ContractTransaction"
+        - $ref: "#/components/schemas/ExchangeTransaction"
+
+    ActivityTransaction:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/InboundP2PActivityTransaction"
+        - $ref: "#/components/schemas/OutboundP2PActivityTransaction"
+        - $ref: "#/components/schemas/OutboundP2PNftActivityTransaction"
+        - $ref: "#/components/schemas/SelfP2PActivityTransaction"
+        - $ref: "#/components/schemas/SingleNftApprovalActivityTransaction"
+        - $ref: "#/components/schemas/SingleNftApprovalRevokeActivityTransaction"
+        - $ref: "#/components/schemas/NftCollectionApprovalActivityTransaction"
+        - $ref: "#/components/schemas/PartialTokenApprovalActivityTransaction"
+        - $ref: "#/components/schemas/NftCollectionApprovalRevokeActivityTransaction"
+        - $ref: "#/components/schemas/Erc20ApprovalActivityTransaction"
+        - $ref: "#/components/schemas/Erc20ApprovalRevokeActivityTransaction"
+        - $ref: "#/components/schemas/UnknownActivityTransaction"
+        - $ref: "#/components/schemas/FailedActivityTransaction"
+
+    InboundP2PActivityTransaction:
+      type: object
+      required:
+        - type
+        - tokens
+        - nfts
+        - network
+        - hash
+        - sender
+        - timestamp
+      properties:
+        type:
+          enum:
+            - InboundP2PActivityTransaction
+          x-excluded-property: "true"
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionToken"
+        nfts:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionNft"
+        sender:
+          type: string
+          format: address
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+      x-implements: ActivityTransactionDto
+    OutboundP2PActivityTransaction:
+      type: object
+      required:
+        - type
+        - token
+        - network
+        - hash
+        - receiver
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - OutboundP2PActivityTransaction
+          x-excluded-property: "true"
+        token:
+          $ref: "#/components/schemas/TransactionToken"
+        receiver:
+          type: string
+          format: address
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    OutboundP2PNftActivityTransaction:
+      type: object
+      required:
+        - type
+        - nft
+        - network
+        - hash
+        - receiver
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - OutboundP2PNftActivityTransaction
+          x-excluded-property: "true"
+        nft:
+          $ref: "#/components/schemas/TransactionNft"
+        receiver:
+          type: string
+          format: address
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    SelfP2PActivityTransaction:
+      type: object
+      required:
+        - type
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - SelfP2PActivityTransaction
+          x-excluded-property: "true"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+        timestamp:
+          type: integer
+          format: timestamp
+      x-implements: ActivityTransactionDto
+    SingleNftApprovalActivityTransaction:
+      type: object
+      required:
+        - type
+        - nft
+        - approveTo
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - SingleNftApprovalActivityTransaction
+          x-excluded-property: "true"
+        nft:
+          $ref: "#/components/schemas/Nft"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    SingleNftApprovalRevokeActivityTransaction:
+      type: object
+      required:
+        - type
+        - nft
+        - revokeFrom
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - SingleNftApprovalRevokeActivityTransaction
+          x-excluded-property: "true"
+        nft:
+          $ref: "#/components/schemas/Nft"
+        revokeFrom:
+          $ref: "#/components/schemas/SmartContract"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    NftCollectionApprovalActivityTransaction:
+      type: object
+      required:
+        - type
+        - nftCollectionInfo
+        - approveTo
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - NftCollectionApprovalActivityTransaction
+          x-excluded-property: "true"
+        nftCollectionInfo:
+          $ref: "#/components/schemas/TransactionNftCollectionInfo"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    PartialTokenApprovalActivityTransaction:
+      type: object
+      required:
+        - type
+        - approveTo
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - PartialTokenApprovalActivityTransaction
+          x-excluded-property: "true"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    NftCollectionApprovalRevokeActivityTransaction:
+      type: object
+      required:
+        - type
+        - nftCollectionInfo
+        - revokeFrom
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - NftCollectionApprovalRevokeActivityTransaction
+          x-excluded-property: "true"
+        nftCollectionInfo:
+          $ref: "#/components/schemas/TransactionNftCollectionInfo"
+        revokeFrom:
+          $ref: "#/components/schemas/SmartContract"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    Erc20ApprovalActivityTransaction:
+      type: object
+      required:
+        - type
+        - allowance
+        - approveTo
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - Erc20ApprovalActivityTransaction
+          x-excluded-property: "true"
+        allowance:
+          $ref: "#/components/schemas/ApprovalAmount"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    Erc20ApprovalRevokeActivityTransaction:
+      type: object
+      required:
+        - type
+        - allowance
+        - revokeFrom
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - Erc20ApprovalRevokeActivityTransaction
+          x-excluded-property: "true"
+        allowance:
+          $ref: "#/components/schemas/ApprovalAmount"
+        revokeFrom:
+          $ref: "#/components/schemas/SmartContract"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    UnknownActivityTransaction:
+      type: object
+      required:
+        - type
+        - method
+        - tokens
+        - nfts
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - UnknownActivityTransaction
+          x-excluded-property: "true"
+        method:
+          type: string
+        smartContract:
+          nullable: true
+          $ref: "#/components/schemas/SmartContract"
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionToken"
+        nfts:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionNft"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    FailedActivityTransaction:
+      type: object
+      required:
+        - type
+        - method
+        - smartContract
+        - network
+        - hash
+        - paidFee
+        - timestamp
+      properties:
+        type:
+          enum:
+            - FailedActivityTransaction
+          x-excluded-property: "true"
+        method:
+          type: string
+        smartContract:
+          $ref: "#/components/schemas/SmartContract"
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        timestamp:
+          type: integer
+          format: timestamp
+        # it's nullable to support Safe transaction cases when fee paid by EOA that signs transaction
+        # and not by smart contract wallet address itself
+        paidFee:
+          $ref: "#/components/schemas/PaidFee"
+          nullable: true
+      x-implements: ActivityTransactionDto
+    PaidFee:
+      type: object
+      required:
+        - priceInNativeCurrency
+        - priceInDefaultCurrency
+      properties:
+        priceInNativeCurrency:
+          $ref: "#/components/schemas/Money"
+        priceInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+          nullable: true
+
+    EoaTransaction:
+      type: object
+      required:
+        - type
+        - token
+        - status
+        - address
+        - network
+        - hash
+        - createdAt
+      properties:
+        type:
+          enum:
+            - EoaTransaction
+          x-excluded-property: "true"
+        token:
+          $ref: "#/components/schemas/TransactionToken"
+        status:
+          $ref: "#/components/schemas/TransactionStatus"
+        address:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        createdAt:
+          type: integer
+          format: timestamp
+      x-implements: HistoryTransactionDto
+
+    ContractTransaction:
+      required:
+        - type
+        - tokens
+        - status
+        - address
+        - network
+        - hash
+        - createdAt
+      properties:
+        type:
+          enum:
+            - ContractTransaction
+          x-excluded-property: "true"
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionToken"
+        status:
+          $ref: "#/components/schemas/TransactionStatus"
+        address:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        createdAt:
+          type: integer
+          format: timestamp
+      x-implements: HistoryTransactionDto
+
+    ExchangeTransaction:
+      required:
+        - type
+        - tokens
+        - status
+        - address
+        - network
+        - hash
+        - createdAt
+      properties:
+        type:
+          enum:
+            - ExchangeTransaction
+          x-excluded-property: "true"
+        tokens:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionToken"
+        status:
+          $ref: "#/components/schemas/TransactionStatus"
+        address:
+          type: string
+        network:
+          $ref: "#/components/schemas/Network"
+        hash:
+          type: string
+        createdAt:
+          type: integer
+          format: timestamp
+      x-implements: HistoryTransactionDto
+
+    Currencies:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/Currency"
+
+    ApprovalsResponse:
+      type: object
+      required:
+        - approvals
+        - currencies
+      properties:
+        approvals:
+          type: array
+          items:
+            $ref: "#/components/schemas/Approval"
+        currencies:
+          $ref: "#/components/schemas/Currencies"
+
+    Approval:
+      type: object
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: "#/components/schemas/Erc20TokenApproval"
+        - $ref: "#/components/schemas/Erc721TokenApproval"
+        - $ref: "#/components/schemas/NftCollectionApproval"
+
+    Erc20TokenApproval:
+      type: object
+      required:
+        - type
+        - approveTo
+        - allowance
+      properties:
+        type:
+          enum:
+            - Erc20TokenApproval
+          x-excluded-property: "true"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+        allowance:
+          $ref: "#/components/schemas/ApprovalAmount"
+      x-implements: [it.zeal.wallet.client.dto.ApprovalDto]
+
+    Erc721TokenApproval:
+      type: object
+      required:
+        - type
+        - approveTo
+        - nft
+      properties:
+        type:
+          enum:
+            - Erc721TokenApproval
+          x-excluded-property: "true"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+        nft:
+          $ref: "#/components/schemas/Nft"
+      x-implements: [it.zeal.wallet.client.dto.ApprovalDto]
+
+    NftCollectionApproval:
+      type: object
+      required:
+        - type
+        - approveTo
+        - collectionInfo
+      properties:
+        type:
+          enum:
+            - NftCollectionApproval
+          x-excluded-property: "true"
+        approveTo:
+          $ref: "#/components/schemas/SmartContract"
+        collectionInfo:
+          $ref: "#/components/schemas/TransactionNftCollectionInfo"
+      x-implements: [it.zeal.wallet.client.dto.ApprovalDto]
+
+    MarketData:
+      type: object
+      required:
+        - priceChange24h
+      properties:
+        priceChange24h:
+          $ref: "#/components/schemas/PriceChange"
+
+    PriceChange:
+      type: object
+      required:
+        - percentage
+        - direction
+      properties:
+        percentage:
+          type: number
+        direction:
+          $ref: "#/components/schemas/PriceChangeDirection"
+
+    PriceChangeDirection:
+      type: string
+      enum:
+        - "Up"
+        - "Down"
+        - "Unchanged"
+
+    NotificationRegistrationRequest:
+      type: object
+      required:
+        - token
+        - tokenType
+        - addresses
+        - deviceId
+        - deviceType
+      properties:
+        token:
+          type: string
+        tokenType:
+          type: string
+          enum:
+            - "FCM"
+        addresses:
+          type: array
+          items:
+            type: string
+            format: address
+        deviceId:
+          type: string
+        deviceType:
+          type: string
+          enum:
+            - "Extension"
+            - "Mobile"
+
+    CryptoFxRateRequest:
+      type: object
+      required:
+        - fromAddress
+        - toAddress
+      properties:
+        fromAddress:
+          type: string
+        toAddress:
+          type: string
+
+    UserOpsTransactionResultRequest:
+      type: object
+      required:
+        - network
+        - transactionHash
+        - userOpHash
+        - sender
+      properties:
+        network:
+          $ref: "#/components/schemas/Network"
+        transactionHash:
+          type: string
+        userOpHash:
+          type: string
+        sender:
+          type: string
+
+    UserOpsFinalFeeRequest:
+      $ref: "#/components/schemas/UserOpsTransactionResultRequest"
+
+    UserOpsFinalFee:
+      type: object
+      required:
+        - feeInTokenCurrency
+        - feeInDefaultCurrency
+        - currencies
+      properties:
+        feeInDefaultCurrency:
+          $ref: "#/components/schemas/Money"
+          nullable: true
+        feeInTokenCurrency:
+          $ref: "#/components/schemas/Money"
+        currencies:
+          $ref: "#/components/schemas/Currencies"

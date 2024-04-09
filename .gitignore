@@ -1,0 +1,86 @@
+smart-contracts/lib/forge-std/**
+
+# Ignore Gradle project-specific cache directory
+.gradle
+.idea
+.iml
+# Ignore Gradle build output directory
+build
+bin
+# Ignore automatically generated Java classes
+**/src/generated/*
+# Mac
+**/.DS_Store
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Include override files you do wish to add to version control using negated pattern
+# !example_override.tf
+
+# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+# example: *tfplan*
+
+# Ignore CLI configuration files
+.terraform.lock.hcl
+.terraformrc
+terraform.rc
+
+
+# TS/JS
+# dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# smart contracts
+/smart-contracts/broadcast
+/smart-contracts/build
+/smart-contracts/cache
+/smart-contracts/out
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/smart-contracts/.env
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+build.zip
+build_prod
+build_prod.zip
+frontend/mobile/*.apk
+frontend/mobile/*.ipa

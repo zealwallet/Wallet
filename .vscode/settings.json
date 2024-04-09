@@ -1,0 +1,48 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "always"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "terminal.integrated.automationProfile.linux": {
+        "path": "/bin/zsh",
+        "icon": "play",
+        "args": ["-l", "-i"]
+    },
+    "terminal.integrated.profiles.linux": {
+        "bash": null,
+        "zsh": {
+            "path": "/bin/zsh",
+            "icon": "star"
+        }
+    },
+    "terminal.integrated.profiles.osx": {
+        "bash": null,
+        "zsh": {
+            "path": "/bin/zsh",
+            "icon": "star"
+        }
+    },
+    "terminal.integrated.automationProfile.osx": {
+        "path": "/bin/zsh",
+        "icon": "play",
+        "args": ["-l", "-i"]
+    }
+}

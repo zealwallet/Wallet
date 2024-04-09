@@ -1,0 +1,4 @@
+export const SWAP_SLIPPAGE_PERCENT_OPTIONS: number[] = [0.1, 0.5, 1]
+
+export const DEFAULT_SWAP_SLIPPAGE_PERCENT: number =
+    SWAP_SLIPPAGE_PERCENT_OPTIONS[1]
