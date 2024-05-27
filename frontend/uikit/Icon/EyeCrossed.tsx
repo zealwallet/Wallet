@@ -1,7 +1,8 @@
 import React from 'react'
-import Svg, { Path } from 'react-native-svg'
+import { Path } from 'react-native-svg'
 
 import { Color, colors } from '@zeal/uikit/colors'
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
@@ -10,8 +11,7 @@ type Props = {
 
 export const EyeCrossed = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             fill="transparent"
             viewBox="0 0 24 24"
             width={size}
@@ -32,6 +32,6 @@ export const EyeCrossed = ({ size, color }: Props) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

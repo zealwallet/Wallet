@@ -1,6 +1,7 @@
 import { parse as parseJSON } from '@zeal/toolkit/JSON'
 import {
     arrayBuffer,
+    nullableOf,
     object,
     Result,
     shape,
@@ -27,7 +28,9 @@ export const parsePasskeySignatureResponse = (
     object(input).andThen((obj) =>
         shape({
             credentialId: string(obj.credentialId).map(base64Decode),
-            userId: string(obj.userId).map(base64Decode),
+            userId: nullableOf(obj.userId, (id) =>
+                string(id).map(base64Decode)
+            ),
             clientDataJSON: string(obj.clientDataJSON).map(base64Decode),
             signature: string(obj.signature).map(base64Decode),
             authenticatorData: string(obj.authenticatorData).map(base64Decode),
@@ -111,8 +114,8 @@ export const parseWebSignatureResponse = (
             ),
             response: object(obj.response).andThen((res) =>
                 shape({
-                    userId: arrayBuffer(res.userHandle).map(
-                        (a) => new Uint8Array(a)
+                    userId: nullableOf(res.userHandle, (id) =>
+                        arrayBuffer(id).map((a) => new Uint8Array(a))
                     ),
                     clientDataJSON: arrayBuffer(res.clientDataJSON).map(
                         (c) => new Uint8Array(c)

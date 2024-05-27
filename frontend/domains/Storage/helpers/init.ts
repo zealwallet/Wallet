@@ -22,6 +22,6 @@ export const init = (encryptedPassword: string): Storage => {
         currencyHiddenMap: {},
         currencyPinMap: {},
         gasCurrencyPresetMap: {},
-        userMadeActionOnNextBestActionIds: [],
+        cardConfig: { type: 'card_owner_address_is_not_selected' },
     }
 }

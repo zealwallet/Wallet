@@ -46,7 +46,6 @@ export const SourceOfFundsForm = ({
                 onMsg={(msg) => {
                     switch (msg.type) {
                         case 'close':
-                        case 'on_back_button_clicked':
                         case 'on_source_of_funds_selected':
                             onMsg(msg)
                             break

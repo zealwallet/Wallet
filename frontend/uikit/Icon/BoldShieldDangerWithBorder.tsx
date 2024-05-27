@@ -1,5 +1,7 @@
 import React from 'react'
-import { G, Path, Svg } from 'react-native-svg'
+import { G, Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const BoldShieldDangerWithBorder = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             color={color && colors[color]}
             viewBox="0 0 18 18"
             width={size}
@@ -36,6 +37,6 @@ export const BoldShieldDangerWithBorder = ({ size, color }: Props) => {
                     fill="currentColor"
                 />
             </G>
-        </Svg>
+        </SvgIcon>
     )
 }

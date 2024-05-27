@@ -133,7 +133,7 @@ export const Completed = ({
                                 </Row>
                             }
                             initialProgress={70}
-                            progress={10}
+                            progress={100}
                         />
 
                         <Divider variant="default" />

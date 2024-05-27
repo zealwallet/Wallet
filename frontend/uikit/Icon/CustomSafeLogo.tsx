@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -9,8 +11,7 @@ type Props = {
 
 export const CustomSafeLogo = ({ color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 64 24"
             width={64}
             height={24}
@@ -44,6 +45,6 @@ export const CustomSafeLogo = ({ color }: Props) => {
                 d="M11.4565 10.1986H13.1172C13.6585 10.1986 14.0975 10.6515 14.0975 11.209V12.9209C14.0975 13.4787 13.6581 13.9313 13.1172 13.9313H11.4565C10.9154 13.9313 10.4763 13.4783 10.4763 12.9209V11.209C10.4763 10.6511 10.9157 10.1986 11.4565 10.1986Z"
                 fill="currentColor"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

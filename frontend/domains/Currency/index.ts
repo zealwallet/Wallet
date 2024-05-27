@@ -13,6 +13,7 @@ export type FiatCurrency = {
     icon: string
     name: string
 }
+
 export type CryptoCurrency = {
     type: 'CryptoCurrency'
     id: string
@@ -32,3 +33,5 @@ export type KnownCurrencies = Record<CurrencyId, Currency>
 export type CurrencyPinMap = Record<CurrencyId, boolean>
 export type CurrencyHiddenMap = Record<CurrencyId, boolean>
 export type GasCurrencyPresetMap = Record<NetworkHexId, CurrencyId>
+
+export type FiatCurrencyCode = 'GBP' | 'EUR' | 'NGN' | 'PLN'

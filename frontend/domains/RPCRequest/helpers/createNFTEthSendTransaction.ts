@@ -1,17 +1,15 @@
-import Web3 from 'web3'
+import { encodeFunctionData, getAddress } from 'viem'
 
 import { notReachable } from '@zeal/toolkit'
 import { generateRandomNumber } from '@zeal/toolkit/Number'
 
 import { Account } from '@zeal/domains/Account'
 import { Address } from '@zeal/domains/Address'
-import { Network, NetworkRPCMap } from '@zeal/domains/Network'
 import {
     PortfolioNFT,
     PortfolioNFTCollection,
 } from '@zeal/domains/NFTCollection'
 import { EthSendTransaction } from '@zeal/domains/RPCRequest'
-import { ZealWeb3RPCProvider } from '@zeal/domains/RPCRequest/helpers/ZealWeb3RPCProvider'
 
 const ERC721_ABI = [
     {
@@ -80,8 +78,6 @@ type Params = {
     toAddress: Address
     nft: PortfolioNFT
     collection: PortfolioNFTCollection
-    network: Network
-    networkRPCMap: NetworkRPCMap
 }
 
 export const createNFTEthSendTransaction = ({
@@ -89,30 +85,20 @@ export const createNFTEthSendTransaction = ({
     toAddress,
     collection,
     nft,
-    network,
-    networkRPCMap,
 }: Params): EthSendTransaction => {
-    const web3 = new Web3(new ZealWeb3RPCProvider({ network, networkRPCMap }))
-
     switch (nft.standard) {
         case 'Erc1155': {
-            const contract = new web3.eth.Contract(
-                ERC1155_ABI,
-                collection.mintAddress,
-                {
-                    from: fromAccount.address,
-                }
-            )
-
-            const data: string = contract.methods
-                .safeTransferFrom(
-                    fromAccount.address,
-                    toAddress,
-                    nft.tokenId,
-                    1,
-                    new Uint8Array(0)
-                )
-                .encodeABI()
+            const data = encodeFunctionData({
+                abi: ERC1155_ABI,
+                functionName: 'safeTransferFrom',
+                args: [
+                    getAddress(fromAccount.address),
+                    getAddress(toAddress),
+                    BigInt(nft.tokenId),
+                    1n,
+                    '0x',
+                ],
+            })
 
             return {
                 id: generateRandomNumber(),
@@ -128,16 +114,15 @@ export const createNFTEthSendTransaction = ({
             }
         }
         case 'Erc721': {
-            const contract = new web3.eth.Contract(
-                ERC721_ABI,
-                collection.mintAddress,
-                {
-                    from: fromAccount.address,
-                }
-            )
-            const data: string = contract.methods
-                .safeTransferFrom(fromAccount.address, toAddress, nft.tokenId)
-                .encodeABI()
+            const data = encodeFunctionData({
+                abi: ERC721_ABI,
+                functionName: 'safeTransferFrom',
+                args: [
+                    getAddress(fromAccount.address),
+                    getAddress(toAddress),
+                    BigInt(nft.tokenId),
+                ],
+            })
 
             return {
                 id: generateRandomNumber(),

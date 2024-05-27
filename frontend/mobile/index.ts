@@ -1,5 +1,6 @@
 import 'src/polyfills'
 import 'react-native-get-random-values'
+import '@walletconnect/react-native-compat'
 import * as Sentry from '@sentry/react-native'
 import { registerRootComponent } from 'expo'
 

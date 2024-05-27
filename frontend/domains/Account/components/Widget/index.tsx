@@ -9,6 +9,7 @@ import { MsgOf } from '@zeal/toolkit/MsgOf'
 
 import { Account } from '@zeal/domains/Account'
 import { CurrencyHiddenMap } from '@zeal/domains/Currency'
+import { WalletConnectInstanceLoadable } from '@zeal/domains/DApp/domains/WalletConnect/api/fetchWalletConnectInstance'
 import { KeyStore } from '@zeal/domains/KeyStore'
 import { CurrentNetwork } from '@zeal/domains/Network'
 import { Portfolio } from '@zeal/domains/Portfolio'
@@ -18,6 +19,7 @@ import { RefreshAndNetworkFilter } from './RefreshAndNetworkFilter'
 import { ShowBalance } from './ShowBalance'
 
 type Props = {
+    walletConnectInstanceLoadable: WalletConnectInstanceLoadable
     portfolio: Portfolio | null
     currentAccount: Account
     currentNetwork: CurrentNetwork
@@ -39,14 +41,18 @@ export const Widget = ({
     keystore,
     currencyHiddenMap,
     installationId,
+    walletConnectInstanceLoadable,
     onMsg,
 }: Props) => {
     return (
         <WidgetContainer
             onClick={() => onMsg({ type: 'account_filter_click' })}
         >
-            <Column spacing={32}>
+            <Column spacing={20}>
                 <AccountRow
+                    walletConnectInstanceLoadable={
+                        walletConnectInstanceLoadable
+                    }
                     installationId={installationId}
                     keystore={keystore}
                     currentAccount={currentAccount}
@@ -83,20 +89,25 @@ export const WidgetSkeleton = ({
     currentNetwork,
     installationId,
     keystore,
+    walletConnectInstanceLoadable,
     onMsg,
 }: {
     currentAccount: Account
     installationId: string
     currentNetwork: CurrentNetwork
     keystore: KeyStore
+    walletConnectInstanceLoadable: WalletConnectInstanceLoadable
     onMsg: (msg: Msg) => void
 }) => {
     return (
         <WidgetContainer
             onClick={() => onMsg({ type: 'account_filter_click' })}
         >
-            <Column spacing={32}>
+            <Column spacing={20}>
                 <AccountRow
+                    walletConnectInstanceLoadable={
+                        walletConnectInstanceLoadable
+                    }
                     installationId={installationId}
                     keystore={keystore}
                     currentAccount={currentAccount}
@@ -104,7 +115,7 @@ export const WidgetSkeleton = ({
                 />
 
                 <Row spacing={8}>
-                    <Skeleton variant="transparent" width={155} height={24} />
+                    <Skeleton variant="transparent" width={155} height={43} />
 
                     <Spacer />
 
@@ -123,12 +134,14 @@ export const ErrorWidget = ({
     currentAccount,
     keystore,
     installationId,
+    walletConnectInstanceLoadable,
     onMsg,
 }: {
     currentAccount: Account
     keystore: KeyStore
     currentNetwork: CurrentNetwork
     installationId: string
+    walletConnectInstanceLoadable: WalletConnectInstanceLoadable
     onMsg: (msg: Msg) => void
 }) => {
     return (
@@ -137,6 +150,9 @@ export const ErrorWidget = ({
         >
             <Column spacing={32}>
                 <AccountRow
+                    walletConnectInstanceLoadable={
+                        walletConnectInstanceLoadable
+                    }
                     installationId={installationId}
                     keystore={keystore}
                     currentAccount={currentAccount}

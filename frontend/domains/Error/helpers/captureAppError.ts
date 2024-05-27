@@ -236,6 +236,7 @@ export const captureAppError = (error: AppError, params: Params) => {
         case 'trezor_popup_closed':
         case 'user_trx_denied_by_user':
         case 'biometric_prompt_cancelled':
+        case 'app_not_associated_with_domain':
             report({
                 error,
                 tags: {
@@ -243,6 +244,21 @@ export const captureAppError = (error: AppError, params: Params) => {
                     source,
                 },
                 extra,
+            })
+            break
+
+        case 'unknown_merchant_code':
+            report({
+                error,
+                tags: {
+                    errorType: error.type,
+                    code: error.code,
+                    source,
+                },
+                extra: {
+                    ...extra,
+                    code: error.code,
+                },
             })
             break
 

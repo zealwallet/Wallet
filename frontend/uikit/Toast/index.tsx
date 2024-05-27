@@ -1,8 +1,12 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { colors } from '@zeal/uikit/colors'
 import { Text } from '@zeal/uikit/Text'
+
+import { notReachable } from '@zeal/toolkit'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
 const styles = StyleSheet.create({
     toast: {
@@ -11,36 +15,65 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         gap: 8,
         paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 8,
-        backgroundColor: colors.surfaceDefault,
-        elevation: 5,
-        shadowColor: 'rgba(8, 3, 21, 0.12)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowRadius: 17,
+        paddingLeft: 12,
+        paddingRight: 16,
+        borderRadius: 24,
+        backgroundColor: colors.backgroundDark,
     },
     toastContainer: {
         position: 'absolute',
-        right: 0,
         left: 0,
-        bottom: 0,
+        right: 0,
+        bottom: 64,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 16,
+        zIndex: 1,
     },
 })
 
-type Props = { children: React.ReactNode }
-export const Toast = ({ children }: Props) => {
-    return <View style={[styles.toast]}>{children}</View>
+type ToastContainerProps = {
+    children: React.ReactNode
 }
 
-export const ToastContainer = ({ children }: Props) => {
-    return <View style={[styles.toastContainer]}>{children}</View>
+type ToastProps = {
+    children: React.ReactNode
 }
 
-export const ToastText = ({ children }: Props) => (
-    <Text variant="paragraph" weight="regular" color="textSecondary">
+type ToastTextProps = {
+    children: React.ReactNode
+}
+
+export const ToastContainer = ({ children }: ToastContainerProps) => {
+    const originalInsent = useSafeAreaInsets()
+    const insent = (() => {
+        switch (ZealPlatform.OS) {
+            case 'web':
+                return {
+                    bottom: 80,
+                }
+            case 'ios':
+                return {
+                    bottom: originalInsent.bottom + 64,
+                }
+            case 'android':
+                return {
+                    bottom: originalInsent.bottom + 72,
+                }
+            /* istanbul ignore next */
+            default:
+                return notReachable(ZealPlatform.OS)
+        }
+    })()
+
+    return <View style={[styles.toastContainer, insent]}>{children}</View>
+}
+
+export const Toast = ({ children }: ToastProps) => {
+    return <View style={styles.toast}>{children}</View>
+}
+
+export const ToastText = ({ children }: ToastTextProps) => (
+    <Text variant="paragraph" weight="regular" color="textOnDarkPrimary">
         {children}
     </Text>
 )

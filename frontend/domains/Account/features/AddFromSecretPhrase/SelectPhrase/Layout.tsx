@@ -35,7 +35,11 @@ export const Layout = ({ secretPhraseMap, onMsg }: Props) => {
     const phrases = keys(secretPhraseMap)
 
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton

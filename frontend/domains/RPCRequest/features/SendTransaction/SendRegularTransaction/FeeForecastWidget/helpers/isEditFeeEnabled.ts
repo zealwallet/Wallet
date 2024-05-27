@@ -15,6 +15,7 @@ export const isEditNetworkFeeEnabled = (network: Network): boolean => {
                 case 'Polygon':
                 case 'PolygonMumbai':
                 case 'PolygonZkevm':
+                case 'Linea':
                 case 'Fantom':
                 case 'FantomTestnet':
                 case 'Gnosis':
@@ -28,6 +29,8 @@ export const isEditNetworkFeeEnabled = (network: Network): boolean => {
                 case 'Arbitrum':
                 case 'ArbitrumGoerli':
                 case 'Base':
+                case 'Blast':
+                case 'OPBNB':
                 case 'zkSync':
                 case 'Aurora':
                 case 'AuroraTestnet':

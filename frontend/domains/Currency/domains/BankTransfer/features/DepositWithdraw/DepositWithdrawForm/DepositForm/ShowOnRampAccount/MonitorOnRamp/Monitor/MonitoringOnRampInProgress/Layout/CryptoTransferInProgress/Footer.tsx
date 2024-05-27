@@ -15,6 +15,7 @@ import {
     OnRampTransactionFailedEvent,
     OnRampTransactionOnHoldComplianceEvent,
     OnRampTransactionOutsideTransferInReviewEvent,
+    OnRampTransactionPendingEvent,
     OnRampTransactionTransferApprovedEvent,
     OnRampTransactionTransferReceivedEvent,
 } from '@zeal/domains/Currency/domains/BankTransfer'
@@ -33,6 +34,7 @@ type Props = {
         | OnRampTransactionTransferApprovedEvent
         | OnRampTransactionTransferReceivedEvent
         | OnRampTransactionCryptoTransferIssuedEvent
+        | OnRampTransactionPendingEvent
     now: number
     startedAt: number
     onMsg: (msg: Msg) => void
@@ -150,6 +152,7 @@ const TransactionProgress = ({
         | OnRampTransactionTransferApprovedEvent
         | OnRampTransactionTransferReceivedEvent
         | OnRampTransactionCryptoTransferIssuedEvent
+        | OnRampTransactionPendingEvent
     now: number
     startedAt: number
 }) => {
@@ -159,6 +162,7 @@ const TransactionProgress = ({
         case 'unblock_onramp_failed':
         case 'unblock_onramp_transfer_approved':
         case 'unblock_onramp_transfer_on_hold_compliance':
+        case 'unblock_onramp_pending':
             return (
                 <Progress
                     variant="neutral"

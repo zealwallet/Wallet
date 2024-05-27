@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { ScrollView } from 'react-native'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Actions } from '@zeal/uikit/Actions'
@@ -13,6 +12,7 @@ import { OutlineSearch } from '@zeal/uikit/Icon/OutlineSearch'
 import { Input } from '@zeal/uikit/Input'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Text } from '@zeal/uikit/Text'
 
 import { noop, notReachable } from '@zeal/toolkit'
@@ -75,6 +75,7 @@ export const Layout = ({
             background="light"
             padding="form"
             aria-labelledby="send-to-layout"
+            onNavigateBack={() => onMsg({ type: 'close' })}
         >
             <Column spacing={16} shrink fill>
                 <Column spacing={0}>
@@ -118,7 +119,7 @@ export const Layout = ({
                     onSubmitEditing={noop}
                 />
 
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollContainer>
                     {(() => {
                         switch (searchResult.type) {
                             case 'accounts_not_found':
@@ -206,7 +207,7 @@ export const Layout = ({
                                 return notReachable(searchResult)
                         }
                     })()}
-                </ScrollView>
+                </ScrollContainer>
 
                 <Actions>
                     <CTA onMsg={onMsg} searchResult={searchResult} />

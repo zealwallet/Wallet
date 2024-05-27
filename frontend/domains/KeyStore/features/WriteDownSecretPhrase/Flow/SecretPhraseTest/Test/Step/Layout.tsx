@@ -112,7 +112,11 @@ export const Layout = ({
         ))
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'on_step_back_button_click' })}
+        >
             <ActionBar
                 left={
                     <IconButton

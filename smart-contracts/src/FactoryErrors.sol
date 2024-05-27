@@ -4,4 +4,5 @@ library FactoryErrors {
     error SaltDoesNotMatchSafe();
     error SignerExist();
     error ImplementationNotDeployed();
+    error ProxyNotDeployed();
 }

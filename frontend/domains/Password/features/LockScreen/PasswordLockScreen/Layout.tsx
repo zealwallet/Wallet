@@ -70,7 +70,7 @@ export const Layout = ({ error: submitError, onMsg }: Props) => {
         }
     }
     return (
-        <Screen background="default" padding="form">
+        <Screen background="default" padding="form" onNavigateBack={null}>
             <ActionBar
                 right={
                     <IconButton

@@ -1,11 +1,10 @@
 import React from 'react'
 import { useIntl } from 'react-intl'
 
+import { Column } from '@zeal/uikit/Column'
 import { ThreeDotVertical } from '@zeal/uikit/Icon/ThreeDotVertical'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { ListItem as UIListItem } from '@zeal/uikit/ListItem'
-import { Row } from '@zeal/uikit/Row'
-import { Text } from '@zeal/uikit/Text'
 
 import { Account } from '@zeal/domains/Account'
 import { CopyAddress } from '@zeal/domains/Address/components/CopyAddress'
@@ -57,25 +56,28 @@ export const ListItem = ({
             )}
             primaryText={account.label}
             shortText={
-                <Row spacing={16}>
-                    <CopyAddress
-                        installationId={installationId}
-                        size="small"
-                        color="on_light"
-                        address={account.address}
+                sum ? (
+                    <FormattedTokenBalanceInDefaultCurrency
+                        money={sum}
+                        knownCurrencies={portfolio.currencies}
                     />
-                    {sum && (
-                        <Text>
-                            <FormattedTokenBalanceInDefaultCurrency
-                                money={sum}
-                                knownCurrencies={portfolio.currencies}
-                            />
-                        </Text>
-                    )}
-                </Row>
+                ) : (
+                    '\u00A0' // \u00A0
+                )
             }
             aria-current={selected}
             side={{
+                title: <></>,
+                subtitle: (
+                    <Column spacing={0} alignY="end">
+                        <CopyAddress
+                            installationId={installationId}
+                            size="small"
+                            color="on_light"
+                            address={account.address}
+                        />
+                    </Column>
+                ),
                 rightIcon: ({ size }) => (
                     <IconButton
                         variant="on_light"

@@ -1,5 +1,7 @@
 import React from 'react'
-import { Circle, G, Svg } from 'react-native-svg'
+import { Circle, G } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -9,8 +11,7 @@ type Props = {
 }
 
 export const Step = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         color={color && colors[color]}
         height={size}
         viewBox="0 0 16 17"
@@ -26,5 +27,5 @@ export const Step = ({ size, color }: Props) => (
                 fill="currentColor"
             />
         </G>
-    </Svg>
+    </SvgIcon>
 )

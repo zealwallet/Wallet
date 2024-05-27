@@ -119,6 +119,7 @@ export type OffRampTransactionEvent =
     | OffRampFiatTransferIssuedEvent
     | OffRampSuccessEvent
     | OffRampFailedEvent
+    | OffRampPendingEvent
 
 type OffRampEventData = {
     transactionUuid: string
@@ -157,6 +158,10 @@ export type OffRampOnHoldKycEvent = {
 // TODO: maybe remap? Not a terminal state and is being treated the same as OffRampInProgressEvent
 export type OffRampFailedEvent = {
     type: 'unblock_offramp_failed'
+} & OffRampEventData
+
+export type OffRampPendingEvent = {
+    type: 'unblock_offramp_pending'
 } & OffRampEventData
 
 export type OffRampTransaction = {
@@ -205,6 +210,7 @@ export type OnRampTransactionEvent =
     | OnRampTransactionCryptoTransferIssuedEvent // CRYPTO_TRANSFER_ISSUED
     | OnRampTransactionProcessCompletedEvent // SUCCESS
     | OnRampTransactionFailedEvent // FAILED
+    | OnRampTransactionPendingEvent // PENDING
 
 export type OnRampTransactionTransferReceivedEvent = {
     type: 'unblock_onramp_transfer_received'
@@ -276,6 +282,15 @@ export type OnRampTransactionProcessCompletedEvent = {
 // TODO: maybe remap? Not a terminal state and is being treated the same as OnRampTransactionOutsideTransferInReviewEvent
 export type OnRampTransactionFailedEvent = {
     type: 'unblock_onramp_failed'
+    address: Address
+    fiat: Money
+    transactionUuid: string
+    createdAt: number
+    updatedAt: number
+}
+
+export type OnRampTransactionPendingEvent = {
+    type: 'unblock_onramp_pending'
     address: Address
     fiat: Money
     transactionUuid: string

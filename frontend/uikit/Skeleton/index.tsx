@@ -1,11 +1,14 @@
-import React, { useRef, useState } from 'react'
-import {
-    Animated,
+import React, { useEffect, useState } from 'react'
+import { LayoutChangeEvent, StyleSheet, View } from 'react-native'
+import Animated, {
     Easing,
-    LayoutChangeEvent,
-    StyleSheet,
-    View,
-} from 'react-native'
+    interpolate,
+    useAnimatedStyle,
+    useDerivedValue,
+    useSharedValue,
+    withRepeat,
+    withTiming,
+} from 'react-native-reanimated'
 
 import { LinearGradient } from 'expo-linear-gradient'
 
@@ -16,14 +19,16 @@ const styles = StyleSheet.create({
         borderRadius: 999,
         overflow: 'hidden',
     },
-
     variant_default: { backgroundColor: '#e4e7eb' },
     variant_transparent: {},
-
     splash: {
         width: '100%',
         height: '100%',
         borderRadius: 999,
+    },
+    gradient: {
+        width: '100%',
+        height: '100%',
     },
 })
 
@@ -42,57 +47,13 @@ export const Skeleton = ({
     height = DEFAULT_SKELETON_HEIGHT,
     width,
 }: Props) => {
-    const animatedValue = useRef(new Animated.Value(0)).current
-
-    const [animationRange, setAnimationRange] = useState({
-        start: 0,
-        end: 0,
-    })
-
-    const onLayout = (event: LayoutChangeEvent) => {
-        const { width } = event.nativeEvent.layout
-        setAnimationRange({ start: -width, end: width })
-    }
-
-    React.useEffect(() => {
-        let timeout: ReturnType<typeof setTimeout>
-
-        const startAnimation = () => {
-            animatedValue.setValue(0)
-            Animated.timing(animatedValue, {
-                toValue: 1,
-                easing: Easing.bezier(0.15, 0.5, 0.5, 1),
-                duration: 750,
-                useNativeDriver: true,
-            }).start(() => {
-                timeout = setTimeout(startAnimation, 750)
-            })
-        }
-
-        startAnimation()
-
-        return () => {
-            animatedValue.stopAnimation()
-            timeout && clearTimeout(timeout)
-        }
-    }, [animatedValue, animationRange])
-
-    const translateX = animatedValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: [animationRange.start, animationRange.end],
-    })
-
-    const animatedStyles = {
-        ...styles.splash,
-        transform: [{ translateX }],
-    }
-
-    const AnimatedLinearGradient =
-        Animated.createAnimatedComponent(LinearGradient)
+    const [measuredWidth, setMeasuredWidth] = useState<number | null>(null)
 
     return (
         <View
-            onLayout={onLayout}
+            onLayout={(event: LayoutChangeEvent) =>
+                setMeasuredWidth(event.nativeEvent.layout.width)
+            }
             style={[
                 styles.container,
                 styles[`variant_${variant}`],
@@ -104,11 +65,55 @@ export const Skeleton = ({
                 },
             ]}
         >
-            <AnimatedLinearGradient
-                colors={['transparent', '#f9f9fa', 'transparent']}
-                end={{ x: 1, y: 0 }}
-                style={animatedStyles}
-            />
+            {measuredWidth && <Splash width={measuredWidth} />}
         </View>
+    )
+}
+
+const Splash = ({ width }: { width: number }) => {
+    const animationProgress = useSharedValue(0)
+
+    const translateX = useDerivedValue(
+        () =>
+            withRepeat(
+                withTiming(
+                    interpolate(
+                        animationProgress.value,
+                        [0, 1],
+                        [-width, width]
+                    ),
+                    {
+                        duration: 750,
+                        easing: Easing.bezier(0.15, 0.5, 0.5, 1),
+                    }
+                ),
+                0 // Repeat indefinitely
+            ),
+        [animationProgress, width]
+    )
+
+    const animatedStyles = useAnimatedStyle(
+        () => ({
+            transform: [{ translateX: translateX.value }],
+        }),
+        [translateX]
+    )
+
+    useEffect(() => {
+        animationProgress.value = 1
+    }, [width, animationProgress])
+
+    return (
+        <Animated.View style={[styles.splash, animatedStyles]}>
+            <LinearGradient
+                style={StyleSheet.absoluteFill}
+                colors={[
+                    'rgba(255,255,255,0)',
+                    '#f9f9fa',
+                    'rgba(255,255,255,0)',
+                ]}
+                end={{ x: 1, y: 0 }}
+            />
+        </Animated.View>
     )
 }

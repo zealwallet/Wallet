@@ -34,7 +34,11 @@ type Msg =
 
 export const Layout = ({ onMsg, account, installationId }: Props) => {
     return (
-        <Popup.Layout background="backgroundLight" onMsg={onMsg}>
+        <Popup.Layout
+            background="backgroundLight"
+            onMsg={onMsg}
+            variant="screen"
+        >
             <Column spacing={0}>
                 <ActionBar
                     right={

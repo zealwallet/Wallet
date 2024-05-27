@@ -1,7 +1,10 @@
 import * as React from 'react'
-import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
+
 const SvgEr = ({ size }: { size: number }) => (
-    <Svg width={size} height={size} viewBox="0 0 512 512" fill="none">
+    <SvgIcon width={size} height={size} viewBox="0 0 512 512" fill="none">
         <G clipPath="url(#clip0_4_7148)">
             <Path
                 d="M233.739 233.739C233.739 233.739 75.1305 437.056 74.9805 437.019C121.306 483.346 185.307 512 256 512C397.384 512 512 397.384 512 256L233.739 233.739Z"
@@ -25,6 +28,6 @@ const SvgEr = ({ size }: { size: number }) => (
                 <Rect width={512} height={512} fill="white" />
             </ClipPath>
         </Defs>
-    </Svg>
+    </SvgIcon>
 )
 export default SvgEr

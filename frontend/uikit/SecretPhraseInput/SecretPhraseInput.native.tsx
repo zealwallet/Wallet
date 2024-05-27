@@ -30,7 +30,7 @@ export const SecretPhraseInput = ({
     hidden,
     autoFocus,
     readOnly,
-    'data-testid': testId,
+    'data-testid': _,
     onChange,
 }: Props) => {
     return (

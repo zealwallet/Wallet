@@ -45,7 +45,7 @@ export type Msg =
 
 export const Layout = ({ mode, manifest, onMsg }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen padding="form" background="light" onNavigateBack={null}>
             <ActionBar
                 left={
                     <ActionBar.Header>

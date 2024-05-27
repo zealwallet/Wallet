@@ -1,17 +1,88 @@
 import React, { createContext, useContext } from 'react'
-import { StyleSheet, Text as NativeText } from 'react-native'
+import { StyleSheet, Text as NativeText, TextStyle } from 'react-native'
+
+import { notReachable } from '@zeal/toolkit'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
 import { colors } from '../colors'
 import { Extractor } from '../Extractor'
 
+export type FontFamily =
+    | 'Lexend-Bold'
+    | 'Lexend-Medium'
+    | 'Lexend-Regular'
+    | 'Lexend-SemiBold'
+
+const fontFamiltyMap: Record<Weight, FontFamily> = {
+    bold: 'Lexend-Bold',
+    medium: 'Lexend-Medium',
+    regular: 'Lexend-Regular',
+    semi_bold: 'Lexend-SemiBold',
+}
+
+const getFontFamilty = (weight: Weight) => {
+    switch (ZealPlatform.OS) {
+        case 'ios':
+        case 'android':
+            return fontFamiltyMap[weight]
+        case 'web':
+            return 'Lexend, sans-serif'
+
+        default:
+            return notReachable(ZealPlatform.OS)
+    }
+}
+
+const getFontStyles = (weight: Weight): TextStyle => {
+    const fontFamily = getFontFamilty(weight)
+
+    switch (weight) {
+        case 'bold': {
+            switch (ZealPlatform.OS) {
+                case 'ios':
+                case 'web':
+                    return {
+                        fontFamily,
+                        fontWeight: '700',
+                    }
+                case 'android':
+                    return {
+                        fontFamily,
+                    }
+                default:
+                    return notReachable(ZealPlatform.OS)
+            }
+        }
+        case 'regular':
+            return {
+                fontFamily,
+                fontWeight: '400',
+            }
+        case 'medium':
+            return {
+                fontFamily,
+                fontWeight: '500',
+            }
+        case 'semi_bold':
+            return {
+                fontFamily,
+                fontWeight: '600',
+            }
+        default:
+            return notReachable(weight)
+    }
+}
+
 export const styles = StyleSheet.create({
     base: {
-        fontFamily: 'Lexend, sans-serif',
         includeFontPadding: false,
         textAlignVertical: 'center',
         minWidth: 0,
     },
-
+    weight_regular: getFontStyles('regular'),
+    weight_medium: getFontStyles('medium'),
+    weight_semi_bold: getFontStyles('semi_bold'),
+    weight_bold: getFontStyles('bold'),
     variant_inherit: {},
     variant_caption1: {
         fontSize: 12,
@@ -63,19 +134,6 @@ export const styles = StyleSheet.create({
     },
 
     weight_inherit: {},
-    weight_regular: {
-        fontWeight: '400',
-    },
-    weight_medium: {
-        fontWeight: '500',
-    },
-    weight_semi_bold: {
-        fontWeight: '600',
-    },
-    weight_bold: {
-        fontWeight: '700',
-    },
-
     color_textOnDark: {
         color: colors.textOnDark,
     },
@@ -90,6 +148,14 @@ export const styles = StyleSheet.create({
 
     color_textSecondary: {
         color: colors.textSecondary,
+    },
+
+    color_textOnColorSecondaryDisabled: {
+        color: colors.textOnColorSecondaryDisabled,
+    },
+
+    color_iconDisabled: {
+        color: colors.iconDisabled,
     },
 
     color_textError: {
@@ -209,6 +275,9 @@ export const styles = StyleSheet.create({
     color_networkPolygonZkevm: {
         color: colors.networkPolygonZkevm,
     },
+    color_networkLinea: {
+        color: colors.networkLinea,
+    },
     color_networkEthereum: {
         color: colors.networkEthereum,
     },
@@ -236,8 +305,20 @@ export const styles = StyleSheet.create({
     color_networkBase: {
         color: colors.networkBase,
     },
+    color_networkBlast: {
+        color: colors.networkBlast,
+    },
+    color_networkOPBNB: {
+        color: colors.networkOPBNB,
+    },
     color_networkzkSync: {
         color: colors.networkzkSync,
+    },
+    color_textStatusWarningOnColorDisabled: {
+        color: colors.textStatusWarningOnColorDisabled,
+    },
+    color_textOnPrimary: {
+        color: colors.textOnPrimary,
     },
 
     align_center: {
@@ -248,12 +329,12 @@ export const styles = StyleSheet.create({
     },
 })
 
+export type Weight = 'bold' | 'medium' | 'regular' | 'semi_bold'
 export type Variant = Extractor<keyof typeof styles, 'variant'>
-export type Weight = Extractor<keyof typeof styles, 'weight'>
 export type Color = Extractor<keyof typeof styles, 'color'>
 type Align = Extractor<keyof typeof styles, 'align'>
 
-type TextStyles = {
+export type TextStyles = {
     variant: Variant
     weight: Weight
     color: Color
@@ -279,6 +360,7 @@ export type Props = {
     color?: Color
     align?: Align
     ellipsis?: boolean
+    textDecorationLine?: 'none' | 'line-through'
 }
 export const Text = ({
     id,
@@ -288,6 +370,7 @@ export const Text = ({
     variant,
     weight,
     ellipsis,
+    textDecorationLine = 'none',
 }: Props) => {
     const textStylesContext = useTextStyleInheritContext()
     const currentStyles: TextStyles = {
@@ -307,6 +390,7 @@ export const Text = ({
                     styles[`weight_${currentStyles.weight}`],
                     styles[`color_${currentStyles.color}`],
                     styles[`align_${align}`],
+                    { textDecorationLine },
                 ]}
             >
                 {children}

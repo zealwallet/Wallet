@@ -13,9 +13,12 @@ import {
     FetchPortfolioResponse,
 } from '@zeal/domains/Account/api/fetchAccounts'
 import { Address } from '@zeal/domains/Address'
+import { CardConfig } from '@zeal/domains/Card'
 import { CurrencyHiddenMap, CurrencyPinMap } from '@zeal/domains/Currency'
+import { fetchCurrenciesMatrix } from '@zeal/domains/Currency/api/fetchCurrenciesMatrix'
 import { isEqual } from '@zeal/domains/Currency/helpers/isEqual'
 import { ConnectionMap } from '@zeal/domains/DApp/domains/ConnectionState'
+import { WalletConnectInstanceLoadable } from '@zeal/domains/DApp/domains/WalletConnect/api/fetchWalletConnectInstance'
 import { captureError } from '@zeal/domains/Error/helpers/captureError'
 import { getKeyStore } from '@zeal/domains/KeyStore/helpers/getKeyStore'
 import { Mode } from '@zeal/domains/Main'
@@ -38,6 +41,8 @@ type Props = {
     selectedAddress: string
     customCurrencies: CustomCurrencyMap
 
+    walletConnectInstanceLoadable: WalletConnectInstanceLoadable
+
     installationId: string
 
     connections: ConnectionMap
@@ -45,7 +50,7 @@ type Props = {
 
     currencyHiddenMap: CurrencyHiddenMap
     currencyPinMap: CurrencyPinMap
-
+    cardConfig: CardConfig
     onMsg: (msg: Msg) => void
 }
 
@@ -105,6 +110,11 @@ type Msg =
                   | 'on_nba_cta_click'
                   | 'on_zwidget_expand_request'
                   | 'on_bank_clicked'
+                  | 'on_card_owner_address_selected'
+                  | 'on_card_onboarded_account_state_received'
+                  | 'card_tab_choose_wallet_on_import_new_wallet_clicked'
+                  | 'on_card_imported_success_animation_complete'
+                  | 'on_order_new_card_gnosis_pay_click'
           }
       >
 
@@ -149,6 +159,8 @@ export const PortfolioLoader = ({
     currencyHiddenMap,
     currencyPinMap,
     mode,
+    walletConnectInstanceLoadable,
+    cardConfig,
     onMsg,
 }: Props) => {
     const liveOnMsg = useLiveRef(onMsg)
@@ -158,6 +170,11 @@ export const PortfolioLoader = ({
     const [selectedNetwork, setSelectedNetwork] = useState<CurrentNetwork>({
         type: 'all_networks',
     })
+
+    useEffect(() => {
+        // to cache (with etag) response for Swap and Bridge
+        fetchCurrenciesMatrix({})
+    }, [])
 
     const [loadable, setLoadable] = useReloadableData(
         fetchAccounts,
@@ -283,9 +300,8 @@ export const PortfolioLoader = ({
 
     return (
         <TabController
-            userMadeActionOnNextBestActionIds={
-                storage.userMadeActionOnNextBestActionIds
-            }
+            cardConfig={cardConfig}
+            walletConnectInstanceLoadable={walletConnectInstanceLoadable}
             mode={mode}
             currencyHiddenMap={currencyHiddenMap}
             currencyPinMap={currencyPinMap}
@@ -307,6 +323,8 @@ export const PortfolioLoader = ({
             portfolioMap={storage.portfolios}
             accounts={storage.accounts}
             bankTransferInfo={storage.bankTransferInfo}
+            feePresetMap={storage.feePresetMap}
+            gasCurrencyPresetMap={storage.gasCurrencyPresetMap}
             onMsg={(msg) => {
                 switch (msg.type) {
                     case 'on_custom_currency_update_request':
@@ -346,6 +364,29 @@ export const PortfolioLoader = ({
                             params: { ...loadable.params, forceRefresh: true },
                         })
                         break
+                    case 'on_refresh_pulled':
+                        setLoadable((old) => {
+                            switch (old.type) {
+                                case 'loaded':
+                                case 'reloading':
+                                case 'subsequent_failed':
+                                    return {
+                                        type: 'reloading',
+                                        params: old.params,
+                                        data: old.data,
+                                    }
+
+                                case 'error':
+                                case 'loading':
+                                    return {
+                                        type: 'loading',
+                                        params: old.params,
+                                    }
+                                default:
+                                    return notReachable(old)
+                            }
+                        })
+                        break
                     case 'track_wallet_clicked':
                     case 'add_wallet_clicked':
                     case 'hardware_wallet_clicked':
@@ -382,10 +423,13 @@ export const PortfolioLoader = ({
                     case 'safe_wallet_clicked':
                     case 'from_any_wallet_click':
                     case 'transaction_request_replaced':
-                    case 'on_nba_close_click':
-                    case 'on_nba_cta_click':
                     case 'on_zwidget_expand_request':
                     case 'on_bank_clicked':
+                    case 'on_card_owner_address_selected':
+                    case 'on_card_onboarded_account_state_received':
+                    case 'card_tab_choose_wallet_on_import_new_wallet_clicked':
+                    case 'on_card_imported_success_animation_complete':
+                    case 'on_order_new_card_gnosis_pay_click':
                         onMsg(msg)
                         break
 

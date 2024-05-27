@@ -82,6 +82,8 @@ jest.mock('expo-crypto', () => ({
     webcrypto: mock_webcrypto,
 }))
 
+jest.mock('@ledgerhq/hw-app-eth', () => ({}))
+
 jest.mock('secp256k1', () => ({
     privateKeyVerify: (buffer: Buffer) =>
         mock_secp256k1.privateKeyVerify(Uint8Array.from(buffer)),

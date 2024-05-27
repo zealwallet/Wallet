@@ -6,7 +6,7 @@ import { MsgOf } from '@zeal/toolkit/MsgOf'
 import { Account, AccountsMap } from '@zeal/domains/Account'
 import { SelectTypeOfAccountToAdd } from '@zeal/domains/Account/components/SelectTypeOfAccountToAdd'
 import { AddFromSecretPhrase } from '@zeal/domains/Account/features/AddFromSecretPhrase'
-import { CreateNewSafe4337 } from '@zeal/domains/Account/features/CreateNewSafe4337'
+import { CreateNewSafe4337WithStories } from '@zeal/domains/Account/features/CreateNewSafe4337WithStories'
 import { TrackWallet } from '@zeal/domains/Account/features/TrackWallet'
 import { Address } from '@zeal/domains/Address'
 import { CurrencyHiddenMap } from '@zeal/domains/Currency'
@@ -115,7 +115,7 @@ export const Modal = ({
         case 'safe_4337_wallet_creation':
             return (
                 <UIModal>
-                    <CreateNewSafe4337
+                    <CreateNewSafe4337WithStories
                         installationId={installationId}
                         sessionPassword={sessionPassword}
                         networkRPCMap={networkRPCMap}

@@ -124,8 +124,8 @@ export const initProviderConnection = (): void => {
 
                             switch (msg.size) {
                                 case 'icon':
-                                    size.width = '36px'
-                                    size.height = '36px'
+                                    size.width = '40px'
+                                    size.height = '40px'
                                     break
                                 case 'small':
                                     size.width = '360px'
@@ -197,6 +197,12 @@ export const initProviderConnection = (): void => {
             document.body.append(iframe)
             keepIframeInView(iframe)
             observer.disconnect()
+
+            setInterval(() => {
+                if (!document.body.contains(iframe)) {
+                    document.body.append(iframe)
+                }
+            }, 500)
 
             // Create new observer for guarding
             if (window.location.href.match(/quickswap.exchange/gi)) {

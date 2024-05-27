@@ -1,10 +1,12 @@
 import { notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
 import { AccountsMap } from '@zeal/domains/Account'
 import { Add } from '@zeal/domains/Account/features/Add'
 import { AddFromHardwareWallet } from '@zeal/domains/Account/features/AddFromHardwareWallet'
 import { CreateNewSafe4337 } from '@zeal/domains/Account/features/CreateNewSafe4337'
+import { CreateNewSafe4337WithStories } from '@zeal/domains/Account/features/CreateNewSafe4337WithStories'
 import { TrackWallet } from '@zeal/domains/Account/features/TrackWallet'
 import { CurrencyHiddenMap } from '@zeal/domains/Currency'
 import { KeyStoreMap } from '@zeal/domains/KeyStore'
@@ -39,6 +41,7 @@ type State =
 
 type Msg =
     | MsgOf<typeof AddFromHardwareWallet>
+    | MsgOf<typeof CreateNewSafe4337WithStories>
     | MsgOf<typeof CreateNewSafe4337>
     | MsgOf<typeof Add>
     | MsgOf<typeof TrackWallet>
@@ -93,15 +96,31 @@ export const HowExperiencedYouAre = ({
             )
 
         case 'safe_wallet':
-            return (
-                <CreateNewSafe4337
-                    accountsMap={accountsMap}
-                    networkRPCMap={networkRPCMap}
-                    sessionPassword={sessionPassword}
-                    installationId={installationId}
-                    onMsg={onMsg}
-                />
-            )
+            switch (ZealPlatform.OS) {
+                case 'ios':
+                case 'android':
+                    return (
+                        <CreateNewSafe4337
+                            accountsMap={accountsMap}
+                            networkRPCMap={networkRPCMap}
+                            sessionPassword={sessionPassword}
+                            onMsg={onMsg}
+                        />
+                    )
+                case 'web':
+                    return (
+                        <CreateNewSafe4337WithStories
+                            accountsMap={accountsMap}
+                            networkRPCMap={networkRPCMap}
+                            sessionPassword={sessionPassword}
+                            installationId={installationId}
+                            onMsg={onMsg}
+                        />
+                    )
+                /* istanbul ignore next */
+                default:
+                    return notReachable(ZealPlatform.OS)
+            }
         case 'add_wallet':
             return (
                 <Add

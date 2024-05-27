@@ -325,8 +325,8 @@ const GroupedTransactions = ({
         <SectionList
             variant="default"
             sections={sections}
-            itemSpacing={12}
-            sectionSpacing={12}
+            itemSpacing={8}
+            sectionSpacing={8}
             renderSectionHeader={({ section: { title, key } }) => (
                 <GroupHeader
                     right={null}

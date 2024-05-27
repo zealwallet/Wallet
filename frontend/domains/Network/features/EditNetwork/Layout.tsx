@@ -1,8 +1,7 @@
 import { FormattedMessage } from 'react-intl'
 
 import { Column } from '@zeal/uikit/Column'
-import { Group } from '@zeal/uikit/Group'
-import { GroupHeader } from '@zeal/uikit/Group'
+import { Group, GroupHeader } from '@zeal/uikit/Group'
 import { BoldNetwork } from '@zeal/uikit/Icon/BoldNetwork'
 import { Checkbox } from '@zeal/uikit/Icon/Checkbox'
 import { InfoCircle } from '@zeal/uikit/Icon/InfoCircle'
@@ -45,7 +44,7 @@ export const Layout = ({ network, networkRPCMap, onMsg }: Props) => {
     const networkRPC = getNetworkRPC({ network, networkRPCMap })
 
     return (
-        <Popup.Layout onMsg={onMsg}>
+        <Popup.Layout onMsg={onMsg} variant="screen">
             <Column spacing={12}>
                 <Group variant="default">
                     <ListItem

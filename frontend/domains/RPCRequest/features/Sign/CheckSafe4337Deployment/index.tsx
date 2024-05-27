@@ -58,7 +58,7 @@ type Props = {
 }
 
 type Msg =
-    | { type: 'close' }
+    | { type: 'on_pre_sign_safe_deployment_error_popup_cancel_clicked' }
     | MsgOf<typeof Signing>
     | Extract<
           MsgOf<typeof DeploySafe>,
@@ -69,8 +69,13 @@ type Msg =
                   | 'on_4337_gas_currency_selected'
                   | 'on_minimize_click'
                   | 'on_safe_deployemnt_cancelled'
+                  | 'on_cancel_confirm_transaction_clicked'
+                  | 'on_safe_transaction_failure_accepted'
+                  | 'on_wrong_network_accepted'
           }
       >
+
+type SafeOnChainState = 'deployed' | 'not_deployed' | 'no_local_signer_added'
 
 const checkSafeDeployment = async ({
     keyStore,
@@ -80,7 +85,7 @@ const checkSafeDeployment = async ({
     keyStore: Safe4337
     network: Network
     networkRPCMap: NetworkRPCMap
-}): Promise<boolean> => {
+}): Promise<SafeOnChainState> => {
     const instance = await getSafe4337Instance({
         network,
         networkRPCMap,
@@ -89,9 +94,14 @@ const checkSafeDeployment = async ({
 
     switch (instance.type) {
         case 'deployed':
-            return true
+            return instance.owners.includes(
+                keyStore.localSignerKeyStore.address
+            )
+                ? 'deployed'
+                : 'no_local_signer_added'
+
         case 'not_deployed':
-            return false
+            return 'not_deployed'
 
         default:
             return notReachable(instance)
@@ -139,6 +149,7 @@ export const CheckSafe4337Deployment = ({
                 case 'maximised':
                     return (
                         <LoadingLayout
+                            onClose={null}
                             actionBar={
                                 <ActionBar
                                     left={
@@ -168,6 +179,7 @@ export const CheckSafe4337Deployment = ({
                     return (
                         <>
                             <LoadingLayout
+                                onClose={null}
                                 actionBar={
                                     <ActionBar
                                         left={
@@ -184,7 +196,9 @@ export const CheckSafe4337Deployment = ({
                                 onMsg={(msg) => {
                                     switch (msg.type) {
                                         case 'close':
-                                            onMsg(msg)
+                                            onMsg({
+                                                type: 'on_pre_sign_safe_deployment_error_popup_cancel_clicked',
+                                            })
                                             break
                                         case 'try_again_clicked':
                                             setLoadable({
@@ -205,61 +219,73 @@ export const CheckSafe4337Deployment = ({
                     return notReachable(state)
             }
 
-        case 'loaded':
-            return loadable.data ? (
-                <Signing
-                    installationId={installationId}
-                    account={account}
-                    dApp={dApp}
-                    keyStore={keyStore}
-                    network={network}
-                    networkMap={networkMap}
-                    request={request}
-                    sessionPassword={sessionPassword}
-                    state={state}
-                    actionSource={actionSource}
-                    onMsg={onMsg}
-                />
-            ) : (
-                <DeploySafe
-                    keyStore={keyStore}
-                    account={account}
-                    accountsMap={accountsMap}
-                    dApp={dApp}
-                    gasCurrencyPresetMap={gasCurrencyPresetMap}
-                    installationId={installationId}
-                    keyStoreMap={keyStoreMap}
-                    network={network}
-                    networkMap={networkMap}
-                    networkRPCMap={networkRPCMap}
-                    portfolio={portfolio}
-                    sessionPassword={sessionPassword}
-                    visualState={state}
-                    actionSource={actionSource}
-                    onMsg={(msg) => {
-                        switch (msg.type) {
-                            case 'drag':
-                            case 'on_expand_request':
-                            case 'on_4337_gas_currency_selected':
-                            case 'on_minimize_click':
-                            case 'on_safe_deployemnt_cancelled':
-                                onMsg(msg)
-                                break
+        case 'loaded': {
+            switch (loadable.data) {
+                case 'deployed':
+                    return (
+                        <Signing
+                            installationId={installationId}
+                            account={account}
+                            dApp={dApp}
+                            keyStore={keyStore}
+                            network={network}
+                            networkMap={networkMap}
+                            request={request}
+                            sessionPassword={sessionPassword}
+                            state={state}
+                            actionSource={actionSource}
+                            onMsg={onMsg}
+                        />
+                    )
+                case 'no_local_signer_added':
+                case 'not_deployed':
+                    return (
+                        <DeploySafe
+                            keyStore={keyStore}
+                            account={account}
+                            accountsMap={accountsMap}
+                            dApp={dApp}
+                            gasCurrencyPresetMap={gasCurrencyPresetMap}
+                            installationId={installationId}
+                            keyStoreMap={keyStoreMap}
+                            network={network}
+                            networkMap={networkMap}
+                            networkRPCMap={networkRPCMap}
+                            portfolio={portfolio}
+                            sessionPassword={sessionPassword}
+                            visualState={state}
+                            actionSource={actionSource}
+                            onMsg={(msg) => {
+                                switch (msg.type) {
+                                    case 'drag':
+                                    case 'on_expand_request':
+                                    case 'on_4337_gas_currency_selected':
+                                    case 'on_minimize_click':
+                                    case 'on_safe_deployemnt_cancelled':
+                                    case 'on_cancel_confirm_transaction_clicked':
+                                    case 'on_safe_transaction_failure_accepted':
+                                    case 'on_wrong_network_accepted':
+                                        onMsg(msg)
+                                        break
 
-                            case 'on_safe_deployed':
-                                setLoadable({
-                                    type: 'loaded',
-                                    data: true,
-                                    params: loadable.params,
-                                })
-                                break
+                                    case 'on_safe_deployed':
+                                        setLoadable({
+                                            type: 'loading',
+                                            params: loadable.params,
+                                        })
+                                        break
 
-                            default:
-                                return notReachable(msg)
-                        }
-                    }}
-                />
-            )
+                                    default:
+                                        return notReachable(msg)
+                                }
+                            }}
+                        />
+                    )
+
+                default:
+                    return notReachable(loadable.data)
+            }
+        }
 
         default:
             return notReachable(loadable)

@@ -15,6 +15,7 @@ import {
     OnRampTransactionOnHoldComplianceEvent,
     OnRampTransactionOnHoldKycEvent,
     OnRampTransactionOutsideTransferInReviewEvent,
+    OnRampTransactionPendingEvent,
     OnRampTransactionTransferApprovedEvent,
     OnRampTransactionTransferReceivedEvent,
 } from '@zeal/domains/Currency/domains/BankTransfer'
@@ -68,6 +69,7 @@ type Props = {
         | OnRampTransactionTransferReceivedEvent
         | OnRampTransactionCryptoTransferIssuedEvent
         | OnRampTransactionOnHoldKycEvent
+        | OnRampTransactionPendingEvent
     form: OnRampFeeParams
     knownCurrencies: KnownCurrencies
 }
@@ -84,6 +86,7 @@ export const CryptoPendingSection = ({
         case 'unblock_onramp_transfer_in_review':
         case 'unblock_onramp_transfer_approved':
         case 'unblock_onramp_transfer_received':
+        case 'unblock_onramp_pending':
         case 'unblock_onramp_transfer_on_hold_kyc': {
             const cryptoCurrency = form.outputCurrency
             const network = networkMap[cryptoCurrency.networkHexChainId] || null

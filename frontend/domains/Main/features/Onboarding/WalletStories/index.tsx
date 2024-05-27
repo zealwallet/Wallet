@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 
+import { CustomSafeIcon } from '@zeal/uikit/Icon/CustomSafeIcon'
 import {
     StoryPage,
     StoryWithPersistentActions,
@@ -22,21 +23,44 @@ type Props = {
     onMsg: (msg: Msg) => void
 }
 
+const SafeStoryTitle = () => {
+    switch (ZealPlatform.OS) {
+        case 'web':
+            return (
+                <FormattedMessage
+                    id="onboarding.story.multi_network_wallet.title.web"
+                    defaultMessage="Secure Self-custody with Biometrics and {safeLogo} Safe. No Seed Phrases"
+                    values={{
+                        safeLogo: <CustomSafeIcon color="textSecondary" />,
+                    }}
+                />
+            )
+        case 'ios':
+        case 'android':
+            return (
+                <FormattedMessage
+                    id="onboarding.story.multi_network_wallet.title.mobile"
+                    defaultMessage="Secure Self-custody with Biometrics and {safeLogo} Safe. No Seed Phrases"
+                    values={{
+                        safeLogo: <CustomSafeIcon color="textSecondary" />,
+                    }}
+                />
+            )
+        default:
+            return notReachable(ZealPlatform.OS)
+    }
+}
+
 export const STORY_SLIDES: StoryPage[] = [
     {
-        title: (
-            <FormattedMessage
-                id="onboarding.story.multi_network_wallet.title"
-                defaultMessage="Zeal is a wallet for all Ethereum-based networks, and it works everywhere"
-            />
-        ),
-        artworkSrc: 'networks',
+        title: <SafeStoryTitle />,
+        artworkSrc: 'safe',
     },
     {
         title: (
             <FormattedMessage
                 id="onboarding.story.smart_portfolio.title"
-                defaultMessage="See your entire portfolio. Tokens, DeFi and NFTs"
+                defaultMessage="See all your Tokens, NFTs, DeFi and Rewards"
             />
         ),
         artworkSrc: 'portfolio',
@@ -45,19 +69,28 @@ export const STORY_SLIDES: StoryPage[] = [
         title: (
             <FormattedMessage
                 id="onboarding.story.safety_checks.title"
-                defaultMessage="Protect against scams, and preview every transaction"
+                defaultMessage="Automatic Protection against Scams and Mistakes"
             />
         ),
-        artworkSrc: 'safe',
+        artworkSrc: 'safety',
     },
     {
         title: (
             <FormattedMessage
                 id="onboarding.story.bank_tranasfers.title"
-                defaultMessage="Free and instant bank transfers"
+                defaultMessage="The first Onchain Crypto Visa®, and Free Crypto Bank Transfers"
             />
         ),
         artworkSrc: 'transfers',
+    },
+    {
+        title: (
+            <FormattedMessage
+                id="onboarding.story.multi_network_wallet.title"
+                defaultMessage="Works with All Apps, on All EVM Networks"
+            />
+        ),
+        artworkSrc: 'networks',
     },
 ]
 

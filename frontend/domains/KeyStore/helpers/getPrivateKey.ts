@@ -3,7 +3,6 @@ import { decrypt } from '@zeal/toolkit/Crypto'
 import { string } from '@zeal/toolkit/Result'
 import * as Web3 from '@zeal/toolkit/Web3'
 
-import { Address } from '@zeal/domains/Address'
 import { PrivateKey, SecretPhrase } from '@zeal/domains/KeyStore'
 import { decryptSecretPhrase } from '@zeal/domains/KeyStore/helpers/decryptSecretPhrase'
 
@@ -13,7 +12,7 @@ export const getPrivateKey = async ({
 }: {
     sessionPassword: string
     keyStore: PrivateKey | SecretPhrase
-}): Promise<{ address: Address; pk: string }> => {
+}): Promise<Web3.privateKey.PrivateKey> => {
     switch (keyStore.type) {
         case 'private_key_store': {
             const pk = await decrypt(
@@ -21,7 +20,7 @@ export const getPrivateKey = async ({
                 keyStore.encryptedPrivateKey,
                 string
             )
-            return { address: keyStore.address, pk: `0x${pk}` }
+            return { address: keyStore.address, privateKey: `0x${pk}` }
         }
 
         case 'secret_phrase_key': {
@@ -38,7 +37,7 @@ export const getPrivateKey = async ({
 
             return {
                 address: pk.address,
-                pk: pk.privateKey,
+                privateKey: pk.privateKey,
             }
         }
 

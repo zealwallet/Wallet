@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { ScrollView } from 'react-native'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Actions } from '@zeal/uikit/Actions'
@@ -14,6 +13,7 @@ import { IconButton } from '@zeal/uikit/IconButton'
 import { InfoCard } from '@zeal/uikit/InfoCard'
 import { ListItem } from '@zeal/uikit/ListItem'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 
 import { notReachable } from '@zeal/toolkit'
 import { values } from '@zeal/toolkit/Object'
@@ -138,7 +138,11 @@ export const Layout = ({
     }
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'on_back_button_clicked' })}
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -169,7 +173,7 @@ export const Layout = ({
                 />
 
                 <Column spacing={12} shrink fill>
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollContainer>
                         <Column spacing={12}>
                             {activeAccounts.length === 0 ? null : (
                                 <Group variant="default">
@@ -240,7 +244,7 @@ export const Layout = ({
                                 />
                             </Group>
                         </Column>
-                    </ScrollView>
+                    </ScrollContainer>
 
                     <Column spacing={8}>
                         <InfoCard

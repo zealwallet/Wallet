@@ -16,19 +16,13 @@ import {
     Msg as EditLabelMsg,
 } from '@zeal/domains/Account/domains/Label/components/EditLabel'
 import { Receive } from '@zeal/domains/Account/features/Receive'
-import {
-    KeyStore,
-    KeyStoreMap,
-    PrivateKey,
-    SecretPhrase,
-} from '@zeal/domains/KeyStore'
+import { KeyStore, PrivateKey, SecretPhrase } from '@zeal/domains/KeyStore'
 import { ViewPrivateKey } from '@zeal/domains/KeyStore/features/ViewPrivateKey'
 import { ViewSecretPhrase } from '@zeal/domains/KeyStore/features/ViewSecretPhrase'
 
 type Props = {
     installationId: string
     accounts: AccountsMap
-    keystoreMap: KeyStoreMap
     account: Account
     encryptedPassword: string
     state: State

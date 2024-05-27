@@ -25,7 +25,9 @@ type Msg =
       >
     | Extract<
           MsgOf<typeof AddFunds>,
-          { type: 'bank_transfer_click' | 'from_any_wallet_click' }
+          {
+              type: 'bank_transfer_click' | 'from_any_wallet_click'
+          }
       >
 
 type State =

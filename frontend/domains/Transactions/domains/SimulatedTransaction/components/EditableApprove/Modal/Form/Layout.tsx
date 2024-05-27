@@ -216,7 +216,11 @@ export const Layout = ({
     }
 
     return (
-        <Popup.Layout onMsg={onMsg} aria-labelledby="edit-permissions-label">
+        <Popup.Layout
+            onMsg={onMsg}
+            aria-labelledby="edit-permissions-label"
+            variant="screen"
+        >
             <Column spacing={24}>
                 <Header
                     titleId="edit-permissions-label"

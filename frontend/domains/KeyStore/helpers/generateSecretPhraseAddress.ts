@@ -1,6 +1,7 @@
 import * as Web3 from '@zeal/toolkit/Web3'
 
 import { Address } from '@zeal/domains/Address'
+import { fromString } from '@zeal/domains/Address/helpers/fromString'
 import { decryptSecretPhrase } from '@zeal/domains/KeyStore/helpers/decryptSecretPhrase'
 
 type Params = {
@@ -40,6 +41,9 @@ export const generateSecretPhraseAddressOnPath = async ({
         decryptedPhrase,
         path as `m/44'/60'/0'/0/${string}`
     )
+    const parsedAddress = fromString(address).getSuccessResultOrThrow(
+        'cannot parse address in generateSecretPhraseAddressOnPath'
+    )
 
-    return { address, path }
+    return { address: parsedAddress, path }
 }

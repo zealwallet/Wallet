@@ -14,6 +14,8 @@ type OpenSeaNetwork =
     | 'matic'
     | 'avalanche'
     | 'optimism'
+    | 'blast'
+    | 'base'
 
 const getOpenSeaNetwork = ({
     networkHexId,
@@ -52,19 +54,25 @@ const getOpenSeaNetwork = ({
                 case 'Optimism':
                     return 'optimism'
 
-                case 'Fantom':
-                case 'PolygonZkevm':
-                case 'Gnosis':
+                case 'Blast':
+                    return 'blast'
+
+                case 'Base':
+                    return 'base'
+
+                case 'Aurora':
                 case 'Celo':
                 case 'Cronos':
-                case 'Aurora':
-                case 'Base':
+                case 'Fantom':
+                case 'Gnosis':
+                case 'Linea':
+                case 'OPBNB':
+                case 'PolygonZkevm':
                 case 'zkSync':
                     throw new ImperativeError(
                         `Network not supported for OpenSea`,
                         { network: network.hexChainId }
                     )
-
                 /* istanbul ignore next */
                 default:
                     return notReachable(network)

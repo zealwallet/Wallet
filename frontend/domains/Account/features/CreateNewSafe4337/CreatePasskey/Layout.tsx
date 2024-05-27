@@ -25,7 +25,11 @@ type Props = {
 type Msg = { type: 'close' } | { type: 'on_enable_biometrics_clicked' }
 
 export const Layout = ({ onMsg }: Props) => (
-    <Screen padding="form" background="light">
+    <Screen
+        padding="form"
+        background="light"
+        onNavigateBack={() => onMsg({ type: 'close' })}
+    >
         <ActionBar
             left={
                 <IconButton
@@ -127,7 +131,7 @@ export const Layout = ({ onMsg }: Props) => (
                     }
                 >
                     <FormattedMessage
-                        id="create-passkey.cta"
+                        id="create-passkey.mobile.cta"
                         defaultMessage="Enable biometrics"
                     />
                 </Button>

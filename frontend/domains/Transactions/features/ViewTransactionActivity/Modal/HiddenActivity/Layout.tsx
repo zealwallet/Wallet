@@ -34,7 +34,11 @@ export const Layout = ({
     networkMap,
 }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 top={
                     <ActionBarAccountSelector

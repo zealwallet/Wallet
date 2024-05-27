@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { ScrollView } from 'react-native'
+import { Keyboard } from 'react-native'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Actions } from '@zeal/uikit/Actions'
@@ -16,9 +16,10 @@ import { IconButton } from '@zeal/uikit/IconButton'
 import { Input } from '@zeal/uikit/Input'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Text } from '@zeal/uikit/Text'
 
-import { noop, notReachable } from '@zeal/toolkit'
+import { notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
 
 import { Account, AccountsMap } from '@zeal/domains/Account'
@@ -82,10 +83,14 @@ export const Layout = ({
     })
 
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
-                    <Row spacing={4}>
+                    <Row spacing={4} alignY="stretch">
                         <Clickable onClick={() => onMsg({ type: 'close' })}>
                             <Row spacing={4}>
                                 <ArrowLeft2 size={24} color="iconDefault" />
@@ -132,7 +137,7 @@ export const Layout = ({
             <Column spacing={16} shrink fill>
                 <Input
                     keyboardType="default"
-                    onSubmitEditing={noop}
+                    onSubmitEditing={Keyboard.dismiss}
                     leftIcon={<OutlineSearch size={24} color="iconDefault" />}
                     rightIcon={<RightIcon searchResult={searchResult} />}
                     variant="regular"
@@ -147,7 +152,7 @@ export const Layout = ({
                     })}
                 />
 
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollContainer>
                     {(() => {
                         switch (searchResult.type) {
                             case 'accounts_not_found':
@@ -235,7 +240,7 @@ export const Layout = ({
                                 return notReachable(searchResult)
                         }
                     })()}
-                </ScrollView>
+                </ScrollContainer>
             </Column>
 
             <CTA onMsg={onMsg} searchResult={searchResult} />

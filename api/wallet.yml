@@ -1227,6 +1227,7 @@ components:
     TransactionEventSource:
       type: string
       enum:
+        - "walletConnect"
         - "zwidget"
         - "bridge"
         - "bridgeApprove"
@@ -1992,7 +1993,7 @@ components:
           items:
             $ref: "#/components/schemas/FxRate"
         currencies:
-            $ref: "#/components/schemas/Currencies"
+          $ref: "#/components/schemas/Currencies"
 
     SubmittedTransactionResultResponse:
       type: object
@@ -2681,8 +2682,8 @@ components:
     UserOpTokenGasEstimate:
       type: object
       required:
-          - tokenAddress
-          - gasEstimate
+        - tokenAddress
+        - gasEstimate
       properties:
         tokenAddress:
           type: string
@@ -3139,21 +3140,20 @@ components:
         - "BSC"
         - "Polygon"
         - "PolygonZkevm"
+        - "Linea"
         - "Fantom"
         - "Optimism"
         - "Base"
+        - "Blast"
+        - "OPBNB"
         - "Gnosis"
         - "Celo"
         - "Avalanche"
         - "Cronos"
-        - "EthereumGoerli"
         - "EthereumSepolia"
-        - "PolygonMumbai"
         - "BscTestnet"
         - "AvalancheFuji"
-        - "OptimismGoerli"
         - "FantomTestnet"
-        - "ArbitrumGoerli"
         - "Aurora"
         - "AuroraTestnet"
 
@@ -4226,29 +4226,15 @@ components:
       type: object
       required:
         - token
-        - tokenType
         - addresses
-        - deviceId
-        - deviceType
       properties:
         token:
           type: string
-        tokenType:
-          type: string
-          enum:
-            - "FCM"
         addresses:
           type: array
           items:
             type: string
             format: address
-        deviceId:
-          type: string
-        deviceType:
-          type: string
-          enum:
-            - "Extension"
-            - "Mobile"
 
     CryptoFxRateRequest:
       type: object

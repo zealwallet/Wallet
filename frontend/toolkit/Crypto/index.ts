@@ -4,7 +4,12 @@ import {
     decrypt as mmDecrypt,
     encrypt as mmEncrypt,
 } from '@metamask/browser-passworder'
-import { getRandomValues, randomUUID } from 'expo-crypto' // eslint-disable-line no-restricted-imports
+import {
+    decryptAESGCM as decryptAESGCMReactNative,
+    encryptRSAOAEP as encryptRSAOAEPReactNative,
+} from '@zeal/react-native-crypto'
+// eslint-disable-next-line no-restricted-imports
+import { getRandomValues, randomUUID } from 'expo-crypto'
 import { encodeAbiParameters as viemEncodeAbiParameters } from 'viem/utils'
 
 import { parse as parseJSON } from '../JSON'
@@ -19,6 +24,25 @@ export const uuid = (): string => {
 export const getRandomIntArray: typeof getRandomValues = (arrayLike) => {
     return getRandomValues(arrayLike)
 }
+
+export const encryptRSAOAEP = async ({
+    dataBase64,
+    publicKeyBase64,
+}: {
+    dataBase64: string
+    publicKeyBase64: string
+}): Promise<string> => encryptRSAOAEPReactNative(dataBase64, publicKeyBase64)
+
+export const decryptAESGCM = async ({
+    cipherBase64,
+    ivBase64,
+    keyBase64,
+}: {
+    cipherBase64: string
+    keyBase64: string
+    ivBase64: string
+}): Promise<string> =>
+    decryptAESGCMReactNative(cipherBase64, keyBase64, ivBase64)
 
 export const encrypt = async <R>(
     password: string,

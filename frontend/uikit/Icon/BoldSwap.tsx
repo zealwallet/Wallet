@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const BoldSwap = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 24 24"
             width={size}
             height={size}
@@ -30,6 +31,6 @@ export const BoldSwap = ({ size, color }: Props) => {
                 d="M12 20.2857C16.5761 20.2857 20.2857 16.5761 20.2857 12C20.2857 11.5266 20.6695 11.1429 21.1429 11.1429C21.6162 11.1429 22 11.5266 22 12C22 17.5228 17.5228 22 12 22C8.82756 22 5.72245 20.2478 3.71429 17.5281V20C3.71429 20.4734 3.33053 20.8571 2.85714 20.8571C2.38376 20.8571 2 20.4734 2 20V15.6571C2 15.0575 2.48609 14.5714 3.08572 14.5714H7.42857C7.90196 14.5714 8.28571 14.9552 8.28571 15.4286C8.28571 15.902 7.90196 16.2857 7.42857 16.2857H4.93183C6.64743 18.7511 9.35967 20.2857 12 20.2857Z"
                 fill="currentColor"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

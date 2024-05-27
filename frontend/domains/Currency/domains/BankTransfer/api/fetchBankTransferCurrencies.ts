@@ -7,43 +7,21 @@ import {
     FiatCurrency,
     KnownCurrencies,
 } from '@zeal/domains/Currency'
+import { FIAT_CURRENCIES } from '@zeal/domains/Currency/constants'
 import { USD } from '@zeal/domains/Currency/domains/BankTransfer/constants'
 import { NetworkHexId } from '@zeal/domains/Network'
 
-type FiatCurrencyCode = 'GBP' | 'EUR' | 'NGN'
-export type BankTransferFiatCurrencies = Record<FiatCurrencyCode, FiatCurrency>
+type UnblockFiatCurrencies = 'GBP' | 'EUR' | 'NGN'
+
+export type BankTransferFiatCurrencies = Record<
+    UnblockFiatCurrencies,
+    FiatCurrency
+>
 
 const UNBLOCK_FIAT_CURRENCIES_MAP: BankTransferFiatCurrencies = {
-    GBP: {
-        type: 'FiatCurrency',
-        id: 'GBP',
-        symbol: '£',
-        code: 'GBP',
-        fraction: 18,
-        rateFraction: 18,
-        icon: 'TODO',
-        name: 'British Pound',
-    },
-    EUR: {
-        type: 'FiatCurrency',
-        id: 'EUR',
-        symbol: '€',
-        code: 'EUR',
-        fraction: 18,
-        rateFraction: 18,
-        icon: 'TODO',
-        name: 'Euro',
-    },
-    NGN: {
-        type: 'FiatCurrency',
-        id: 'NGN',
-        symbol: '₦',
-        code: 'NGN',
-        fraction: 18,
-        rateFraction: 18,
-        icon: 'TODO',
-        name: 'Nigerian Naira',
-    },
+    GBP: FIAT_CURRENCIES['GBP'],
+    EUR: FIAT_CURRENCIES['EUR'],
+    NGN: FIAT_CURRENCIES['NGN'],
 }
 
 export const UNBLOCK_SUSPENDED_FIAT_CURRENCY_CODES: string[] = ['NGN']

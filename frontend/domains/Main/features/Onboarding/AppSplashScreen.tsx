@@ -24,7 +24,7 @@ export const AppSplashScreen = ({ onMsg }: Props) => {
     }, [onMsgLive])
 
     return (
-        <Screen padding="main" background="splashScreen">
+        <Screen padding="main" background="splashScreen" onNavigateBack={null}>
             <Column spacing={0} alignX="center" alignY="center" fill>
                 <ZealSplashScreenLogo />
             </Column>

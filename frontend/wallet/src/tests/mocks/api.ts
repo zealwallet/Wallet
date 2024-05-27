@@ -74,6 +74,30 @@ export type ApiMock = Omit<
 // TODO Wrap mock functions with jest.fn() [jest.Mock<T, P> type]
 
 let apiMock: ApiMock
+;(global.fetch as unknown) = async (
+    url: string,
+    options: { method: 'GET' }
+): ReturnType<typeof fetch> => {
+    const method = options.method.toLowerCase()
+
+    const parsedURL = new URL(url)
+
+    const config = {
+        method,
+        url: parsedURL.pathname,
+        params: Object.fromEntries(parsedURL.searchParams.entries()),
+    }
+
+    const { data, headers, status } = await getResponse(config)
+
+    return Promise.resolve({
+        ok: !isFailedStatus(status),
+        headers: { get: (key: string) => headers[key] },
+        json: () => Promise.resolve(data),
+    } as Response)
+}
+
+const isFailedStatus = (status: number): boolean => status > 299
 
 const getPRCResponder = (
     config: AxiosRequestConfig,
@@ -186,9 +210,7 @@ const getMockResponder = (config: AxiosRequestConfig): ResponseFunction => {
 
     if (!matchedMock) {
         // eslint-disable-next-line no-console
-        console.error(
-            `Failed to find mock for URL[${requestUrl}] method [${requestMethod}]`
-        )
+        console.error(`Failed to find mock for URL[${requestUrl}]`)
         process.exit(-1)
     }
 
@@ -225,7 +247,7 @@ const getResponse = async (
 
     const [status, data] = responder(config)
 
-    if (status > 299) {
+    if (isFailedStatus(status)) {
         throw new HttpError(requestUrl, requestMethod, status, null, data, {})
     }
 

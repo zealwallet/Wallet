@@ -1,9 +1,4 @@
 import { useEffect } from 'react'
-import { FormattedMessage } from 'react-intl'
-
-import { Header } from '@zeal/uikit/Header'
-import { OutlineFingerprint } from '@zeal/uikit/Icon/OutlineFingerprint'
-import { Popup } from '@zeal/uikit/Popup'
 
 import { notReachable, useLiveRef } from '@zeal/toolkit'
 import { useLoadableData } from '@zeal/toolkit/LoadableData/LoadableData'
@@ -15,6 +10,7 @@ import { ConnectedMinimized } from '@zeal/domains/DApp/domains/ConnectionState/f
 import { AppErrorPopup } from '@zeal/domains/Error/components/AppErrorPopup'
 import { parseAppError } from '@zeal/domains/Error/parsers/parseAppError'
 import { KeyStoreMap, Safe4337 } from '@zeal/domains/KeyStore'
+import { SignWithPasskeyPopup } from '@zeal/domains/KeyStore/domains/Passkey/components/SignWithPasskeyPopup'
 import { ActionSource } from '@zeal/domains/Main'
 import { NetworkMap } from '@zeal/domains/Network'
 import { LoadingLayout } from '@zeal/domains/RPCRequest/features/SendSafe4337Transaction/Flow/LoadingLayout'
@@ -254,29 +250,3 @@ export const Sign = ({
             return notReachable(loadable)
     }
 }
-
-const SignWithPasskeyPopup = ({
-    onMsg,
-}: {
-    onMsg: (msg: { type: 'close' }) => void
-}) => (
-    <Popup.Layout onMsg={onMsg}>
-        <Header
-            icon={({ size, color }) => (
-                <OutlineFingerprint size={size} color={color} />
-            )}
-            title={
-                <FormattedMessage
-                    id="sign.passkey.title"
-                    defaultMessage="Sign with passkey"
-                />
-            }
-            subtitle={
-                <FormattedMessage
-                    id="sign.passkey.subtitle"
-                    defaultMessage="Your browser should prompt you to sign with the passkey associated with this wallet. Please continue there."
-                />
-            }
-        />
-    </Popup.Layout>
-)

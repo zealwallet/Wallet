@@ -112,6 +112,7 @@ export const ListItem = ({
                             <IconButton
                                 variant="on_light"
                                 onClick={() => openExternalURL(explorerLink)}
+                                size="small"
                             >
                                 {({ color }) => (
                                     <ExternalLink size={14} color={color} />

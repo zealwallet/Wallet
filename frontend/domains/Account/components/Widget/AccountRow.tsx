@@ -7,10 +7,13 @@ import { Text } from '@zeal/uikit/Text'
 import { Account } from '@zeal/domains/Account'
 import { Avatar } from '@zeal/domains/Account/components/Avatar'
 import { CopyAddressIconButton } from '@zeal/domains/Address/components/CopyAddressIconButton'
+import { WalletConnectInstanceLoadable } from '@zeal/domains/DApp/domains/WalletConnect/api/fetchWalletConnectInstance'
+import { ScanButton } from '@zeal/domains/DApp/domains/WalletConnect/features/ScanButton'
 import { KeyStore } from '@zeal/domains/KeyStore'
 
 type Props = {
     currentAccount: Account
+    walletConnectInstanceLoadable: WalletConnectInstanceLoadable
     installationId: string
     keystore: KeyStore
     onMsg: (msg: Msg) => void
@@ -22,6 +25,7 @@ export const AccountRow = ({
     onMsg,
     keystore,
     currentAccount,
+    walletConnectInstanceLoadable,
     installationId,
 }: Props) => {
     return (
@@ -34,7 +38,7 @@ export const AccountRow = ({
                     <Row spacing={8} shrink>
                         <Avatar
                             account={currentAccount}
-                            size={32}
+                            size={28}
                             keystore={keystore}
                         />
 
@@ -54,12 +58,20 @@ export const AccountRow = ({
 
             <Spacer />
 
-            <CopyAddressIconButton
-                size={24}
-                variant="on_color"
-                address={currentAccount.address}
-                installationId={installationId}
-            />
+            <Row spacing={0}>
+                <CopyAddressIconButton
+                    size={24}
+                    variant="on_color"
+                    address={currentAccount.address}
+                    installationId={installationId}
+                />
+
+                <ScanButton
+                    walletConnectInstanceLoadable={
+                        walletConnectInstanceLoadable
+                    }
+                />
+            </Row>
         </Row>
     )
 }

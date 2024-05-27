@@ -6,7 +6,7 @@ import { BannerLimit } from '@zeal/uikit/BannerLimit'
 import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
 import { Group } from '@zeal/uikit/Group'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { BoldDangerTriangle } from '@zeal/uikit/Icon/BoldDangerTriangle'
 import { BoldId } from '@zeal/uikit/Icon/BoldId'
 import { BoldLock } from '@zeal/uikit/Icon/BoldLock'
@@ -17,6 +17,7 @@ import { AmountInput } from '@zeal/uikit/Input/AmountInput'
 import { NextStepSeparator } from '@zeal/uikit/NextStepSeparator'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Skeleton } from '@zeal/uikit/Skeleton'
 import { Spacer } from '@zeal/uikit/Spacer'
 import { TabHeader } from '@zeal/uikit/TabHeader'
@@ -230,7 +231,11 @@ export const Layout = ({
     }
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 network={network}
                 account={account}
@@ -238,53 +243,176 @@ export const Layout = ({
                     keyStoreMap,
                     address: account.address,
                 })}
-                right={
+                left={
                     <IconButton
                         variant="on_light"
                         onClick={() => onMsg({ type: 'close' })}
                     >
-                        {({ color }) => <CloseCross size={24} color={color} />}
+                        {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
             />
-            <Column spacing={16}>
-                <Row spacing={12}>
-                    <TabHeader selected>
-                        <FormattedMessage
-                            id="bank_transfers.deposit.deposit-header"
-                            defaultMessage="Deposit"
-                        />
-                    </TabHeader>
-                    <TabHeader
-                        selected={false}
-                        onClick={() => onMsg({ type: 'on_withdraw_tab_click' })}
-                    >
-                        <FormattedMessage
-                            id="bank_transfers.deposit.withdraw-header"
-                            defaultMessage="Withdraw"
-                        />
-                    </TabHeader>
-                </Row>
+            <Column spacing={8} fill alignY="stretch">
+                <Column spacing={16} fill alignY="stretch">
+                    <Row spacing={12}>
+                        <TabHeader selected>
+                            <FormattedMessage
+                                id="bank_transfers.deposit.deposit-header"
+                                defaultMessage="Deposit"
+                            />
+                        </TabHeader>
+                        <TabHeader
+                            selected={false}
+                            onClick={() =>
+                                onMsg({ type: 'on_withdraw_tab_click' })
+                            }
+                        >
+                            <FormattedMessage
+                                id="bank_transfers.deposit.withdraw-header"
+                                defaultMessage="Withdraw"
+                            />
+                        </TabHeader>
+                    </Row>
+                    <ScrollContainer contentFill>
+                        <Column spacing={12} fill>
+                            <Column spacing={4}>
+                                <AmountInput
+                                    state={errors.input ? 'error' : 'normal'}
+                                    content={{
+                                        topLeft: (
+                                            <IconButton
+                                                variant="on_light"
+                                                onClick={() => {
+                                                    onMsg({
+                                                        type: 'on_currency_selector_click',
+                                                    })
+                                                }}
+                                            >
+                                                {() => (
+                                                    <Row spacing={4}>
+                                                        <CurrencyAvatar
+                                                            key={
+                                                                inputCurrency.id
+                                                            }
+                                                            currency={
+                                                                inputCurrency
+                                                            }
+                                                            size={24}
+                                                            rightBadge={() =>
+                                                                null
+                                                            }
+                                                        />
+                                                        <Text
+                                                            variant="title3"
+                                                            color="textPrimary"
+                                                            weight="medium"
+                                                        >
+                                                            {inputCurrency.code}
+                                                        </Text>
+                                                        <LightArrowDown2
+                                                            size={18}
+                                                            color="iconDefault"
+                                                        />
+                                                    </Row>
+                                                )}
+                                            </IconButton>
+                                        ),
+                                        topRight: ({ onBlur, onFocus }) => (
+                                            <AmountInput.Input
+                                                onBlur={onBlur}
+                                                onFocus={onFocus}
+                                                label={formatMessage({
+                                                    id: 'bank_transfers.deposit.amount-input',
+                                                    defaultMessage:
+                                                        'Amount to deposit',
+                                                })}
+                                                amount={amount}
+                                                fraction={
+                                                    inputCurrency.fraction
+                                                }
+                                                onChange={(value) =>
+                                                    onMsg({
+                                                        type: 'on_amount_change',
+                                                        amount: value,
+                                                    })
+                                                }
+                                                autoFocus
+                                                prefix={inputCurrency.symbol}
+                                                onSubmitEditing={onSubmit}
+                                            />
+                                        ),
+                                        bottomRight: (() => {
+                                            switch (pollable.type) {
+                                                case 'loading':
+                                                case 'reloading':
+                                                    return (
+                                                        <Skeleton
+                                                            variant="default"
+                                                            width={40}
+                                                            height={16}
+                                                        />
+                                                    )
+                                                case 'loaded':
+                                                case 'subsequent_failed':
+                                                    return grossAmount ? (
+                                                        <Text
+                                                            variant="footnote"
+                                                            color="textSecondary"
+                                                            weight="regular"
+                                                        >
+                                                            <FormattedTokenBalanceInDefaultCurrency
+                                                                knownCurrencies={
+                                                                    knownCurrencies
+                                                                }
+                                                                money={getCryptoAmountInDefaultCurrency(
+                                                                    grossAmount,
+                                                                    knownCurrencies
+                                                                )}
+                                                            />
+                                                        </Text>
+                                                    ) : null
+                                                case 'error':
+                                                    return null
+                                                /* istanbul ignore next */
+                                                default:
+                                                    return notReachable(
+                                                        pollable
+                                                    )
+                                            }
+                                        })(),
+                                    }}
+                                />
 
-                <Column spacing={12}>
-                    <Column spacing={4}>
-                        <AmountInput
-                            state={errors.input ? 'error' : 'normal'}
-                            content={{
-                                topLeft: (
-                                    <IconButton
-                                        variant="on_light"
-                                        onClick={() => {
-                                            onMsg({
-                                                type: 'on_currency_selector_click',
-                                            })
-                                        }}
-                                    >
-                                        {() => (
+                                <NextStepSeparator />
+
+                                <AmountInput
+                                    state={(() => {
+                                        switch (pollable.type) {
+                                            case 'error':
+                                                return 'error'
+                                            case 'loaded':
+                                            case 'reloading':
+                                            case 'subsequent_failed':
+                                            case 'loading':
+                                                return 'normal'
+                                            default:
+                                                return notReachable(pollable)
+                                        }
+                                    })()}
+                                    top={
+                                        <NetworkFancyButton
+                                            fill
+                                            rounded={false}
+                                            network={network}
+                                            onClick={null}
+                                        />
+                                    }
+                                    content={{
+                                        topLeft: (
                                             <Row spacing={4}>
                                                 <CurrencyAvatar
-                                                    key={inputCurrency.id}
-                                                    currency={inputCurrency}
+                                                    key={outputCurrency.id}
+                                                    currency={outputCurrency}
                                                     size={24}
                                                     rightBadge={() => null}
                                                 />
@@ -293,316 +421,243 @@ export const Layout = ({
                                                     color="textPrimary"
                                                     weight="medium"
                                                 >
-                                                    {inputCurrency.code}
+                                                    {outputCurrency.code}
                                                 </Text>
-                                                <LightArrowDown2
-                                                    size={18}
-                                                    color="iconDefault"
-                                                />
                                             </Row>
-                                        )}
-                                    </IconButton>
-                                ),
-                                topRight: ({ onBlur, onFocus }) => (
-                                    <AmountInput.Input
-                                        onBlur={onBlur}
-                                        onFocus={onFocus}
-                                        label={formatMessage({
-                                            id: 'bank_transfers.deposit.amount-input',
-                                            defaultMessage: 'Amount to deposit',
-                                        })}
-                                        amount={amount}
-                                        fraction={inputCurrency.fraction}
-                                        onChange={(value) =>
-                                            onMsg({
-                                                type: 'on_amount_change',
-                                                amount: value,
-                                            })
-                                        }
-                                        autoFocus
-                                        prefix={inputCurrency.symbol}
-                                        onSubmitEditing={onSubmit}
-                                    />
-                                ),
-                                bottomRight: (() => {
-                                    switch (pollable.type) {
-                                        case 'loading':
-                                        case 'reloading':
-                                            return (
-                                                <Skeleton
-                                                    variant="default"
-                                                    width={40}
-                                                    height={16}
-                                                />
-                                            )
-                                        case 'loaded':
-                                        case 'subsequent_failed':
-                                            return grossAmount ? (
-                                                <Text
-                                                    variant="footnote"
-                                                    color="textSecondary"
-                                                    weight="regular"
-                                                >
-                                                    <FormattedTokenBalanceInDefaultCurrency
-                                                        knownCurrencies={
-                                                            knownCurrencies
-                                                        }
-                                                        money={getCryptoAmountInDefaultCurrency(
-                                                            grossAmount,
-                                                            knownCurrencies
-                                                        )}
-                                                    />
-                                                </Text>
-                                            ) : null
-                                        case 'error':
-                                            return null
-                                        /* istanbul ignore next */
-                                        default:
-                                            return notReachable(pollable)
-                                    }
-                                })(),
-                            }}
-                        />
-
-                        <NextStepSeparator />
-
-                        <AmountInput
-                            state={(() => {
-                                switch (pollable.type) {
-                                    case 'error':
-                                        return 'error'
-                                    case 'loaded':
-                                    case 'reloading':
-                                    case 'subsequent_failed':
-                                    case 'loading':
-                                        return 'normal'
-                                    default:
-                                        return notReachable(pollable)
-                                }
-                            })()}
-                            top={
-                                <NetworkFancyButton
-                                    fill
-                                    rounded={false}
-                                    network={network}
-                                    onClick={null}
-                                />
-                            }
-                            content={{
-                                topLeft: (
-                                    <Row spacing={4}>
-                                        <CurrencyAvatar
-                                            key={outputCurrency.id}
-                                            currency={outputCurrency}
-                                            size={24}
-                                            rightBadge={() => null}
-                                        />
-                                        <Text
-                                            variant="title3"
-                                            color="textPrimary"
-                                            weight="medium"
-                                        >
-                                            {outputCurrency.code}
-                                        </Text>
-                                    </Row>
-                                ),
-                                topRight: ({ onBlur, onFocus }) =>
-                                    (() => {
-                                        switch (pollable.type) {
-                                            case 'loading':
-                                            case 'reloading':
-                                                return (
-                                                    <AmountInput.InputSkeleton />
-                                                )
-                                            case 'loaded':
-                                            case 'subsequent_failed':
-                                                return (
-                                                    <AmountInput.Input
-                                                        onBlur={onBlur}
-                                                        onFocus={onFocus}
-                                                        label={formatMessage({
-                                                            id: 'bank_transfers.deposit.amount-output',
-                                                            defaultMessage:
-                                                                'Destination amount',
-                                                        })}
-                                                        amount={formattedCrypto}
-                                                        fraction={
-                                                            outputCurrency.fraction ??
-                                                            0
-                                                        }
-                                                        onChange={noop}
-                                                        prefix=""
-                                                        readOnly
-                                                        onSubmitEditing={
-                                                            onSubmit
-                                                        }
-                                                    />
-                                                )
-                                            case 'error':
-                                                return (
-                                                    <Column
-                                                        spacing={0}
-                                                        alignX="end"
-                                                    >
+                                        ),
+                                        topRight: ({ onBlur, onFocus }) =>
+                                            (() => {
+                                                switch (pollable.type) {
+                                                    case 'loading':
+                                                    case 'reloading':
+                                                        return (
+                                                            <AmountInput.InputSkeleton />
+                                                        )
+                                                    case 'loaded':
+                                                    case 'subsequent_failed':
+                                                        return (
+                                                            <AmountInput.Input
+                                                                onBlur={onBlur}
+                                                                onFocus={
+                                                                    onFocus
+                                                                }
+                                                                label={formatMessage(
+                                                                    {
+                                                                        id: 'bank_transfers.deposit.amount-output',
+                                                                        defaultMessage:
+                                                                            'Destination amount',
+                                                                    }
+                                                                )}
+                                                                amount={
+                                                                    formattedCrypto
+                                                                }
+                                                                fraction={
+                                                                    outputCurrency.fraction ??
+                                                                    0
+                                                                }
+                                                                onChange={noop}
+                                                                prefix=""
+                                                                readOnly
+                                                                onSubmitEditing={
+                                                                    onSubmit
+                                                                }
+                                                            />
+                                                        )
+                                                    case 'error':
+                                                        return (
+                                                            <Column
+                                                                spacing={0}
+                                                                alignX="end"
+                                                            >
+                                                                <Text
+                                                                    variant="title3"
+                                                                    color="textDisabled"
+                                                                    weight="regular"
+                                                                >
+                                                                    <FormattedMessage
+                                                                        id="bank_transfers.deposit.amount-output.error"
+                                                                        defaultMessage="error"
+                                                                    />
+                                                                </Text>
+                                                            </Column>
+                                                        )
+                                                    /* istanbul ignore next */
+                                                    default:
+                                                        return notReachable(
+                                                            pollable
+                                                        )
+                                                }
+                                            })(),
+                                        bottomRight: (() => {
+                                            switch (pollable.type) {
+                                                case 'loading':
+                                                case 'reloading':
+                                                    return (
+                                                        <Skeleton
+                                                            variant="default"
+                                                            width={40}
+                                                            height={16}
+                                                        />
+                                                    )
+                                                case 'loaded':
+                                                case 'subsequent_failed':
+                                                    return netAmount ? (
                                                         <Text
-                                                            variant="title3"
-                                                            color="textDisabled"
+                                                            variant="footnote"
+                                                            color="textSecondary"
                                                             weight="regular"
                                                         >
-                                                            <FormattedMessage
-                                                                id="bank_transfers.deposit.amount-output.error"
-                                                                defaultMessage="error"
+                                                            <FormattedTokenBalanceInDefaultCurrency
+                                                                knownCurrencies={
+                                                                    knownCurrencies
+                                                                }
+                                                                money={getCryptoAmountInDefaultCurrency(
+                                                                    netAmount,
+                                                                    knownCurrencies
+                                                                )}
                                                             />
                                                         </Text>
-                                                    </Column>
-                                                )
-                                            /* istanbul ignore next */
-                                            default:
-                                                return notReachable(pollable)
-                                        }
-                                    })(),
-                                bottomRight: (() => {
-                                    switch (pollable.type) {
-                                        case 'loading':
-                                        case 'reloading':
-                                            return (
-                                                <Skeleton
-                                                    variant="default"
-                                                    width={40}
-                                                    height={16}
+                                                    ) : null
+                                                case 'error':
+                                                    return null
+                                                /* istanbul ignore next */
+                                                default:
+                                                    return notReachable(
+                                                        pollable
+                                                    )
+                                            }
+                                        })(),
+                                        bottomLeft: (
+                                            <Text
+                                                color="textSecondary"
+                                                variant="paragraph"
+                                            >
+                                                <FormattedMessage
+                                                    id="bank_transfers.deposit.default-token.balance"
+                                                    defaultMessage="Balance {amount}"
+                                                    values={{
+                                                        amount: (
+                                                            <FormattedTokenBalances
+                                                                money={
+                                                                    cryptoBalance
+                                                                }
+                                                                knownCurrencies={
+                                                                    knownCurrencies
+                                                                }
+                                                            />
+                                                        ),
+                                                    }}
                                                 />
-                                            )
-                                        case 'loaded':
-                                        case 'subsequent_failed':
-                                            return netAmount ? (
-                                                <Text
-                                                    variant="footnote"
-                                                    color="textSecondary"
-                                                    weight="regular"
-                                                >
-                                                    <FormattedTokenBalanceInDefaultCurrency
-                                                        knownCurrencies={
-                                                            knownCurrencies
-                                                        }
-                                                        money={getCryptoAmountInDefaultCurrency(
-                                                            netAmount,
-                                                            knownCurrencies
-                                                        )}
+                                            </Text>
+                                        ),
+                                    }}
+                                />
+                            </Column>
+                            <Spacer />
+                            <Column spacing={12}>
+                                <Group variant="default">
+                                    <Column spacing={0}>
+                                        <Row spacing={3}>
+                                            <Text
+                                                variant="paragraph"
+                                                color="textPrimary"
+                                            >
+                                                <FormattedMessage
+                                                    id="bank_transfers.deposit.fees"
+                                                    defaultMessage="Fees"
+                                                />
+                                            </Text>
+                                            <IconButton
+                                                variant="on_light"
+                                                onClick={() =>
+                                                    onMsg({
+                                                        type: 'on_fee_info_click',
+                                                    })
+                                                }
+                                            >
+                                                {({ color }) => (
+                                                    <InfoCircle
+                                                        size={20}
+                                                        color={color}
                                                     />
-                                                </Text>
-                                            ) : null
-                                        case 'error':
-                                            return null
-                                        /* istanbul ignore next */
-                                        default:
-                                            return notReachable(pollable)
-                                    }
-                                })(),
-                                bottomLeft: (
-                                    <Text
-                                        color="textSecondary"
-                                        variant="paragraph"
-                                    >
-                                        <FormattedMessage
-                                            id="bank_transfers.deposit.default-token.balance"
-                                            defaultMessage="Balance {amount}"
-                                            values={{
-                                                amount: (
-                                                    <FormattedTokenBalances
-                                                        money={cryptoBalance}
-                                                        knownCurrencies={
-                                                            knownCurrencies
-                                                        }
+                                                )}
+                                            </IconButton>
+
+                                            <Spacer />
+
+                                            <Fees
+                                                pollable={pollable}
+                                                knownCurrencies={
+                                                    knownCurrencies
+                                                }
+                                            />
+                                        </Row>
+                                        <Row spacing={3}>
+                                            <Text
+                                                variant="paragraph"
+                                                color="textPrimary"
+                                            >
+                                                <FormattedMessage
+                                                    id="bank_transfers.deposit.time"
+                                                    defaultMessage="Time"
+                                                />
+                                            </Text>
+                                            <IconButton
+                                                variant="on_light"
+                                                onClick={() =>
+                                                    onMsg({
+                                                        type: 'on_time_info_click',
+                                                    })
+                                                }
+                                            >
+                                                {({ color }) => (
+                                                    <InfoCircle
+                                                        size={20}
+                                                        color={color}
                                                     />
-                                                ),
-                                            }}
-                                        />
-                                    </Text>
-                                ),
-                            }}
-                        />
-                    </Column>
+                                                )}
+                                            </IconButton>
+
+                                            <Spacer />
+
+                                            <Text
+                                                variant="paragraph"
+                                                color="textPrimary"
+                                                weight="regular"
+                                            >
+                                                {formatHumanReadableDuration(
+                                                    ON_RAMP_SERVICE_TIME_MS
+                                                )}
+                                            </Text>
+                                        </Row>
+                                    </Column>
+                                </Group>
+                                {errors.banner ? (
+                                    <ErrorBanner
+                                        error={errors.banner}
+                                        kycStatus={unblockUser.kycStatus}
+                                        knownCurrencies={knownCurrencies}
+                                        onClick={() =>
+                                            onMsg({
+                                                type: 'on_kyc_banner_click',
+                                            })
+                                        }
+                                    />
+                                ) : (
+                                    <KycVerificationBanner
+                                        kycStatus={unblockUser.kycStatus}
+                                        knownCurrencies={knownCurrencies}
+                                        onClick={() =>
+                                            onMsg({
+                                                type: 'on_kyc_banner_click',
+                                            })
+                                        }
+                                    />
+                                )}
+                            </Column>
+                        </Column>
+                    </ScrollContainer>
                 </Column>
-            </Column>
-
-            <Spacer />
-
-            <Column spacing={12}>
-                <Group variant="default">
-                    <Column spacing={6}>
-                        <Row spacing={3}>
-                            <Text variant="paragraph" color="textPrimary">
-                                <FormattedMessage
-                                    id="bank_transfers.deposit.fees"
-                                    defaultMessage="Fees"
-                                />
-                            </Text>
-                            <IconButton
-                                variant="on_light"
-                                onClick={() =>
-                                    onMsg({ type: 'on_fee_info_click' })
-                                }
-                            >
-                                {({ color }) => (
-                                    <InfoCircle size={14} color={color} />
-                                )}
-                            </IconButton>
-
-                            <Spacer />
-
-                            <Fees
-                                pollable={pollable}
-                                knownCurrencies={knownCurrencies}
-                            />
-                        </Row>
-                        <Row spacing={3}>
-                            <Text variant="paragraph" color="textPrimary">
-                                <FormattedMessage
-                                    id="bank_transfers.deposit.time"
-                                    defaultMessage="Time"
-                                />
-                            </Text>
-                            <IconButton
-                                variant="on_light"
-                                onClick={() =>
-                                    onMsg({
-                                        type: 'on_time_info_click',
-                                    })
-                                }
-                            >
-                                {({ color }) => (
-                                    <InfoCircle size={14} color={color} />
-                                )}
-                            </IconButton>
-
-                            <Spacer />
-
-                            <Text
-                                variant="paragraph"
-                                color="textPrimary"
-                                weight="regular"
-                            >
-                                {formatHumanReadableDuration(
-                                    ON_RAMP_SERVICE_TIME_MS
-                                )}
-                            </Text>
-                        </Row>
-                    </Column>
-                </Group>
-                {errors.banner ? (
-                    <ErrorBanner
-                        error={errors.banner}
-                        kycStatus={unblockUser.kycStatus}
-                        knownCurrencies={knownCurrencies}
-                        onClick={() => onMsg({ type: 'on_kyc_banner_click' })}
-                    />
-                ) : (
-                    <KycVerificationBanner
-                        kycStatus={unblockUser.kycStatus}
-                        knownCurrencies={knownCurrencies}
-                        onClick={() => onMsg({ type: 'on_kyc_banner_click' })}
-                    />
-                )}
                 <Actions>
                     <Button
                         size="regular"

@@ -33,7 +33,7 @@ export type PasskeySignatureRequest = {
 
 export type PasskeySignatureResponse = {
     credentialId: Uint8Array
-    userId: Uint8Array
+    userId: Uint8Array | null // On cross-platform signatures with a non-empty allowCredentials list, Android returns null. This should be fine since you should have the userId if you have the credentialId https://groups.google.com/a/fidoalliance.org/g/fido-dev/c/v6JBaTsNv08
     signature: Uint8Array
     clientDataJSON: Uint8Array
     authenticatorData: Uint8Array
@@ -197,7 +197,7 @@ const buildWebCreationRequest = (
     request: PasskeyCreationRequest
 ): PublicKeyCredentialCreationOptions => ({
     challenge: request.challenge,
-    rp: { name: 'Zeal Wallet' },
+    rp: { name: 'Zeal Wallet', id: request.rpId },
     user: {
         id: request.userId, // This has to be random otherwise existing passkey will be replaced
         name: request.userName, // This shows up in passkey list modal for user to differentiate between passkeys
@@ -207,9 +207,10 @@ const buildWebCreationRequest = (
         // If this is left out, IOS creates discoverable credentials by default, but Android creates non-discoverable credentials - https://docs.turnkey.com/passkeys/options#requireresidentkey-and-residentkey
         requireResidentKey: true,
         residentKey: 'required',
+        authenticatorAttachment: 'cross-platform',
     },
     pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
-    timeout: 6000000, // Ugly timeout UI shown to user if this value is small and user takes long
+    timeout: 300000, // Ugly timeout UI shown to user if this value is small and user takes long
 })
 
 const buildWebSignRequest = (
@@ -220,7 +221,8 @@ const buildWebSignRequest = (
         type: 'public-key',
         id: credentialId,
     })),
-    timeout: 6000000,
+    timeout: 300000,
+    rpId: request.rpId,
 })
 
 const buildAndroidSignRequestJson = (

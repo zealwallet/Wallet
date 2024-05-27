@@ -2,7 +2,6 @@ import { uuid } from '@zeal/toolkit/Crypto'
 import { values } from '@zeal/toolkit/Object'
 import {
     array,
-    arrayOf,
     boolean,
     groupByType,
     match,
@@ -30,21 +29,17 @@ import { parseCryptoCurrency } from '@zeal/domains/Currency/helpers/parse'
 import { parse as parseKeyStoreMap } from '@zeal/domains/KeyStore/parsers/parse'
 import { PREDEFINED_AND_TEST_NETWORKS } from '@zeal/domains/Network/constants'
 import { parseNetworkHexId } from '@zeal/domains/Network/helpers/parse'
-import { parse as parsePortfolio } from '@zeal/domains/Portfolio/helpers/parse'
+import { PortfolioMap } from '@zeal/domains/Portfolio'
 import { Storage } from '@zeal/domains/Storage'
 import { parseDAppConnectionState } from '@zeal/domains/Storage/domains/DAppConnectionState'
 import { parseSubmitted } from '@zeal/domains/TransactionRequest/parsers/parseTransactionRequest'
 
-export const parseLocalStorage = (input: unknown): Result<unknown, Storage> => {
-    return object(input).andThen((obj) =>
+export const parseLocalStorage = (
+    local: unknown,
+    portfolioMap: PortfolioMap
+): Result<unknown, Storage> =>
+    object(local).andThen((obj) =>
         shape({
-            userMadeActionOnNextBestActionIds: oneOf(
-                obj.userMadeActionOnNextBestActionIds,
-                [
-                    arrayOf(obj.userMadeActionOnNextBestActionIds, string),
-                    success([]),
-                ]
-            ),
             currencyHiddenMap: oneOf(obj, [
                 object(obj.currencyHiddenMap).andThen((currencyHiddenMap) =>
                     recordStrict(currencyHiddenMap, {
@@ -198,16 +193,7 @@ export const parseLocalStorage = (input: unknown): Result<unknown, Storage> => {
             accounts: object(obj.accounts)
                 .andThen(parseIndexKey)
                 .andThen((accounts) => record(accounts, parseAccount)),
-            portfolios: oneOf(obj.portfolios, [
-                object(obj.portfolios).andThen((portfolios) =>
-                    recordStrict(portfolios, {
-                        keyParser: parseAddress,
-                        valueParser: parsePortfolio,
-                    })
-                ),
-
-                success({}),
-            ]),
+            portfolios: success(portfolioMap),
 
             keystoreMap: oneOf(obj.keystoreMap, [
                 parseKeyStoreMap(obj.keystoreMap),
@@ -309,6 +295,19 @@ export const parseLocalStorage = (input: unknown): Result<unknown, Storage> => {
                 success(null),
             ]),
             bankTransferInfo: parseBankTransferInfo(obj.bankTransferInfo),
+            cardConfig: oneOf(obj.cardConfig, [
+                object(obj.cardConfig).andThen((cardConfig) =>
+                    shape({
+                        type: match(
+                            cardConfig.type,
+                            'card_owner_address_is_selected' as const
+                        ),
+                        owner: parseAddress(cardConfig.owner),
+                    })
+                ),
+                success({
+                    type: 'card_owner_address_is_not_selected' as const,
+                }),
+            ]),
         })
     )
-}

@@ -8,6 +8,7 @@ import { Row } from '@zeal/uikit/Row'
 import { Skeleton } from '@zeal/uikit/Skeleton'
 
 import { notReachable } from '@zeal/toolkit'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
 type InputRenderProps = {
     onFocus: () => void
@@ -16,6 +17,7 @@ type InputRenderProps = {
 
 type Props = {
     top?: React.ReactNode
+    label?: string
     content: {
         topLeft: React.ReactNode
         topRight: (prop: InputRenderProps) => React.ReactNode
@@ -42,11 +44,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     content: {
-        padding: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
         minHeight: 75,
+        justifyContent: 'space-between',
         flexDirection: 'column',
         width: '100%',
-        gap: 8,
+        gap: 0,
         overflow: 'hidden',
     },
     top_left: {
@@ -68,8 +72,19 @@ const styles = StyleSheet.create({
         color: colors.textPrimary,
         height: 24,
         padding: 0,
-        outlineStyle: 'none',
-        backgroundColor: 'none',
+        ...(() => {
+            switch (ZealPlatform.OS) {
+                case 'ios':
+                case 'android':
+                    return {}
+                case 'web':
+                    return { outlineStyle: 'none' }
+                /* istanbul ignore next */
+                default:
+                    return notReachable(ZealPlatform.OS)
+            }
+        })(),
+        backgroundColor: 'rgba(0,0,0,0)',
         fontWeight: '500',
         fontSize: 20,
         lineHeight: 25,
@@ -114,7 +129,7 @@ const styles = StyleSheet.create({
 
 type InteractionState = Extractor<keyof typeof styles, 'state'>
 
-export const AmountInput = ({ top, content, bottom, state }: Props) => {
+export const AmountInput = ({ top, content, bottom, state, label }: Props) => {
     const [isFocused, setIsFocused] = useState<boolean>(false)
     const [isHovered, setIsHovered] = useState<boolean>(false)
 
@@ -139,6 +154,7 @@ export const AmountInput = ({ top, content, bottom, state }: Props) => {
 
     return (
         <View
+            aria-label={label}
             onPointerEnter={() => setIsHovered(true)}
             onPointerLeave={() => setIsHovered(false)}
             style={[styles.container, styles[`state_${stateStyles}`]]}

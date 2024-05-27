@@ -1,116 +1,116 @@
-export const bridgeQuoteEthereumUSDCPolygonUSDT: unknown = {
+export const bridgeQuoteArbitrumUSDCEBaseUSDbC: unknown = {
     success: true,
     result: {
         routes: [
             {
-                routeId: '54af6dc6-8fa0-43c9-888e-7f32083a7370',
+                routeId: '6468675a-591c-4267-9dea-c96e5c54c974',
                 isOnlySwapRoute: false,
                 fromAmount: '100000000',
-                toAmount: '99542004',
+                toAmount: '99758457',
                 usedBridgeNames: ['across'],
                 minimumGasBalances: {
-                    '1': '30000000000000000',
-                    '137': '60000000000000000',
+                    '8453': '1800000000000000',
+                    '42161': '2800000000000000',
                 },
                 chainGasBalances: {
-                    '1': {
-                        minGasBalance: '30000000000000000',
+                    '8453': {
+                        minGasBalance: '1800000000000000',
                         hasGasBalance: false,
                     },
-                    '137': {
-                        minGasBalance: '60000000000000000',
+                    '42161': {
+                        minGasBalance: '2800000000000000',
                         hasGasBalance: false,
                     },
                 },
                 totalUserTx: 1,
-                sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                totalGasFeesInUsd: 9.814728839954673,
-                receivedValueInUsd: 89.72229116004533,
-                inputValueInUsd: 99.914,
-                outputValueInUsd: 99.53702,
+                sender: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
+                recipient: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
+                totalGasFeesInUsd: 0.031100115356600004,
+                receivedValueInUsd: 99.7123898846434,
+                inputValueInUsd: 99.814,
+                outputValueInUsd: 99.74349,
                 userTxs: [
                     {
                         userTxType: 'fund-movr',
                         txType: 'eth_sendTransaction',
-                        chainId: 1,
-                        toAmount: '99542004',
+                        chainId: 42161,
+                        toAmount: '99758457',
                         toAsset: {
-                            chainId: 137,
+                            chainId: 8453,
                             address:
-                                '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                            symbol: 'USDT',
-                            name: 'Tether USD',
+                                '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca',
+                            symbol: 'USDBC',
+                            name: 'USD Base Coin',
                             decimals: 6,
-                            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
+                            icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                             logoURI:
-                                'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            chainAgnosticId: 'USDT',
+                                'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+                            chainAgnosticId: 'USDBC',
                         },
                         stepCount: 2,
-                        routePath: '12-388',
-                        sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
+                        routePath: '407-388',
+                        sender: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
                         approvalData: {
                             minimumApprovalAmount: '100000000',
                             approvalTokenAddress:
-                                '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+                                '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
                             allowanceTarget:
                                 '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
-                            owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
+                            owner: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
                         },
                         steps: [
                             {
                                 type: 'middleware',
                                 protocol: {
-                                    name: 'oneinch',
-                                    displayName: '1Inch',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/1inch.png',
+                                    name: 'zerox',
+                                    displayName: '0x',
+                                    icon: 'https://media.socket.tech/dexes/0x.svg',
                                 },
-                                chainId: 1,
+                                chainId: 42161,
                                 fromAsset: {
-                                    chainId: 1,
+                                    chainId: 42161,
                                     address:
-                                        '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                                    symbol: 'USDC',
-                                    name: 'USDCoin',
+                                        '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+                                    symbol: 'USDC.E',
+                                    name: 'Bridged USDC',
                                     decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                                    icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                                     logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                                        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                                     chainAgnosticId: 'USDC',
                                 },
-                                swapSlippage: 0.5,
                                 fromAmount: '100000000',
                                 toAsset: {
-                                    chainId: 1,
+                                    chainId: 42161,
                                     address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
+                                        '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
+                                    symbol: 'USDC',
+                                    name: 'USD Coin',
                                     decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
+                                    icon: 'https://assets.polygon.technology/tokenAssets/usdc.svg',
                                     logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
+                                        'https://assets.polygon.technology/tokenAssets/usdc.svg',
+                                    chainAgnosticId: null,
                                 },
-                                toAmount: '99678961',
-                                minAmountOut: '99180566',
+                                toAmount: '99843732',
+                                swapSlippage: 0.5,
+                                minAmountOut: '99344513',
                                 gasFees: {
-                                    gasAmount: '3494937852150000',
-                                    gasLimit: 223000,
+                                    gasAmount: '4778980000000',
+                                    gasLimit: 477898,
                                     asset: {
-                                        chainId: 1,
+                                        chainId: 42161,
                                         address:
                                             '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
                                         symbol: 'ETH',
                                         name: 'Ethereum',
                                         decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                        icon: 'https://assets.polygon.technology/tokenAssets/eth.svg',
                                         logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                            'https://assets.polygon.technology/tokenAssets/eth.svg',
                                         chainAgnosticId: null,
                                     },
-                                    feesInUsd: 6.05277801800302,
+                                    feesInUsd: 0.0142158884366,
                                 },
                             },
                             {
@@ -122,92 +122,95 @@ export const bridgeQuoteEthereumUSDCPolygonUSDT: unknown = {
                                     securityScore: 3,
                                     robustnessScore: 4,
                                 },
-                                fromChainId: 1,
+                                fromChainId: 42161,
                                 fromAsset: {
-                                    chainId: 1,
+                                    chainId: 42161,
                                     address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
+                                        '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
+                                    symbol: 'USDC',
+                                    name: 'USD Coin',
                                     decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
+                                    icon: 'https://assets.polygon.technology/tokenAssets/usdc.svg',
                                     logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
+                                        'https://assets.polygon.technology/tokenAssets/usdc.svg',
+                                    chainAgnosticId: null,
                                 },
-                                fromAmount: '99678961',
-                                toChainId: 137,
+                                fromAmount: '99843732',
+                                toChainId: 8453,
                                 toAsset: {
-                                    chainId: 137,
+                                    chainId: 8453,
                                     address:
-                                        '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
+                                        '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca',
+                                    symbol: 'USDBC',
+                                    name: 'USD Base Coin',
                                     decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
+                                    icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                                     logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
+                                        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+                                    chainAgnosticId: 'USDBC',
                                 },
-                                toAmount: '99542004',
+                                toAmount: '99758457',
                                 bridgeSlippage: 0,
-                                minAmountOut: '99043609',
+                                minAmountOut: '99259238',
                                 protocolFees: {
-                                    amount: '136957',
+                                    amount: '85275',
                                     asset: {
-                                        chainId: 1,
+                                        chainId: 42161,
                                         address:
-                                            '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                        symbol: 'USDT',
-                                        name: 'Tether USD',
+                                            '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
+                                        symbol: 'USDC',
+                                        name: 'USD Coin',
                                         decimals: 6,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
+                                        icon: 'https://assets.polygon.technology/tokenAssets/usdc.svg',
                                         logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        chainAgnosticId: 'USDT',
+                                            'https://assets.polygon.technology/tokenAssets/usdc.svg',
+                                        chainAgnosticId: null,
                                     },
-                                    feesInUsd: 0,
+                                    feesInUsd: 0.085275,
                                 },
                                 gasFees: {
-                                    gasLimit: 138600,
+                                    gasLimit: 567600,
                                     asset: {
-                                        chainId: 1,
+                                        chainId: 42161,
                                         address:
                                             '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
                                         symbol: 'ETH',
                                         name: 'Ethereum',
                                         decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                        icon: 'https://assets.polygon.technology/tokenAssets/eth.svg',
                                         logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                            'https://assets.polygon.technology/tokenAssets/eth.svg',
                                         chainAgnosticId: null,
                                     },
-                                    gasAmount: '2172190073130000',
-                                    feesInUsd: 3.7619508219516526,
+                                    gasAmount: '5676000000000',
+                                    feesInUsd: 0.016884226920000002,
                                 },
                                 serviceTime: 60,
                                 maxServiceTime: 18000,
+                                extraData: {
+                                    rewards: [],
+                                },
                             },
                         ],
                         gasFees: {
-                            gasAmount: '5667127925280000',
-                            feesInUsd: 9.814728839954673,
+                            gasAmount: '10454980000000',
+                            feesInUsd: 0.031100115356600004,
                             asset: {
-                                chainId: 1,
+                                chainId: 42161,
                                 address:
                                     '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
                                 symbol: 'ETH',
                                 name: 'Ethereum',
                                 decimals: 18,
-                                icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                icon: 'https://assets.polygon.technology/tokenAssets/eth.svg',
                                 logoURI:
-                                    'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                    'https://assets.polygon.technology/tokenAssets/eth.svg',
                                 chainAgnosticId: null,
                             },
-                            gasLimit: 361600,
+                            gasLimit: 1045498,
                         },
                         serviceTime: 60,
-                        recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
+                        recipient: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
                         maxServiceTime: 18000,
                         bridgeSlippage: 0,
                         swapSlippage: 0.5,
@@ -219,989 +222,76 @@ export const bridgeQuoteEthereumUSDCPolygonUSDT: unknown = {
                 integratorFee: {
                     amount: '0',
                     asset: {
-                        chainId: 1,
-                        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                        symbol: 'USDC',
-                        name: 'USDCoin',
+                        chainId: 42161,
+                        address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+                        symbol: 'USDC.E',
+                        name: 'Bridged USDC',
                         decimals: 6,
-                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                        icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                         logoURI:
-                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                            'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                         chainAgnosticId: 'USDC',
                     },
                 },
-            },
-            {
-                routeId: '4e6f978e-a61c-43d8-a8c5-21cccaa83250',
-                isOnlySwapRoute: false,
-                fromAmount: '100000000',
-                toAmount: '99678961',
-                usedBridgeNames: ['polygon-bridge'],
-                minimumGasBalances: {
-                    '1': '30000000000000000',
-                    '137': '60000000000000000',
-                },
-                chainGasBalances: {
-                    '1': {
-                        minGasBalance: '30000000000000000',
-                        hasGasBalance: false,
-                    },
-                    '137': {
-                        minGasBalance: '60000000000000000',
-                        hasGasBalance: false,
-                    },
-                },
-                totalUserTx: 1,
-                sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                totalGasFeesInUsd: 10.289044068047062,
-                receivedValueInUsd: 89.38492593195294,
-                inputValueInUsd: 99.914,
-                outputValueInUsd: 99.67397,
-                userTxs: [
-                    {
-                        userTxType: 'fund-movr',
-                        txType: 'eth_sendTransaction',
-                        chainId: 1,
-                        toAmount: '99678961',
-                        toAsset: {
-                            chainId: 137,
-                            address:
-                                '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                            symbol: 'USDT',
-                            name: 'Tether USD',
-                            decimals: 6,
-                            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            logoURI:
-                                'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            chainAgnosticId: 'USDT',
-                        },
-                        stepCount: 2,
-                        routePath: '12-2',
-                        sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        approvalData: {
-                            minimumApprovalAmount: '100000000',
-                            approvalTokenAddress:
-                                '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                            allowanceTarget:
-                                '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
-                            owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        },
-                        steps: [
-                            {
-                                type: 'middleware',
-                                protocol: {
-                                    name: 'oneinch',
-                                    displayName: '1Inch',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/1inch.png',
-                                },
-                                chainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                                    symbol: 'USDC',
-                                    name: 'USDCoin',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    chainAgnosticId: 'USDC',
-                                },
-                                swapSlippage: 0.5,
-                                fromAmount: '100000000',
-                                toAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                toAmount: '99678961',
-                                minAmountOut: '99180566',
-                                gasFees: {
-                                    gasAmount: '3494937852150000',
-                                    gasLimit: 223000,
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    feesInUsd: 6.05277801800302,
-                                },
-                            },
-                            {
-                                type: 'bridge',
-                                protocol: {
-                                    name: 'polygon-bridge',
-                                    displayName: 'Polygon POS',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/polygon-bridge.png',
-                                    securityScore: 5,
-                                    robustnessScore: 5,
-                                },
-                                bridgeSlippage: 0,
-                                fromChainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                fromAmount: '99678961',
-                                toChainId: 137,
-                                toAsset: {
-                                    chainId: 137,
-                                    address:
-                                        '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                toAmount: '99678961',
-                                minAmountOut: '99180566',
-                                protocolFees: {
-                                    asset: {
-                                        chainId: 137,
-                                        address:
-                                            '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                        symbol: 'USDT',
-                                        name: 'Tether USD',
-                                        decimals: 6,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        chainAgnosticId: 'USDT',
-                                    },
-                                    feesInUsd: 0,
-                                    amount: '0',
-                                },
-                                gasFees: {
-                                    gasAmount: '2446064687328750',
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    gasLimit: 156075,
-                                    feesInUsd: 4.236266050044041,
-                                },
-                                serviceTime: 1260,
-                                maxServiceTime: 1200,
-                            },
-                        ],
-                        gasFees: {
-                            gasAmount: '5941002539478750',
-                            feesInUsd: 10.289044068047062,
-                            asset: {
-                                chainId: 1,
-                                address:
-                                    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                symbol: 'ETH',
-                                name: 'Ethereum',
-                                decimals: 18,
-                                icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                logoURI:
-                                    'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                chainAgnosticId: null,
-                            },
-                            gasLimit: 379075,
-                        },
-                        serviceTime: 1260,
-                        recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        maxServiceTime: 1200,
-                        bridgeSlippage: 0,
-                        swapSlippage: 0.5,
-                        userTxIndex: 0,
-                    },
-                ],
-                serviceTime: 1260,
-                maxServiceTime: 1200,
-                integratorFee: {
-                    amount: '0',
-                    asset: {
-                        chainId: 1,
-                        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                        symbol: 'USDC',
-                        name: 'USDCoin',
-                        decimals: 6,
-                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        logoURI:
-                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        chainAgnosticId: 'USDC',
-                    },
+                extraData: {
+                    rewards: [],
                 },
             },
             {
-                routeId: 'fac5e032-40f7-450f-ab7a-5b46455a9dd8',
+                routeId: '036fbccf-26ca-453a-aa85-981e1b79a97f',
                 isOnlySwapRoute: false,
                 fromAmount: '100000000',
-                toAmount: '99325337',
-                usedBridgeNames: ['hop'],
-                minimumGasBalances: {
-                    '1': '30000000000000000',
-                    '137': '60000000000000000',
-                },
-                chainGasBalances: {
-                    '1': {
-                        minGasBalance: '30000000000000000',
-                        hasGasBalance: false,
-                    },
-                    '137': {
-                        minGasBalance: '60000000000000000',
-                        hasGasBalance: false,
-                    },
-                },
-                totalUserTx: 1,
-                sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                totalGasFeesInUsd: 10.094676608912895,
-                receivedValueInUsd: 89.2256933910871,
-                inputValueInUsd: 99.914,
-                outputValueInUsd: 99.32037,
-                userTxs: [
-                    {
-                        userTxType: 'fund-movr',
-                        txType: 'eth_sendTransaction',
-                        chainId: 1,
-                        toAmount: '99325337',
-                        toAsset: {
-                            chainId: 137,
-                            address:
-                                '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                            symbol: 'USDT',
-                            name: 'Tether USD',
-                            decimals: 6,
-                            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            logoURI:
-                                'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            chainAgnosticId: 'USDT',
-                        },
-                        stepCount: 2,
-                        routePath: '12-17',
-                        sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        approvalData: {
-                            minimumApprovalAmount: '100000000',
-                            approvalTokenAddress:
-                                '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                            allowanceTarget:
-                                '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
-                            owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        },
-                        steps: [
-                            {
-                                type: 'middleware',
-                                protocol: {
-                                    name: 'oneinch',
-                                    displayName: '1Inch',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/1inch.png',
-                                },
-                                chainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                                    symbol: 'USDC',
-                                    name: 'USDCoin',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    chainAgnosticId: 'USDC',
-                                },
-                                swapSlippage: 0.5,
-                                fromAmount: '100000000',
-                                toAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                toAmount: '99678961',
-                                minAmountOut: '99180566',
-                                gasFees: {
-                                    gasAmount: '3494937852150000',
-                                    gasLimit: 223000,
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    feesInUsd: 6.05277801800302,
-                                },
-                            },
-                            {
-                                type: 'bridge',
-                                protocol: {
-                                    name: 'hop',
-                                    displayName: 'Hop',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/hop.png',
-                                    securityScore: 4,
-                                    robustnessScore: 4,
-                                },
-                                bridgeSlippage: 0.5,
-                                fromChainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                fromAmount: '99678961',
-                                toChainId: 137,
-                                toAsset: {
-                                    chainId: 137,
-                                    address:
-                                        '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                minAmountOut: '98330315',
-                                toAmount: '99325337',
-                                protocolFees: {
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                        symbol: 'USDT',
-                                        name: 'Tether USD',
-                                        decimals: 6,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        chainAgnosticId: 'USDT',
-                                    },
-                                    feesInUsd: 0,
-                                    amount: '0',
-                                },
-                                gasFees: {
-                                    gasAmount: '2333834866883700',
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    gasLimit: 148914,
-                                    feesInUsd: 4.041898590909874,
-                                },
-                                serviceTime: 1260,
-                                maxServiceTime: 1200,
-                            },
-                        ],
-                        gasFees: {
-                            gasAmount: '5828772719033700',
-                            feesInUsd: 10.094676608912895,
-                            asset: {
-                                chainId: 1,
-                                address:
-                                    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                symbol: 'ETH',
-                                name: 'Ethereum',
-                                decimals: 18,
-                                icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                logoURI:
-                                    'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                chainAgnosticId: null,
-                            },
-                            gasLimit: 371914,
-                        },
-                        serviceTime: 1260,
-                        recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        maxServiceTime: 1200,
-                        bridgeSlippage: 0.5,
-                        swapSlippage: 0.5,
-                        userTxIndex: 0,
-                    },
-                ],
-                serviceTime: 1260,
-                maxServiceTime: 1200,
-                integratorFee: {
-                    amount: '0',
-                    asset: {
-                        chainId: 1,
-                        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                        symbol: 'USDC',
-                        name: 'USDCoin',
-                        decimals: 6,
-                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        logoURI:
-                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        chainAgnosticId: 'USDC',
-                    },
-                },
-            },
-            {
-                routeId: '764d9bb4-3212-4a04-bda7-c123943070f2',
-                isOnlySwapRoute: false,
-                fromAmount: '100000000',
-                toAmount: '99723128',
-                usedBridgeNames: ['hyphen'],
-                minimumGasBalances: {
-                    '1': '30000000000000000',
-                    '137': '60000000000000000',
-                },
-                chainGasBalances: {
-                    '1': {
-                        minGasBalance: '30000000000000000',
-                        hasGasBalance: false,
-                    },
-                    '137': {
-                        minGasBalance: '60000000000000000',
-                        hasGasBalance: false,
-                    },
-                },
-                totalUserTx: 1,
-                sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                totalGasFeesInUsd: 11.291308108821859,
-                receivedValueInUsd: 88.42683189117815,
-                inputValueInUsd: 99.914,
-                outputValueInUsd: 99.71814,
-                userTxs: [
-                    {
-                        userTxType: 'fund-movr',
-                        txType: 'eth_sendTransaction',
-                        chainId: 1,
-                        toAmount: '99723128',
-                        toAsset: {
-                            chainId: 137,
-                            address:
-                                '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                            symbol: 'USDT',
-                            name: 'Tether USD',
-                            decimals: 6,
-                            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            logoURI:
-                                'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            chainAgnosticId: 'USDT',
-                        },
-                        stepCount: 2,
-                        routePath: '12-4',
-                        sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        approvalData: {
-                            minimumApprovalAmount: '100000000',
-                            approvalTokenAddress:
-                                '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                            allowanceTarget:
-                                '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
-                            owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        },
-                        steps: [
-                            {
-                                type: 'middleware',
-                                protocol: {
-                                    name: 'oneinch',
-                                    displayName: '1Inch',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/1inch.png',
-                                },
-                                chainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                                    symbol: 'USDC',
-                                    name: 'USDCoin',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    chainAgnosticId: 'USDC',
-                                },
-                                swapSlippage: 0.5,
-                                fromAmount: '100000000',
-                                toAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                toAmount: '99678961',
-                                minAmountOut: '99180566',
-                                gasFees: {
-                                    gasAmount: '3494937852150000',
-                                    gasLimit: 223000,
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    feesInUsd: 6.05277801800302,
-                                },
-                            },
-                            {
-                                type: 'bridge',
-                                protocol: {
-                                    name: 'hyphen',
-                                    displayName: 'Hyphen',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/hyphen.png',
-                                    securityScore: 1,
-                                    robustnessScore: 4,
-                                },
-                                fromChainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                fromAmount: '99678961',
-                                toChainId: 137,
-                                toAsset: {
-                                    chainId: 137,
-                                    address:
-                                        '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                toAmount: '99723128',
-                                bridgeSlippage: 0,
-                                minAmountOut: '99224733',
-                                protocolFees: {
-                                    asset: {
-                                        chainId: 137,
-                                        address:
-                                            '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                        symbol: 'USDT',
-                                        name: 'Tether USD',
-                                        decimals: 6,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        chainAgnosticId: 'USDT',
-                                    },
-                                    feesInUsd: 0,
-                                    amount: '-44167',
-                                },
-                                gasFees: {
-                                    gasAmount: '3024782513017050',
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    gasLimit: 193001,
-                                    feesInUsd: 5.238530090818838,
-                                },
-                                serviceTime: 360,
-                                maxServiceTime: 7200,
-                            },
-                        ],
-                        gasFees: {
-                            gasAmount: '6519720365167050',
-                            feesInUsd: 11.291308108821859,
-                            asset: {
-                                chainId: 1,
-                                address:
-                                    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                symbol: 'ETH',
-                                name: 'Ethereum',
-                                decimals: 18,
-                                icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                logoURI:
-                                    'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                chainAgnosticId: null,
-                            },
-                            gasLimit: 416001,
-                        },
-                        serviceTime: 360,
-                        recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        maxServiceTime: 7200,
-                        bridgeSlippage: 0,
-                        swapSlippage: 0.5,
-                        userTxIndex: 0,
-                    },
-                ],
-                serviceTime: 360,
-                maxServiceTime: 7200,
-                integratorFee: {
-                    amount: '0',
-                    asset: {
-                        chainId: 1,
-                        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                        symbol: 'USDC',
-                        name: 'USDCoin',
-                        decimals: 6,
-                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        logoURI:
-                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        chainAgnosticId: 'USDC',
-                    },
-                },
-            },
-            {
-                routeId: '78c86448-32ed-4918-95ba-16295a913fe3',
-                isOnlySwapRoute: false,
-                fromAmount: '100000000',
-                toAmount: '98069927',
-                usedBridgeNames: ['celer'],
-                minimumGasBalances: {
-                    '1': '30000000000000000',
-                    '137': '60000000000000000',
-                },
-                chainGasBalances: {
-                    '1': {
-                        minGasBalance: '30000000000000000',
-                        hasGasBalance: false,
-                    },
-                    '137': {
-                        minGasBalance: '60000000000000000',
-                        hasGasBalance: false,
-                    },
-                },
-                totalUserTx: 1,
-                sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                totalGasFeesInUsd: 10.543695024840355,
-                receivedValueInUsd: 87.52132497515964,
-                inputValueInUsd: 99.914,
-                outputValueInUsd: 98.06502,
-                userTxs: [
-                    {
-                        userTxType: 'fund-movr',
-                        txType: 'eth_sendTransaction',
-                        chainId: 1,
-                        toAmount: '98069927',
-                        toAsset: {
-                            chainId: 137,
-                            address:
-                                '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                            symbol: 'USDT',
-                            name: 'Tether USD',
-                            decimals: 6,
-                            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            logoURI:
-                                'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            chainAgnosticId: 'USDT',
-                        },
-                        stepCount: 2,
-                        routePath: '12-16',
-                        sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        approvalData: {
-                            minimumApprovalAmount: '100000000',
-                            approvalTokenAddress:
-                                '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                            allowanceTarget:
-                                '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
-                            owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        },
-                        steps: [
-                            {
-                                type: 'middleware',
-                                protocol: {
-                                    name: 'oneinch',
-                                    displayName: '1Inch',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/1inch.png',
-                                },
-                                chainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                                    symbol: 'USDC',
-                                    name: 'USDCoin',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    chainAgnosticId: 'USDC',
-                                },
-                                swapSlippage: 0.5,
-                                fromAmount: '100000000',
-                                toAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                toAmount: '99678961',
-                                minAmountOut: '99180566',
-                                gasFees: {
-                                    gasAmount: '3494937852150000',
-                                    gasLimit: 223000,
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    feesInUsd: 6.05277801800302,
-                                },
-                            },
-                            {
-                                type: 'bridge',
-                                protocol: {
-                                    name: 'celer',
-                                    displayName: 'Celer',
-                                    icon: 'https://socketicons.s3.amazonaws.com/Celer+Light.png',
-                                    securityScore: 3,
-                                    robustnessScore: 3,
-                                },
-                                fromChainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                fromAmount: '99678961',
-                                toChainId: 137,
-                                toAsset: {
-                                    chainId: 137,
-                                    address:
-                                        '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                toAmount: '98069927',
-                                minAmountOut: '97081182',
-                                gasFees: {
-                                    gasAmount: '2593102834991850',
-                                    gasLimit: 165457,
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    feesInUsd: 4.490917006837335,
-                                },
-                                bridgeSlippage: 0.5,
-                                protocolFees: {
-                                    asset: {
-                                        chainId: 137,
-                                        address:
-                                            '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                        symbol: 'USDT',
-                                        name: 'Tether USD',
-                                        decimals: 6,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        chainAgnosticId: 'USDT',
-                                    },
-                                    feesInUsd: 0,
-                                    amount: '1609020',
-                                },
-                                serviceTime: 300,
-                                maxServiceTime: 7200,
-                            },
-                        ],
-                        gasFees: {
-                            gasAmount: '6088040687141850',
-                            feesInUsd: 10.543695024840355,
-                            asset: {
-                                chainId: 1,
-                                address:
-                                    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                symbol: 'ETH',
-                                name: 'Ethereum',
-                                decimals: 18,
-                                icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                logoURI:
-                                    'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                chainAgnosticId: null,
-                            },
-                            gasLimit: 388457,
-                        },
-                        serviceTime: 300,
-                        recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        maxServiceTime: 7200,
-                        bridgeSlippage: 0.5,
-                        swapSlippage: 0.5,
-                        userTxIndex: 0,
-                    },
-                ],
-                serviceTime: 300,
-                maxServiceTime: 7200,
-                integratorFee: {
-                    amount: '0',
-                    asset: {
-                        chainId: 1,
-                        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                        symbol: 'USDC',
-                        name: 'USDCoin',
-                        decimals: 6,
-                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        logoURI:
-                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        chainAgnosticId: 'USDC',
-                    },
-                },
-            },
-            {
-                routeId: 'f9ffa9c3-7d67-4018-b475-093eb773f6d2',
-                isOnlySwapRoute: false,
-                fromAmount: '100000000',
-                toAmount: '99893804',
+                toAmount: '98778314',
                 usedBridgeNames: ['stargate'],
                 minimumGasBalances: {
-                    '1': '30000000000000000',
-                    '137': '60000000000000000',
+                    '8453': '1800000000000000',
+                    '42161': '2800000000000000',
                 },
                 chainGasBalances: {
-                    '1': {
-                        minGasBalance: '30000000000000000',
+                    '8453': {
+                        minGasBalance: '1800000000000000',
                         hasGasBalance: false,
                     },
-                    '137': {
-                        minGasBalance: '60000000000000000',
+                    '42161': {
+                        minGasBalance: '2800000000000000',
                         hasGasBalance: false,
                     },
                 },
                 totalUserTx: 1,
-                sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                totalGasFeesInUsd: 13.64411342198407,
-                receivedValueInUsd: 86.24468657801593,
-                inputValueInUsd: 99.914,
-                outputValueInUsd: 99.8888,
+                sender: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
+                recipient: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
+                totalGasFeesInUsd: 0.0496104158854,
+                receivedValueInUsd: 98.71387958411461,
+                inputValueInUsd: 99.814,
+                outputValueInUsd: 98.76349,
                 userTxs: [
                     {
                         userTxType: 'fund-movr',
                         txType: 'eth_sendTransaction',
-                        chainId: 1,
-                        toAmount: '99893804',
+                        chainId: 42161,
+                        toAmount: '98778314',
                         toAsset: {
-                            chainId: 137,
+                            chainId: 8453,
                             address:
-                                '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                            symbol: 'USDT',
-                            name: 'Tether USD',
+                                '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca',
+                            symbol: 'USDBC',
+                            name: 'USD Base Coin',
                             decimals: 6,
-                            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
+                            icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                             logoURI:
-                                'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            chainAgnosticId: 'USDT',
+                                'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+                            chainAgnosticId: 'USDBC',
                         },
                         stepCount: 1,
-                        routePath: '0-8',
-                        sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
+                        routePath: '0-408',
+                        sender: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
                         approvalData: {
                             minimumApprovalAmount: '100000000',
                             approvalTokenAddress:
-                                '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+                                '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
                             allowanceTarget:
                                 '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
-                            owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
+                            owner: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
                         },
                         steps: [
                             {
@@ -1214,369 +304,153 @@ export const bridgeQuoteEthereumUSDCPolygonUSDT: unknown = {
                                     robustnessScore: 3,
                                 },
                                 bridgeSlippage: 0.5,
-                                fromChainId: 1,
+                                fromChainId: 42161,
                                 fromAsset: {
-                                    chainId: 1,
+                                    chainId: 42161,
                                     address:
-                                        '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                                    symbol: 'USDC',
-                                    name: 'USDCoin',
+                                        '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+                                    symbol: 'USDC.E',
+                                    name: 'Bridged USDC',
                                     decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                                    icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                                     logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                                        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                                     chainAgnosticId: 'USDC',
                                 },
                                 fromAmount: '100000000',
-                                toChainId: 137,
+                                toChainId: 8453,
                                 toAsset: {
-                                    chainId: 137,
+                                    chainId: 8453,
                                     address:
-                                        '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
+                                        '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca',
+                                    symbol: 'USDBC',
+                                    name: 'USD Base Coin',
                                     decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
+                                    icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                                     logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
+                                        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+                                    chainAgnosticId: 'USDBC',
                                 },
-                                minAmountOut: '99394334',
-                                toAmount: '99893804',
+                                minAmountOut: '98284422',
+                                toAmount: '98778314',
                                 protocolFees: {
                                     asset: {
-                                        chainId: 1,
+                                        chainId: 42161,
                                         address:
-                                            '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                                        symbol: 'USDC',
-                                        name: 'USDCoin',
+                                            '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+                                        symbol: 'USDC.E',
+                                        name: 'Bridged USDC',
                                         decimals: 6,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                                        icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                                         logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                                            'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                                         chainAgnosticId: 'USDC',
                                     },
-                                    feesInUsd: 0,
-                                    amount: '106196',
+                                    feesInUsd: 1.222415,
+                                    amount: '1224686',
                                 },
                                 gasFees: {
-                                    gasAmount: '7878254962545728',
+                                    gasAmount: '16677620000000',
                                     asset: {
-                                        chainId: 1,
+                                        chainId: 42161,
                                         address:
                                             '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
                                         symbol: 'ETH',
                                         name: 'Ethereum',
                                         decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                        icon: 'https://assets.polygon.technology/tokenAssets/eth.svg',
                                         logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                            'https://assets.polygon.technology/tokenAssets/eth.svg',
                                         chainAgnosticId: null,
                                     },
-                                    gasLimit: 467562,
-                                    feesInUsd: 13.64411342198407,
+                                    gasLimit: 1000000,
+                                    feesInUsd: 0.0496104158854,
                                 },
-                                serviceTime: 3000,
+                                serviceTime: 60,
                                 maxServiceTime: 7200,
+                                extraData: {
+                                    rewards: [],
+                                },
                             },
                         ],
                         gasFees: {
-                            gasAmount: '7878254962545728',
-                            feesInUsd: 13.64411342198407,
+                            gasAmount: '16677620000000',
+                            feesInUsd: 0.0496104158854,
                             asset: {
-                                chainId: 1,
+                                chainId: 42161,
                                 address:
                                     '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
                                 symbol: 'ETH',
                                 name: 'Ethereum',
                                 decimals: 18,
-                                icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                icon: 'https://assets.polygon.technology/tokenAssets/eth.svg',
                                 logoURI:
-                                    'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
+                                    'https://assets.polygon.technology/tokenAssets/eth.svg',
                                 chainAgnosticId: null,
                             },
-                            gasLimit: 467562,
+                            gasLimit: 1000000,
                         },
-                        serviceTime: 3000,
-                        recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
+                        serviceTime: 60,
+                        recipient: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
                         maxServiceTime: 7200,
                         bridgeSlippage: 0.5,
                         userTxIndex: 0,
                     },
                 ],
-                serviceTime: 3000,
+                serviceTime: 60,
                 maxServiceTime: 7200,
                 integratorFee: {
                     amount: '0',
                     asset: {
-                        chainId: 1,
-                        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                        symbol: 'USDC',
-                        name: 'USDCoin',
+                        chainId: 42161,
+                        address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+                        symbol: 'USDC.E',
+                        name: 'Bridged USDC',
                         decimals: 6,
-                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                        icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                         logoURI:
-                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                            'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
                         chainAgnosticId: 'USDC',
                     },
                 },
-            },
-            {
-                routeId: '35226925-ef6e-4fb1-9b1b-c48513646a03',
-                isOnlySwapRoute: false,
-                fromAmount: '100000000',
-                toAmount: '99570018',
-                usedBridgeNames: ['stargate'],
-                minimumGasBalances: {
-                    '1': '30000000000000000',
-                    '137': '60000000000000000',
-                },
-                chainGasBalances: {
-                    '1': {
-                        minGasBalance: '30000000000000000',
-                        hasGasBalance: false,
-                    },
-                    '137': {
-                        minGasBalance: '60000000000000000',
-                        hasGasBalance: false,
-                    },
-                },
-                totalUserTx: 1,
-                sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                totalGasFeesInUsd: 18.128923365798755,
-                receivedValueInUsd: 81.43610663420124,
-                inputValueInUsd: 99.914,
-                outputValueInUsd: 99.56503,
-                userTxs: [
-                    {
-                        userTxType: 'fund-movr',
-                        txType: 'eth_sendTransaction',
-                        chainId: 1,
-                        toAmount: '99570018',
-                        toAsset: {
-                            chainId: 137,
-                            address:
-                                '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                            symbol: 'USDT',
-                            name: 'Tether USD',
-                            decimals: 6,
-                            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            logoURI:
-                                'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                            chainAgnosticId: 'USDT',
-                        },
-                        stepCount: 2,
-                        routePath: '12-8',
-                        sender: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        approvalData: {
-                            minimumApprovalAmount: '100000000',
-                            approvalTokenAddress:
-                                '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                            allowanceTarget:
-                                '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
-                            owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        },
-                        steps: [
-                            {
-                                type: 'middleware',
-                                protocol: {
-                                    name: 'oneinch',
-                                    displayName: '1Inch',
-                                    icon: 'https://bridgelogos.s3.ap-south-1.amazonaws.com/1inch.png',
-                                },
-                                chainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                                    symbol: 'USDC',
-                                    name: 'USDCoin',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                                    chainAgnosticId: 'USDC',
-                                },
-                                swapSlippage: 0.5,
-                                fromAmount: '100000000',
-                                toAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                toAmount: '99678961',
-                                minAmountOut: '99180566',
-                                gasFees: {
-                                    gasAmount: '3494937852150000',
-                                    gasLimit: 223000,
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    feesInUsd: 6.05277801800302,
-                                },
-                            },
-                            {
-                                type: 'bridge',
-                                protocol: {
-                                    name: 'stargate',
-                                    displayName: 'Stargate',
-                                    icon: 'https://s2.coinmarketcap.com/static/img/coins/128x128/18934.png',
-                                    securityScore: 2,
-                                    robustnessScore: 3,
-                                },
-                                bridgeSlippage: 0.5,
-                                fromChainId: 1,
-                                fromAsset: {
-                                    chainId: 1,
-                                    address:
-                                        '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                fromAmount: '99678961',
-                                toChainId: 137,
-                                toAsset: {
-                                    chainId: 137,
-                                    address:
-                                        '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-                                    symbol: 'USDT',
-                                    name: 'Tether USD',
-                                    decimals: 6,
-                                    icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    logoURI:
-                                        'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                    chainAgnosticId: 'USDT',
-                                },
-                                minAmountOut: '98573772',
-                                toAmount: '99570018',
-                                protocolFees: {
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xdac17f958d2ee523a2206206994597c13d831ec7',
-                                        symbol: 'USDT',
-                                        name: 'Tether USD',
-                                        decimals: 6,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-                                        chainAgnosticId: 'USDT',
-                                    },
-                                    feesInUsd: 0,
-                                    amount: '108943',
-                                },
-                                gasFees: {
-                                    gasAmount: '6972893662801328',
-                                    asset: {
-                                        chainId: 1,
-                                        address:
-                                            '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                        symbol: 'ETH',
-                                        name: 'Ethereum',
-                                        decimals: 18,
-                                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        logoURI:
-                                            'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                        chainAgnosticId: null,
-                                    },
-                                    gasLimit: 409794,
-                                    feesInUsd: 12.076145347795734,
-                                },
-                                serviceTime: 3000,
-                                maxServiceTime: 7200,
-                            },
-                        ],
-                        gasFees: {
-                            gasAmount: '10467831514951328',
-                            feesInUsd: 18.128923365798755,
-                            asset: {
-                                chainId: 1,
-                                address:
-                                    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-                                symbol: 'ETH',
-                                name: 'Ethereum',
-                                decimals: 18,
-                                icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                logoURI:
-                                    'https://maticnetwork.github.io/polygon-token-assets/assets/eth.svg',
-                                chainAgnosticId: null,
-                            },
-                            gasLimit: 632794,
-                        },
-                        serviceTime: 3000,
-                        recipient: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                        maxServiceTime: 7200,
-                        bridgeSlippage: 0.5,
-                        swapSlippage: 0.5,
-                        userTxIndex: 0,
-                    },
-                ],
-                serviceTime: 3000,
-                maxServiceTime: 7200,
-                integratorFee: {
-                    amount: '0',
-                    asset: {
-                        chainId: 1,
-                        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-                        symbol: 'USDC',
-                        name: 'USDCoin',
-                        decimals: 6,
-                        icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        logoURI:
-                            'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
-                        chainAgnosticId: 'USDC',
-                    },
+                extraData: {
+                    rewards: [],
                 },
             },
         ],
+        socketRoute: null,
         destinationCallData: {},
-        fromChainId: 1,
+        fromChainId: 42161,
         fromAsset: {
-            chainId: 1,
-            address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-            symbol: 'USDC',
-            name: 'USDCoin',
+            chainId: 42161,
+            address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+            symbol: 'USDC.E',
+            name: 'Bridged USDC',
             decimals: 6,
-            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+            icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
             logoURI:
-                'https://maticnetwork.github.io/polygon-token-assets/assets/usdc.svg',
+                'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
             chainAgnosticId: 'USDC',
         },
-        toChainId: 137,
+        toChainId: 8453,
         toAsset: {
-            chainId: 137,
-            address: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-            symbol: 'USDT',
-            name: 'Tether USD',
+            chainId: 8453,
+            address: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca',
+            symbol: 'USDBC',
+            name: 'USD Base Coin',
             decimals: 6,
-            icon: 'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
+            icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
             logoURI:
-                'https://maticnetwork.github.io/polygon-token-assets/assets/usdt.svg',
-            chainAgnosticId: 'USDT',
+                'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+            chainAgnosticId: 'USDBC',
         },
         bridgeRouteErrors: {
+            'polygon-bridge': {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            hyphen: {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
             'arbitrum-bridge': {
                 status: 'ASSET_NOT_SUPPORTED',
             },
@@ -1584,6 +458,15 @@ export const bridgeQuoteEthereumUSDCPolygonUSDT: unknown = {
                 status: 'ASSET_NOT_SUPPORTED',
             },
             'anyswap-router-v6': {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            hop: {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            hopCctp: {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            celer: {
                 status: 'ASSET_NOT_SUPPORTED',
             },
             'refuel-bridge': {
@@ -1596,6 +479,30 @@ export const bridgeQuoteEthereumUSDCPolygonUSDT: unknown = {
                 status: 'ASSET_NOT_SUPPORTED',
             },
             connext: {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            synapse: {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            'base-bridge': {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            'zora-bridge': {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            'zksync-native': {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            symbiosis: {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            'gnosis-native-bridge': {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            'mantle-native-bridge': {
+                status: 'ASSET_NOT_SUPPORTED',
+            },
+            'scroll-native-bridge': {
                 status: 'ASSET_NOT_SUPPORTED',
             },
         },

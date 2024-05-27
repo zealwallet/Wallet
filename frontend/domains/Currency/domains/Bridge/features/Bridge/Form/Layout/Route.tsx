@@ -37,7 +37,7 @@ export const Route = ({ pollable, onMsg }: Props) => {
         case 'loading':
         case 'reloading':
             return (
-                <Column spacing={12}>
+                <Column spacing={8}>
                     <Header
                         swapSlippagePercent={pollable.params.slippagePercent}
                         onMsg={onMsg}
@@ -66,7 +66,7 @@ export const Route = ({ pollable, onMsg }: Props) => {
         case 'error':
         case 'subsequent_failed':
             return (
-                <Column spacing={12}>
+                <Column spacing={8}>
                     <Header
                         swapSlippagePercent={pollable.params.slippagePercent}
                         onMsg={onMsg}
@@ -118,7 +118,7 @@ export const Route = ({ pollable, onMsg }: Props) => {
 
             return (
                 bridgeRouteRequest && (
-                    <Column spacing={12}>
+                    <Column spacing={8}>
                         <Header
                             swapSlippagePercent={
                                 pollable.params.slippagePercent

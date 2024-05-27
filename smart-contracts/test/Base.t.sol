@@ -18,7 +18,7 @@ import "forge-std/Vm.sol";
 
 contract BaseTest is Test {
     // Safe contracts
-    address constant SAFE_FACTORY = 0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2;
+    address constant SAFE_FACTORY = 0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67;
     address constant SAFE_SINGLETON = 0x29fcB43b46531BcA003ddC8FCB67FFE91900C762;
 
     // 4337 module is the same as the fallback handler

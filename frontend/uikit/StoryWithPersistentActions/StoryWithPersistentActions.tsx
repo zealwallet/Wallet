@@ -36,22 +36,34 @@ export type Msg =
     | { type: 'on_stories_completed' }
     | { type: 'on_next_slide_shown'; currentSlide: number }
 
-type Artwork = 'networks' | 'portfolio' | 'safe' | 'transfers'
+type Artwork =
+    | 'safe'
+    | 'networks'
+    | 'portfolio'
+    | 'safety'
+    | 'transfers'
+    | 'beta'
+    | 'connectionStory1'
+    | 'connectionStory2'
+    | 'connectionStory3'
+    | 'howToConnectToMetamask'
+    | 'stables'
 
 export type StoryPage = {
     artworkSrc: Artwork
     title: React.ReactNode
+    subtitle?: React.ReactNode
 }
 
 const SHOW_SLIDE_FOR_MS = 6000
 
 const styles = StyleSheet.create({
     container: {
-        height: 240,
+        height: 260,
         padding: 16,
         backgroundColor: colors.surfaceDefault,
     },
-    artwork: { flexGrow: 1 },
+    artwork: { flexGrow: 1, backgroundColor: colors.backgroundLight },
     storyNextPreviousButton: {
         position: 'absolute',
         height: '100%',
@@ -111,7 +123,7 @@ export const StoryWithPersistentActions = ({
     }, [liveRefOnMsg, currentSlide, isLastSlide])
 
     return (
-        <Screen background="default" padding="story">
+        <Screen background="default" padding="story" onNavigateBack={null}>
             <Column spacing={0} fill shrink>
                 <Player key={page.artworkSrc} art={page.artworkSrc} />
                 <LinearGradient
@@ -188,8 +200,8 @@ export const StoryWithPersistentActions = ({
 
             <View style={[styles.container]}>
                 <Column spacing={32} fill>
-                    <Column spacing={0} fill alignX="center">
-                        <Column spacing={0} fill alignY="center">
+                    <Column spacing={8} fill alignX="center">
+                        <Column spacing={8} fill alignY="center">
                             <Text
                                 align="center"
                                 variant="title2"
@@ -198,23 +210,34 @@ export const StoryWithPersistentActions = ({
                             >
                                 {page.title}
                             </Text>
+                            {page.subtitle && (
+                                <Text
+                                    variant="footnote"
+                                    color="textSecondary"
+                                    align="center"
+                                >
+                                    {page.subtitle}
+                                </Text>
+                            )}
                         </Column>
-                        <Row spacing={0} alignX="center">
-                            <ProgressBar
-                                stories={stories}
-                                currentSlide={currentSlide}
-                                animationTimeMs={SHOW_SLIDE_FOR_MS}
-                                onMsg={(msg) => {
-                                    switch (msg.type) {
-                                        case 'on_progress_bar_clicked':
-                                            setCurrentSlide(msg.step)
-                                            break
-                                        default:
-                                            notReachable(msg.type)
-                                    }
-                                }}
-                            ></ProgressBar>
-                        </Row>
+                        {stories.length > 1 && (
+                            <Row spacing={0} alignX="center">
+                                <ProgressBar
+                                    stories={stories}
+                                    currentSlide={currentSlide}
+                                    animationTimeMs={SHOW_SLIDE_FOR_MS}
+                                    onMsg={(msg) => {
+                                        switch (msg.type) {
+                                            case 'on_progress_bar_clicked':
+                                                setCurrentSlide(msg.step)
+                                                break
+                                            default:
+                                                notReachable(msg.type)
+                                        }
+                                    }}
+                                ></ProgressBar>
+                            </Row>
+                        )}
                     </Column>
                     <Actions variant="row">
                         <Button
@@ -245,14 +268,29 @@ export const StoryWithPersistentActions = ({
 const Player = memo(({ art }: { art: Artwork }) => {
     const source = useMemo(() => {
         switch (art) {
+            case 'safe':
+                return require('./assets/safe.json')
             case 'networks':
                 return require('./assets/networks.json')
             case 'portfolio':
                 return require('./assets/portfolio.json')
-            case 'safe':
-                return require('./assets/safe.json')
+            case 'safety':
+                return require('./assets/safety.json')
             case 'transfers':
                 return require('./assets/transfers.json')
+            case 'beta':
+                return require('./assets/beta.json')
+            case 'connectionStory1':
+                return require('./assets/connection_story_1.json')
+            case 'connectionStory2':
+                return require('./assets/connection_story_2.json')
+            case 'connectionStory3':
+                return require('./assets/connection_story_3.json')
+            case 'howToConnectToMetamask':
+                return require('./assets/how_to_connect_to_metamask.json')
+            case 'stables':
+                return require('./assets/stables.json')
+
             /* istanbul ignore next */
             default:
                 return notReachable(art)

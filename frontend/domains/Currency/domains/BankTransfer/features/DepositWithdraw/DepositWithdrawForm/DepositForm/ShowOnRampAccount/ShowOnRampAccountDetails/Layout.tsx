@@ -5,7 +5,6 @@ import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
 import { Group } from '@zeal/uikit/Group'
 import { Header } from '@zeal/uikit/Header'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { InfoCircle } from '@zeal/uikit/Icon/InfoCircle'
 import { IconButton } from '@zeal/uikit/IconButton'
@@ -52,7 +51,6 @@ export type Msg =
     | { type: 'close' }
     | { type: 'on_zeal_account_tooltip_click' }
     | { type: 'on_sent_from_bank_click' }
-    | { type: 'on_back_button_clicked' }
 
 export const Layout = ({
     onRampAccount,
@@ -68,7 +66,11 @@ export const Layout = ({
     const amount = amountToBigint(form.amount, form.inputCurrency.fraction)
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 network={network}
                 account={account}
@@ -83,19 +85,9 @@ export const Layout = ({
                             id: 'actions.back',
                             defaultMessage: 'Back',
                         })}
-                        onClick={() =>
-                            onMsg({ type: 'on_back_button_clicked' })
-                        }
-                    >
-                        {({ color }) => <BackIcon size={24} color={color} />}
-                    </IconButton>
-                }
-                right={
-                    <IconButton
-                        variant="on_light"
                         onClick={() => onMsg({ type: 'close' })}
                     >
-                        {({ color }) => <CloseCross size={24} color={color} />}
+                        {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
             />

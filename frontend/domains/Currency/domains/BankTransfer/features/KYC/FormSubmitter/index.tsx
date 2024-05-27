@@ -91,7 +91,6 @@ export const FormSubmitter = ({
                     onMsg={(msg) => {
                         switch (msg.type) {
                             case 'close':
-                            case 'on_back_button_clicked':
                                 onMsg(msg)
                                 break
                             case 'form_submitted':

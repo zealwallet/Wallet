@@ -131,6 +131,8 @@ export const getConfirmationBlockCount = (network: Network): bigint => {
                 case 'Fantom':
                 case 'Optimism':
                 case 'Base':
+                case 'Blast':
+                case 'OPBNB':
                 case 'Gnosis':
                 case 'Celo':
                 case 'Avalanche':
@@ -142,6 +144,7 @@ export const getConfirmationBlockCount = (network: Network): bigint => {
                 case 'OptimismGoerli':
                 case 'FantomTestnet':
                 case 'ArbitrumGoerli':
+                case 'Linea': // TODO: check
                     return 0n // initial confirmation not included in the confirmation count. i.e. 0=1 and 1=2
                 case 'PolygonMumbai':
                 case 'Polygon':

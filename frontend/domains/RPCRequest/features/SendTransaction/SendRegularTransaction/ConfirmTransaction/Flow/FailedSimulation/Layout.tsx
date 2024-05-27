@@ -92,7 +92,11 @@ export const Layout = ({
     })
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'on_minimize_click' })}
+        >
             <ActionBar
                 title={
                     <FormattedMessage

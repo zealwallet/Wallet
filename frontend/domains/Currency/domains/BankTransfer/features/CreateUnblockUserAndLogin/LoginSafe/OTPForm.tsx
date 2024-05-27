@@ -5,7 +5,7 @@ import { Actions } from '@zeal/uikit/Actions'
 import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
 import { Header } from '@zeal/uikit/Header'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { Input } from '@zeal/uikit/Input'
 import { Screen } from '@zeal/uikit/Screen'
@@ -96,17 +96,21 @@ export const OtpForm = ({
     }
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 account={account}
                 keystore={keyStore}
                 network={network}
-                right={
+                left={
                     <IconButton
                         variant="on_light"
                         onClick={() => onMsg({ type: 'close' })}
                     >
-                        {({ color }) => <CloseCross size={24} color={color} />}
+                        {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
             />

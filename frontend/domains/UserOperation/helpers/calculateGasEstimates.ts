@@ -131,22 +131,100 @@ export const calculateGasEstimates = async ({
         bundlerResponse.gasEstimate.verificationGasLimit +
         verificationGasLimitBuffer
 
-    const nonPaymasterPreVerificationGas = await calculatePreVerificationGas({
-        network,
-        networkRPCMap,
-        initialUserOperation,
-        dummySignature,
-        paymasterAndData: null,
-        feeAndGasEstimates: {
-            gasPrice: bundlerResponse.gasPrice,
-            gasEstimate: {
-                preVerificationGas:
-                    bundlerResponse.gasEstimate.preVerificationGas,
-                verificationGasLimit: sigBufferedVerificationGasLimit,
-                callGasLimit: adjustedCallGasLimit,
+    // Token Paymaster calculations (ERC20 payments)
+
+    const tokenPaymasterVerificationGasLimit =
+        sigBufferedVerificationGasLimit +
+        TOKEN_PAYMASTER_VERIFICATION_GAS_LIMIT_BUFFER
+
+    const approvalBufferedCallGasLimit =
+        adjustedCallGasLimit + APPROVAL_CALL_GAS_LIMIT_BUFFER
+
+    const updatedCallDataWithApproval =
+        metaTransactionDatasToUserOperationCallData({
+            metaTransactionDatas: [
+                ...metaTransactionDatas,
+                getDummyApprovalMetaTransactionData(),
+            ],
+        })
+    const sponsorPaymasterVerificationGasLimit =
+        sigBufferedVerificationGasLimit +
+        SPONSOR_PAYMASTER_VERIFICATION_GAS_LIMIT_BUFFER
+
+    const [
+        nonPaymasterPreVerificationGas,
+        paymasterWithoutApprovalPreVerificationGas,
+        paymasterWitApprovalPreVerificationGas,
+        sponsorPaymasterPreVerificationGas,
+    ] = await Promise.all([
+        calculatePreVerificationGas({
+            network,
+            networkRPCMap,
+            initialUserOperation,
+            dummySignature,
+            paymasterAndData: null,
+            feeAndGasEstimates: {
+                gasPrice: bundlerResponse.gasPrice,
+                gasEstimate: {
+                    preVerificationGas:
+                        bundlerResponse.gasEstimate.preVerificationGas,
+                    verificationGasLimit: sigBufferedVerificationGasLimit,
+                    callGasLimit: adjustedCallGasLimit,
+                },
             },
-        },
-    })
+        }),
+        calculatePreVerificationGas({
+            network,
+            networkRPCMap,
+            initialUserOperation,
+            dummySignature,
+            paymasterAndData: DUMMY_TOKEN_PAYMASTER_AND_DATA,
+            feeAndGasEstimates: {
+                gasPrice: bundlerResponse.gasPrice,
+                gasEstimate: {
+                    callGasLimit: adjustedCallGasLimit,
+                    verificationGasLimit: tokenPaymasterVerificationGasLimit,
+                    preVerificationGas:
+                        bundlerResponse.gasEstimate.preVerificationGas,
+                },
+            },
+        }),
+        calculatePreVerificationGas({
+            network,
+            networkRPCMap,
+            initialUserOperation: {
+                ...initialUserOperation,
+                callData: updatedCallDataWithApproval,
+            },
+            dummySignature,
+            paymasterAndData: DUMMY_TOKEN_PAYMASTER_AND_DATA,
+            feeAndGasEstimates: {
+                gasPrice: bundlerResponse.gasPrice,
+                gasEstimate: {
+                    callGasLimit: approvalBufferedCallGasLimit,
+                    verificationGasLimit: tokenPaymasterVerificationGasLimit,
+                    preVerificationGas:
+                        bundlerResponse.gasEstimate.preVerificationGas,
+                },
+            },
+        }),
+        calculatePreVerificationGas({
+            network,
+            networkRPCMap,
+            initialUserOperation,
+            dummySignature,
+            paymasterAndData: DUMMY_SPONSOR_PAYMASTER_AND_DATA,
+            feeAndGasEstimates: {
+                gasPrice: bundlerResponse.gasPrice,
+                gasEstimate: {
+                    callGasLimit: adjustedCallGasLimit,
+                    verificationGasLimit: sponsorPaymasterVerificationGasLimit,
+                    preVerificationGas:
+                        bundlerResponse.gasEstimate.preVerificationGas,
+                },
+            },
+        }),
+    ])
 
     // No paymaster calculations (native payment)
 
@@ -168,31 +246,7 @@ export const calculateGasEstimates = async ({
         totalGas: nonPaymasterTotalGas,
     }
 
-    // Token Paymaster calculations (ERC20 payments)
-
-    const tokenPaymasterVerificationGasLimit =
-        sigBufferedVerificationGasLimit +
-        TOKEN_PAYMASTER_VERIFICATION_GAS_LIMIT_BUFFER
-
     // Paymaster without approval calculations
-
-    const paymasterWithoutApprovalPreVerificationGas =
-        await calculatePreVerificationGas({
-            network,
-            networkRPCMap,
-            initialUserOperation,
-            dummySignature,
-            paymasterAndData: DUMMY_TOKEN_PAYMASTER_AND_DATA,
-            feeAndGasEstimates: {
-                gasPrice: bundlerResponse.gasPrice,
-                gasEstimate: {
-                    callGasLimit: adjustedCallGasLimit,
-                    verificationGasLimit: tokenPaymasterVerificationGasLimit,
-                    preVerificationGas:
-                        bundlerResponse.gasEstimate.preVerificationGas,
-                },
-            },
-        })
 
     const paymasterWithoutApprovalTotalGas = calculateTotalGas({
         gasEstimate: {
@@ -216,38 +270,6 @@ export const calculateGasEstimates = async ({
 
     // Paymaster with approval calculations
 
-    const approvalBufferedCallGasLimit =
-        adjustedCallGasLimit + APPROVAL_CALL_GAS_LIMIT_BUFFER
-
-    const updatedCallDataWithApproval =
-        metaTransactionDatasToUserOperationCallData({
-            metaTransactionDatas: [
-                ...metaTransactionDatas,
-                getDummyApprovalMetaTransactionData(),
-            ],
-        })
-
-    const paymasterWitApprovalPreVerificationGas =
-        await calculatePreVerificationGas({
-            network,
-            networkRPCMap,
-            initialUserOperation: {
-                ...initialUserOperation,
-                callData: updatedCallDataWithApproval,
-            },
-            dummySignature,
-            paymasterAndData: DUMMY_TOKEN_PAYMASTER_AND_DATA,
-            feeAndGasEstimates: {
-                gasPrice: bundlerResponse.gasPrice,
-                gasEstimate: {
-                    callGasLimit: approvalBufferedCallGasLimit,
-                    verificationGasLimit: tokenPaymasterVerificationGasLimit,
-                    preVerificationGas:
-                        bundlerResponse.gasEstimate.preVerificationGas,
-                },
-            },
-        })
-
     const paymasterWithApprovalTotalGas = calculateTotalGas({
         gasEstimate: {
             callGasLimit: approvalBufferedCallGasLimit,
@@ -269,28 +291,6 @@ export const calculateGasEstimates = async ({
     }
 
     // Sponsor Paymaster calculations
-
-    const sponsorPaymasterVerificationGasLimit =
-        sigBufferedVerificationGasLimit +
-        SPONSOR_PAYMASTER_VERIFICATION_GAS_LIMIT_BUFFER
-
-    const sponsorPaymasterPreVerificationGas =
-        await calculatePreVerificationGas({
-            network,
-            networkRPCMap,
-            initialUserOperation,
-            dummySignature,
-            paymasterAndData: DUMMY_SPONSOR_PAYMASTER_AND_DATA,
-            feeAndGasEstimates: {
-                gasPrice: bundlerResponse.gasPrice,
-                gasEstimate: {
-                    callGasLimit: adjustedCallGasLimit,
-                    verificationGasLimit: sponsorPaymasterVerificationGasLimit,
-                    preVerificationGas:
-                        bundlerResponse.gasEstimate.preVerificationGas,
-                },
-            },
-        })
 
     const sponsorPaymasterTotalGas = calculateTotalGas({
         gasEstimate: {

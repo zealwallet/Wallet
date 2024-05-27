@@ -973,6 +973,7 @@ export type components = {
         }
         /** @enum {string} */
         TransactionEventSource:
+            | 'walletConnect'
             | 'zwidget'
             | 'bridge'
             | 'bridgeApprove'
@@ -1693,9 +1694,12 @@ export type components = {
             | 'BSC'
             | 'Polygon'
             | 'PolygonZkevm'
+            | 'Linea'
             | 'Fantom'
             | 'Optimism'
             | 'Base'
+            | 'Blast'
+            | 'OPBNB'
             | 'Gnosis'
             | 'Celo'
             | 'Avalanche'
@@ -2082,12 +2086,7 @@ export type components = {
         PriceChangeDirection: 'Up' | 'Down' | 'Unchanged'
         NotificationRegistrationRequest: {
             token: string
-            /** @enum {string} */
-            tokenType: 'FCM'
             addresses: string[]
-            deviceId: string
-            /** @enum {string} */
-            deviceType: 'Extension' | 'Mobile'
         }
         CryptoFxRateRequest: {
             fromAddress: string

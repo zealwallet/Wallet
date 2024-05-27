@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -9,8 +11,7 @@ type Props = {
 }
 
 export const Plus = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         viewBox="0 0 28 28"
         fill="none"
         width={size}
@@ -29,5 +30,5 @@ export const Plus = ({ size, color }: Props) => (
             strokeWidth="2.1"
             strokeLinecap="round"
         />
-    </Svg>
+    </SvgIcon>
 )

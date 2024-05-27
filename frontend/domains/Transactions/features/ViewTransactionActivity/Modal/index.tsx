@@ -8,7 +8,6 @@ import { Popup } from '@zeal/uikit/Popup'
 
 import { notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
-import { values } from '@zeal/toolkit/Object'
 
 import { Account, AccountsMap } from '@zeal/domains/Account'
 import { Manage as ManageAccounts } from '@zeal/domains/Account/features/Manage'
@@ -20,6 +19,7 @@ import {
     NetworkRPCMap,
 } from '@zeal/domains/Network'
 import { NetworkFilter } from '@zeal/domains/Network/features/Fillter'
+import { getAllNetworksFromNetworkMap } from '@zeal/domains/Network/helpers/getAllNetworksFromNetworkMap'
 import { PortfolioMap } from '@zeal/domains/Portfolio'
 import { getPortfolio } from '@zeal/domains/Portfolio/helpers/getPortfolio'
 import { CustomCurrencyMap } from '@zeal/domains/Storage'
@@ -145,15 +145,6 @@ export const Modal = ({
                 address: account.address,
                 portfolioMap,
             })
-            const networks: CurrentNetwork[] = [
-                { type: 'all_networks' } as const,
-                ...values(networkMap).map(
-                    (network): CurrentNetwork => ({
-                        type: 'specific_network',
-                        network,
-                    })
-                ),
-            ]
 
             return (
                 <UIModal>
@@ -163,7 +154,7 @@ export const Modal = ({
                         currencyHiddenMap={currencyHiddenMap}
                         account={account}
                         keyStoreMap={keystoreMap}
-                        networks={networks}
+                        networks={getAllNetworksFromNetworkMap(networkMap)}
                         networkRPCMap={networkRPCMap}
                         portfolio={portfolio}
                         currentNetwork={selectedNetwork}

@@ -1,17 +1,14 @@
 import React from 'react'
-import { ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
 }
 
 export const CustomWalletConnect = ({ size }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
-        viewBox="0 0 28 28"
-        width={size}
-        height={size}
-    >
+    <SvgIcon viewBox="0 0 28 28" width={size} height={size}>
         <G clipPath="url(#clip0_1042_28372)">
             <Rect width="28" height="28" fill="#3B99FC" />
             <Path
@@ -28,5 +25,5 @@ export const CustomWalletConnect = ({ size }: Props) => (
                 <Rect width="28" height="28" rx="8" fill="white" />
             </ClipPath>
         </Defs>
-    </Svg>
+    </SvgIcon>
 )

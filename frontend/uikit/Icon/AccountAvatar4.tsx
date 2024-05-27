@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Svg, {
+import {
     ClipPath,
     Defs,
     G,
@@ -10,18 +10,14 @@ import Svg, {
     Use,
 } from 'react-native-svg'
 
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
+
 type Props = {
     size: number
 }
 
 export const AccountAvatar4 = ({ size }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
-        viewBox="0 0 28 28"
-        width={size}
-        height={size}
-        fill="none"
-    >
+    <SvgIcon viewBox="0 0 28 28" width={size} height={size} fill="none">
         <G clipPath="url(#avatar_4_svg__a)">
             <Path fill="url(#avatar_4_svg__b)" d="M0 0h28v28H0z" />
         </G>
@@ -44,5 +40,5 @@ export const AccountAvatar4 = ({ size }: Props) => (
                 height={56}
             />
         </Defs>
-    </Svg>
+    </SvgIcon>
 )

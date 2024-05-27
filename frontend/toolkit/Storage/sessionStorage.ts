@@ -45,3 +45,20 @@ export const set = async ({
             return notReachable(ZealPlatform.OS)
     }
 }
+
+export const remove = async ({ key }: { key: string }): Promise<void> => {
+    switch (ZealPlatform.OS) {
+        case 'ios':
+        case 'android':
+            delete nativeSessionStorage[key]
+            DeviceEventEmitter.emit('storageChange')
+            return
+
+        case 'web': {
+            return chrome.storage.session.remove(key)
+        }
+
+        default:
+            return notReachable(ZealPlatform.OS)
+    }
+}

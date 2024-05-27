@@ -33,9 +33,9 @@ import { AppErrorPopup } from '@zeal/domains/Error/components/AppErrorPopup'
 import { parseAppError } from '@zeal/domains/Error/parsers/parseAppError'
 import { NetworkHexId } from '@zeal/domains/Network'
 import { parseNetworkHexId } from '@zeal/domains/Network/helpers/parse'
-import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
 
 import { fetchSupportedTopUpCurrencies } from 'src/features/SendCryptoCurrency/api/fetchSupportedTopUpCurrencies'
+import { postUserEvent } from 'src/features/UserEvents'
 
 import { Flow } from './Flow'
 
@@ -120,7 +120,6 @@ export const DataLoader = ({ zealAccount }: Props) => {
     useEffect(() => {
         postUserEvent({
             type: 'TopUpDappOpenedEvent',
-            installationId: 'dapp-no-installation-id',
         })
     }, [])
 
@@ -171,7 +170,7 @@ export const DataLoader = ({ zealAccount }: Props) => {
 }
 
 const Skeleton = ({ zealAccount }: { zealAccount: Account }) => (
-    <Screen padding="form" background="light">
+    <Screen padding="form" background="light" onNavigateBack={null}>
         <UIActionBar
             top={
                 <Row spacing={8}>

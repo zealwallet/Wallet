@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 
+import { Actions } from '@zeal/uikit/Actions'
 import { BannerOutline } from '@zeal/uikit/BannerOutline'
 import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
@@ -12,13 +13,12 @@ import { notReachable } from '@zeal/toolkit'
 import { useLoadableData } from '@zeal/toolkit/LoadableData/LoadableData'
 
 import { captureError } from '@zeal/domains/Error/helpers/captureError'
-import { FormattedFeeInDefaultCurrency2 } from '@zeal/domains/Money/components/FormattedFeeInDefaultCurrency'
-import { TruncatedFeeInNativeTokenCurrency2 } from '@zeal/domains/Money/components/TruncatedFeeInNativeTokenCurrency'
 import { NetworkMap } from '@zeal/domains/Network'
 import { findNetworkByHexChainId } from '@zeal/domains/Network/constants'
 import { Submited } from '@zeal/domains/TransactionRequest'
 import { SubmitedTransactionFailed } from '@zeal/domains/TransactionRequest/domains/SubmitedTransaction'
 import { fetchFinalFee } from '@zeal/domains/Transactions/api/fetchFinalFee'
+import { FinalFeeBanner } from '@zeal/domains/Transactions/components/FinalFeeBanner'
 
 type Props = {
     failedTransaction: SubmitedTransactionFailed
@@ -72,14 +72,14 @@ export const Failed = ({
             return (
                 <Column spacing={12}>
                     <BannerOutline icon={null}>
-                        <Row spacing={0} alignX="stretch" fullWidth>
+                        <Row spacing={0} alignX="stretch">
                             <Text
                                 variant="paragraph"
                                 color="textPrimary"
                                 weight="regular"
                             >
                                 <FormattedMessage
-                                    id="confirmTransaction.finalNetworkFee"
+                                    id="confirmTransaction.networkFee"
                                     defaultMessage="Final network fee"
                                 />
                             </Text>
@@ -87,77 +87,55 @@ export const Failed = ({
                         </Row>
                     </BannerOutline>
 
-                    <Button
-                        variant="primary"
-                        size="regular"
-                        onClick={() =>
-                            onMsg({
-                                type: 'transaction_failure_accepted',
-                                failedTransaction,
-                                transactionRequest,
-                            })
-                        }
-                    >
-                        <FormattedMessage
-                            id="action.close"
-                            defaultMessage="Close"
-                        />
-                    </Button>
+                    <Actions>
+                        <Button
+                            variant="primary"
+                            size="regular"
+                            onClick={() =>
+                                onMsg({
+                                    type: 'transaction_failure_accepted',
+                                    failedTransaction,
+                                    transactionRequest,
+                                })
+                            }
+                        >
+                            <FormattedMessage
+                                id="action.close"
+                                defaultMessage="Close"
+                            />
+                        </Button>
+                    </Actions>
                 </Column>
             )
 
         case 'loaded':
             return (
                 <Column spacing={12}>
-                    <BannerOutline icon={null}>
-                        <Row spacing={0} alignX="stretch" fullWidth>
-                            <Text
-                                variant="paragraph"
-                                color="textPrimary"
-                                weight="regular"
-                            >
-                                <FormattedMessage
-                                    id="confirmTransaction.finalNetworkFee"
-                                    defaultMessage="Final network fee"
-                                />
-                            </Text>
-
-                            <Text
-                                variant="paragraph"
-                                color="textPrimary"
-                                weight="regular"
-                            >
-                                {loadable.data.priceInDefaultCurrency ? (
-                                    <FormattedFeeInDefaultCurrency2
-                                        money={
-                                            loadable.data.priceInDefaultCurrency
-                                        }
-                                    />
-                                ) : (
-                                    <TruncatedFeeInNativeTokenCurrency2
-                                        money={loadable.data.fee}
-                                    />
-                                )}
-                            </Text>
-                        </Row>
-                    </BannerOutline>
-
-                    <Button
-                        variant="primary"
-                        size="regular"
-                        onClick={() =>
-                            onMsg({
-                                type: 'transaction_failure_accepted',
-                                failedTransaction,
-                                transactionRequest,
-                            })
+                    <FinalFeeBanner
+                        fee={loadable.data.fee}
+                        priceInDefaultCurrency={
+                            loadable.data.priceInDefaultCurrency
                         }
-                    >
-                        <FormattedMessage
-                            id="action.close"
-                            defaultMessage="Close"
-                        />
-                    </Button>
+                    />
+
+                    <Actions>
+                        <Button
+                            variant="primary"
+                            size="regular"
+                            onClick={() =>
+                                onMsg({
+                                    type: 'transaction_failure_accepted',
+                                    failedTransaction,
+                                    transactionRequest,
+                                })
+                            }
+                        >
+                            <FormattedMessage
+                                id="action.close"
+                                defaultMessage="Close"
+                            />
+                        </Button>
+                    </Actions>
                 </Column>
             )
 

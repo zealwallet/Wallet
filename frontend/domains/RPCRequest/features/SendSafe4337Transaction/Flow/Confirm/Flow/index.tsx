@@ -59,6 +59,7 @@ type Msg =
                   | 'on_cancel_confirm_transaction_clicked'
                   | 'drag'
                   | 'on_expand_request'
+                  | 'on_edit_approval_form_submit'
           }
       >
     | Extract<
@@ -226,6 +227,7 @@ export const Flow = ({
             return (
                 <>
                     <Layout
+                        networkRPCMap={networkRPCMap}
                         installationId={installationId}
                         pollingStartedAt={pollingStartedAt}
                         pollingInterval={POLLABLE_INTERVAL_MS}
@@ -254,6 +256,7 @@ export const Flow = ({
                                 case 'on_submit_click':
                                 case 'on_minimize_click':
                                 case 'on_cancel_confirm_transaction_clicked':
+                                case 'on_edit_approval_form_submit':
                                     onMsg(msg)
                                     break
                                 case 'on_user_confirmation_requested':

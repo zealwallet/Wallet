@@ -18,6 +18,7 @@ import {
     OffRampFiatTransferIssuedEvent,
     OffRampInProgressEvent,
     OffRampOnHoldComplianceEvent,
+    OffRampPendingEvent,
     WithdrawalRequest,
 } from '@zeal/domains/Currency/domains/BankTransfer'
 import { OffRampTransactionView } from '@zeal/domains/Currency/domains/BankTransfer/components/OffRampTransactionView'
@@ -36,6 +37,7 @@ type Props = {
         | OffRampOnHoldComplianceEvent
         | OffRampFiatTransferIssuedEvent
         | OffRampFailedEvent
+        | OffRampPendingEvent
         | null
     kycStatus: KycStatus
     withdrawalRequest: WithdrawalRequest

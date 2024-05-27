@@ -83,4 +83,5 @@ build.zip
 build_prod
 build_prod.zip
 frontend/mobile/*.apk
+frontend/mobile/*.aab
 frontend/mobile/*.ipa

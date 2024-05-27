@@ -197,9 +197,24 @@ export const fetchGasAbstractionTransactionFees = async ({
     dummySignature: string
     signal?: AbortSignal
 }): Promise<GasAbstractionTransactionFee[]> => {
-    const [nativeCurrency] = await fetchCryptoCurrencies({
-        currencies: [{ network, addresses: [getNativeTokenAddress(network)] }],
-    })
+    const nativeTokenAddress = getNativeTokenAddress(network)
+
+    const [[nativeCurrency], nonce, nativeToDefaultRate] = await Promise.all([
+        fetchCryptoCurrencies({
+            currencies: [{ network, addresses: [nativeTokenAddress] }],
+        }),
+        fetchCurrentEntrypointNonce({
+            network,
+            entrypoint,
+            address: sender,
+            networkRPCMap,
+            signal,
+        }),
+        fetchRate2({
+            network,
+            tokenAddress: nativeTokenAddress,
+        }),
+    ])
 
     if (!nativeCurrency) {
         throw new ImperativeError(
@@ -207,14 +222,6 @@ export const fetchGasAbstractionTransactionFees = async ({
             { network: network.hexChainId }
         )
     }
-
-    const nonce = await fetchCurrentEntrypointNonce({
-        network,
-        entrypoint,
-        address: sender,
-        networkRPCMap,
-        signal,
-    })
 
     const callData = metaTransactionDatasToUserOperationCallData({
         metaTransactionDatas,
@@ -249,11 +256,6 @@ export const fetchGasAbstractionTransactionFees = async ({
         currency: nativeCurrency,
         amount: nonPaymasterGasEstimate.totalGas * gasPrice.maxFeePerGas,
     }
-
-    const nativeToDefaultRate = await fetchRate2({
-        network,
-        tokenAddress: nativeCurrency.address,
-    })
 
     const feeInDefaultCurrency = nativeToDefaultRate
         ? applyRate2({

@@ -31,6 +31,7 @@ export const fetchLastUnfinishedOnRamp = async ({
                 case 'unblock_offramp_on_hold_compliance':
                 case 'unblock_offramp_on_hold_kyc':
                 case 'unblock_offramp_failed':
+                case 'unblock_offramp_pending':
                     return false
                 case 'unblock_onramp_transfer_received':
                 case 'unblock_onramp_transfer_in_review':
@@ -40,6 +41,7 @@ export const fetchLastUnfinishedOnRamp = async ({
                 case 'unblock_onramp_transfer_on_hold_compliance':
                 case 'unblock_onramp_transfer_on_hold_kyc':
                 case 'unblock_onramp_failed':
+                case 'unblock_onramp_pending':
                     return true
                 default:
                     return notReachable(event)
@@ -70,6 +72,7 @@ export const fetchLastUnfinishedOnRamp = async ({
                         case 'unblock_onramp_transfer_on_hold_compliance':
                         case 'unblock_onramp_transfer_on_hold_kyc':
                         case 'unblock_onramp_failed':
+                        case 'unblock_onramp_pending':
                             return false
                         case 'unblock_onramp_process_completed':
                             return true

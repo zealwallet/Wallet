@@ -8,8 +8,11 @@ import { ecr20TransactionFeeForecast } from '@zeal/domains/RPCRequest/api/fixtur
 import { erc20TransactionReceipt } from '@zeal/domains/RPCRequest/api/fixtures/erc20TransactionReceipt'
 import { erc20TransactionResult } from '@zeal/domains/RPCRequest/api/fixtures/erc20TransactionResult'
 import { ethGetBlockByNumber } from '@zeal/domains/RPCRequest/api/fixtures/ethGetBlockByNumber'
-import { onlyPKAccount } from '@zeal/domains/Storage/api/fixtures/localStorage'
-import { LS_KEY } from '@zeal/domains/Storage/constants'
+import {
+    onlyPKAccount,
+    portfolioMap,
+} from '@zeal/domains/Storage/api/fixtures/localStorage'
+import { LS_KEY, PORTFOLIO_MAP_KEY } from '@zeal/domains/Storage/constants'
 
 import { cleanEnv, mockEnv, TestEnvironment } from 'src/tests/env'
 import { runLottieListeners } from 'src/tests/mocks/lottie'
@@ -29,8 +32,10 @@ afterEach(() => {
 test(`As a user, I should be able to search for an address to send to, so that I can send tokens to any wallet, even without tracking already
     As a user I should be able to send tokens, so that I can transact`, async () => {
     env.chromeMocks.storages.local[LS_KEY] = JSON.stringify(onlyPKAccount)
+    env.chromeMocks.storages.local[PORTFOLIO_MAP_KEY] =
+        JSON.stringify(portfolioMap)
 
-    const fromAddress = '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932'
+    const fromAddress = '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932'
 
     await renderPage(
         `/page_entrypoint.html?type=send_erc20_token&fromAddress=${fromAddress}`

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { StoryWithActionsInTheEnd as UIStory } from '@zeal/uikit/StoryWithActionsInTheEnd'
+import { StoryWithPersistentActions } from '@zeal/uikit/StoryWithPersistentActions'
 
 import { notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
@@ -13,7 +13,9 @@ type Props = {
     onMsg: (msg: Msg) => void
 }
 
-export type Msg = MsgOf<typeof UIStory>
+export type Msg =
+    | MsgOf<typeof StoryWithPersistentActions>
+    | { type: 'on_stories_dismissed' }
 
 export const Story = ({ installationId, onMsg }: Props) => {
     useEffect(() => {
@@ -25,7 +27,7 @@ export const Story = ({ installationId, onMsg }: Props) => {
     }, [installationId])
 
     return (
-        <UIStory
+        <StoryWithPersistentActions
             stories={[
                 {
                     title: (
@@ -40,15 +42,36 @@ export const Story = ({ installationId, onMsg }: Props) => {
                             defaultMessage="Transfer between your local currency & USDC"
                         />
                     ),
-                    artworkSrc: require('./wallet_stories/bank_transfers_1.png'),
+                    artworkSrc: 'transfers',
                 },
             ]}
-            mainCtaTitle={
-                <FormattedMessage
-                    id="bank_transfers.story_cta.get_started"
-                    defaultMessage="Get started"
-                />
-            }
+            actions={{
+                primary: {
+                    title: (
+                        <FormattedMessage
+                            id="bank_transfers.story_cta.get_started"
+                            defaultMessage="Get started"
+                        />
+                    ),
+                    onClick: () => onMsg({ type: 'on_stories_completed' }),
+                },
+                secondary: {
+                    title: (
+                        <FormattedMessage
+                            id="bank_transfers.story_cta.back"
+                            defaultMessage="Back"
+                        />
+                    ),
+                    onClick: () => {
+                        postUserEvent({
+                            type: 'StoryFlowDismissedEvent',
+                            name: 'bank_transfers',
+                            installationId,
+                        })
+                        onMsg({ type: 'on_stories_dismissed' })
+                    },
+                },
+            }}
             onMsg={(msg) => {
                 switch (msg.type) {
                     case 'on_stories_completed':
@@ -58,18 +81,11 @@ export const Story = ({ installationId, onMsg }: Props) => {
                             installationId,
                         })
                         break
-                    case 'on_stories_dismissed':
-                        postUserEvent({
-                            type: 'StoryFlowDismissedEvent',
-                            name: 'bank_transfers',
-                            installationId,
-                        })
-                        break
-                    case 'on_next_click':
+                    case 'on_next_slide_shown':
                         postUserEvent({
                             type: 'StoryFlowAdvancedEvent',
                             name: 'bank_transfers',
-                            slideNumber: msg.slide,
+                            slideNumber: msg.currentSlide,
                             installationId,
                         })
                         break
@@ -77,7 +93,6 @@ export const Story = ({ installationId, onMsg }: Props) => {
                     default:
                         return notReachable(msg)
                 }
-                onMsg(msg)
             }}
         />
     )

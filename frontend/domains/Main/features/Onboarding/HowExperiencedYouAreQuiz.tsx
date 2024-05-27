@@ -27,7 +27,11 @@ type Msg =
 
 export const HowExperiencedYouAreQuiz = ({ installationId, onMsg }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton

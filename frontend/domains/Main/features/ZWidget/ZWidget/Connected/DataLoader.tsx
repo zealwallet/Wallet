@@ -96,7 +96,7 @@ export const DataLoader = ({
     )
     switch (loadable.type) {
         case 'loading':
-            return <LoadingLayout actionBar={null} />
+            return <LoadingLayout actionBar={null} onClose={null} />
         case 'loaded':
             return (
                 <SendTransaction
@@ -123,7 +123,7 @@ export const DataLoader = ({
         case 'error':
             return (
                 <>
-                    <LoadingLayout actionBar={null} />
+                    <LoadingLayout actionBar={null} onClose={null} />
                     <AppErrorPopup
                         error={parseAppError(loadable.error)}
                         onMsg={(msg) => {

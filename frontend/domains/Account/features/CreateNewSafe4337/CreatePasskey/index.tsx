@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react'
 
-import { createPasskey } from '@zeal/passkeys'
-
 import { notReachable, useLiveRef } from '@zeal/toolkit'
-import { getRandomIntArray } from '@zeal/toolkit/Crypto'
 import { useLazyLoadableData } from '@zeal/toolkit/LoadableData/LazyLoadableData'
 
 import { AppErrorPopup } from '@zeal/domains/Error/components/AppErrorPopup'
 import { parseAppError } from '@zeal/domains/Error/parsers/parseAppError'
-import { Safe4337 } from '@zeal/domains/KeyStore'
-import { createPasskeyOwner } from '@zeal/domains/KeyStore/helpers/createPasskeyOwner'
+import { Passkey } from '@zeal/domains/KeyStore/domains/Passkey'
+import { createPasskey } from '@zeal/domains/KeyStore/domains/Passkey/helpers/createPasskey'
 import { Network, NetworkRPCMap } from '@zeal/domains/Network'
 
 import { Layout } from './Layout'
@@ -28,40 +25,8 @@ type Msg =
     | { type: 'close' }
     | {
           type: 'on_passkey_created'
-          passkeyOwner: Safe4337['safeDeplymentConfig']['passkeyOwner']
+          passkeyOwner: Passkey
       }
-
-export const createPasskeyCredential = async ({
-    network,
-    safeLabel,
-    sessionPassword,
-    networkRPCMap,
-}: {
-    network: Network
-    safeLabel: string
-    sessionPassword: string
-    networkRPCMap: NetworkRPCMap
-}): Promise<Safe4337['safeDeplymentConfig']['passkeyOwner']> => {
-    const recoveryIdBuffer = Uint8Array.from(
-        getRandomIntArray(new Uint8Array(32)),
-        (c) => c
-    )
-
-    const response = await createPasskey({
-        userName: safeLabel,
-        userId: recoveryIdBuffer,
-        challenge: getRandomIntArray(new Uint8Array(26)), // Not meaningful during registration,
-        rpId: 'sample-associated-domain.web.app',
-    })
-
-    return createPasskeyOwner({
-        recoveryIdBuffer,
-        sessionPassword,
-        network,
-        networkRPCMap,
-        attestationBuffer: response.attestationObject,
-    })
-}
 
 export const CreatePasskey = ({
     onMsg,
@@ -70,7 +35,7 @@ export const CreatePasskey = ({
     safeLabel,
     networkRPCMap,
 }: Props) => {
-    const [loadable, setLoadable] = useLazyLoadableData(createPasskeyCredential)
+    const [loadable, setLoadable] = useLazyLoadableData(createPasskey)
 
     const onMsgLive = useLiveRef(onMsg)
 

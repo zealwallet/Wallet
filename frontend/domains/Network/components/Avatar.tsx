@@ -19,12 +19,15 @@ import {
     Aurora,
     Avalanche,
     Base as BaseIcon,
+    Blast,
     BNB,
     Celo,
     Cronos,
     Eth,
     Fantom,
     Gnosis,
+    Linea,
+    OPBNB,
     Optimism,
     Polygon,
     PolygonZkevm,
@@ -201,6 +204,12 @@ const PredefinedNetworkAvatar = ({
                     <PolygonZkevm size={size} />
                 </UIAvatar>
             )
+        case 'Linea':
+            return (
+                <UIAvatar border={border} size={size}>
+                    <Linea size={size} />
+                </UIAvatar>
+            )
         case 'Fantom':
             return (
                 <UIAvatar border={border} size={size}>
@@ -217,6 +226,18 @@ const PredefinedNetworkAvatar = ({
             return (
                 <UIAvatar border={border} size={size}>
                     <BaseIcon size={size} />
+                </UIAvatar>
+            )
+        case 'Blast':
+            return (
+                <UIAvatar border={border} size={size}>
+                    <Blast size={size} />
+                </UIAvatar>
+            )
+        case 'OPBNB':
+            return (
+                <UIAvatar border={border} size={size}>
+                    <OPBNB size={size} />
                 </UIAvatar>
             )
         case 'Gnosis':

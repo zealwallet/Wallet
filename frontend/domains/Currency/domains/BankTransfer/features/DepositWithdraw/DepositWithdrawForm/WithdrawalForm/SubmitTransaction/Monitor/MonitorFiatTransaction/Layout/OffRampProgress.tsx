@@ -79,6 +79,7 @@ export const OffRampProgress = ({
         case 'unblock_offramp_in_progress':
         case 'unblock_offramp_failed':
         case 'unblock_offramp_on_hold_compliance':
+        case 'unblock_offramp_pending':
             return (
                 <Progress
                     variant="neutral"
@@ -154,6 +155,7 @@ const TransactionLink = ({
             case 'unblock_offramp_failed':
             case 'unblock_offramp_fiat_transfer_issued':
             case 'unblock_offramp_on_hold_compliance':
+            case 'unblock_offramp_pending':
                 return 'neutral'
 
             case 'unblock_offramp_on_hold_kyc':
@@ -225,6 +227,7 @@ const Title = ({
         case 'unblock_offramp_in_progress':
         case 'unblock_offramp_failed':
         case 'unblock_offramp_on_hold_compliance':
+        case 'unblock_offramp_pending':
             return (
                 <FormattedMessage
                     id="currency.bankTransfer.off_ramp.transferring_to_currency"

@@ -29,7 +29,7 @@ export const CompletedSplash = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen padding="form" background="light" onNavigateBack={null}>
             <AccountActionBar
                 keystore={getKeyStore({
                     keyStoreMap: keystoreMap,

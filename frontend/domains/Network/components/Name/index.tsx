@@ -69,6 +69,13 @@ export const Name = ({ currentNetwork }: Props) => {
                                     defaultMessage="Polygon zkEVM"
                                 />
                             )
+                        case 'Linea':
+                            return (
+                                <FormattedMessage
+                                    id="network.name.Linea"
+                                    defaultMessage="Linea"
+                                />
+                            )
                         case 'Fantom':
                             return (
                                 <FormattedMessage
@@ -88,6 +95,20 @@ export const Name = ({ currentNetwork }: Props) => {
                                 <FormattedMessage
                                     id="network.name.Base"
                                     defaultMessage="Base"
+                                />
+                            )
+                        case 'Blast':
+                            return (
+                                <FormattedMessage
+                                    id="network.name.Blast"
+                                    defaultMessage="Blast"
+                                />
+                            )
+                        case 'OPBNB':
+                            return (
+                                <FormattedMessage
+                                    id="network.name.OPBNB"
+                                    defaultMessage="OPBNB"
                                 />
                             )
                         case 'Gnosis':

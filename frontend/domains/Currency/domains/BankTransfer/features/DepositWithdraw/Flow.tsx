@@ -180,9 +180,7 @@ export const Flow = ({
                     onMsg={(msg) => {
                         switch (msg.type) {
                             case 'close':
-                                setState({
-                                    type: 'create_user_and_login_to_unblock',
-                                })
+                                onMsg(msg)
                                 break
                             case 'unblock_offramp_account_created':
                                 setState({

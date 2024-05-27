@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { TextInput } from 'react-native'
 
 import { Actions } from '@zeal/uikit/Actions'
 import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
 import { Header } from '@zeal/uikit/Header'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { Input } from '@zeal/uikit/Input'
@@ -15,6 +15,7 @@ import { Spacer } from '@zeal/uikit/Spacer'
 import { Text } from '@zeal/uikit/Text'
 
 import { notReachable } from '@zeal/toolkit'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 import {
     failure,
     nonEmptyString,
@@ -52,7 +53,6 @@ type FormErrors = {
 
 type Msg =
     | { type: 'on_form_submitted'; completedForm: PersonalDetails }
-    | { type: 'on_back_button_clicked' }
     | {
           type: 'close'
       }
@@ -144,6 +144,9 @@ export const PersonalDetailsForm = ({
         initialPersonalDetails
     )
 
+    const lastNameInput = useRef<TextInput>(null)
+    const dateOfBirthInput = useRef<TextInput>(null)
+
     const errors = isSubmitted
         ? validateOnSubmit(form).getFailureReason() || {}
         : validateAsUserTypes(form).getFailureReason() || {}
@@ -171,7 +174,11 @@ export const PersonalDetailsForm = ({
     }
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 network={network}
                 account={account}
@@ -182,19 +189,9 @@ export const PersonalDetailsForm = ({
                 left={
                     <IconButton
                         variant="on_light"
-                        onClick={() =>
-                            onMsg({ type: 'on_back_button_clicked' })
-                        }
-                    >
-                        {({ color }) => <BackIcon size={24} color={color} />}
-                    </IconButton>
-                }
-                right={
-                    <IconButton
-                        variant="on_light"
                         onClick={() => onMsg({ type: 'close' })}
                     >
-                        {({ color }) => <CloseCross size={24} color={color} />}
+                        {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
             />
@@ -224,7 +221,23 @@ export const PersonalDetailsForm = ({
 
                         <Input
                             keyboardType="default"
-                            onSubmitEditing={onSubmit}
+                            returnKeyType="next"
+                            autoComplete="name"
+                            blurOnSubmit={false} // prevent keyboard flashing when pressing "next"
+                            onSubmitEditing={() => {
+                                switch (ZealPlatform.OS) {
+                                    case 'ios':
+                                    case 'android':
+                                        lastNameInput.current?.focus()
+                                        break
+                                    case 'web':
+                                        onSubmit()
+                                        break
+                                    /* istanbul ignore next */
+                                    default:
+                                        return notReachable(ZealPlatform.OS)
+                                }
+                            }}
                             onChange={(e) =>
                                 setForm({
                                     ...form,
@@ -250,8 +263,25 @@ export const PersonalDetailsForm = ({
                         </Text>
 
                         <Input
+                            ref={lastNameInput}
                             keyboardType="default"
-                            onSubmitEditing={onSubmit}
+                            autoComplete="name"
+                            returnKeyType="next"
+                            blurOnSubmit={false} // prevent keyboard flashing when pressing "next"
+                            onSubmitEditing={() => {
+                                switch (ZealPlatform.OS) {
+                                    case 'ios':
+                                    case 'android':
+                                        dateOfBirthInput.current?.focus()
+                                        break
+                                    case 'web':
+                                        onSubmit()
+                                        break
+                                    /* istanbul ignore next */
+                                    default:
+                                        return notReachable(ZealPlatform.OS)
+                                }
+                            }}
                             onChange={(e) =>
                                 setForm({
                                     ...form,
@@ -287,6 +317,7 @@ export const PersonalDetailsForm = ({
                         >
                             {({ value, onChange }) => (
                                 <Input
+                                    ref={dateOfBirthInput}
                                     keyboardType="number-pad"
                                     onSubmitEditing={onSubmit}
                                     onChange={onChange}

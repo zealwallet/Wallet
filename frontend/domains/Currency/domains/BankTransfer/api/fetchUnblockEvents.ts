@@ -27,6 +27,7 @@ import {
     OffRampInProgressEvent,
     OffRampOnHoldComplianceEvent,
     OffRampOnHoldKycEvent,
+    OffRampPendingEvent,
     OffRampSuccessEvent,
     OffRampTransactionEvent,
     OnRampTransactionCryptoTransferIssuedEvent,
@@ -35,6 +36,7 @@ import {
     OnRampTransactionOnHoldComplianceEvent,
     OnRampTransactionOnHoldKycEvent,
     OnRampTransactionOutsideTransferInReviewEvent,
+    OnRampTransactionPendingEvent,
     OnRampTransactionProcessCompletedEvent,
     OnRampTransactionTransferApprovedEvent,
     OnRampTransactionTransferReceivedEvent,
@@ -747,6 +749,72 @@ const parseUnblockOnrampTransactionFailedEvent = (
             })
         })
 
+const parseUnblockOnrampTransactionPendingEvent = (
+    input: unknown,
+    knownCurrencies: KnownCurrencies
+): Result<unknown, OnRampTransactionPendingEvent> =>
+    object(input)
+        .andThen((obj) =>
+            shape({
+                data: string(obj.data)
+                    .andThen(parseJSON)
+                    .andThen(object)
+                    .andThen((event) =>
+                        shape({
+                            type: match('fiatToCrypto' as const, event.type),
+                            subType: match('PENDING' as const, event.subType),
+                            data: object(event.data).andThen((eventDataObj) =>
+                                shape({
+                                    transactionUuid: string(
+                                        eventDataObj.transactionUuid
+                                    ),
+                                    currencyFiat: string(
+                                        eventDataObj.currencyFiat
+                                    ),
+                                    amountFiat: number(eventDataObj.amountFiat),
+                                    walletAddress: parse(
+                                        eventDataObj.walletAddress
+                                    ),
+                                })
+                            ),
+                        })
+                    ),
+                createdAt: number(obj.createdAt),
+                updatedAt: number(obj.updatedAt),
+            })
+        )
+        .andThen((event) => {
+            const currency = values(knownCurrencies).find(
+                (currency) =>
+                    currency.code.toUpperCase() ===
+                    event.data.data.currencyFiat.toUpperCase()
+            )
+
+            if (!currency) {
+                return failure({
+                    type: 'failed_to_find_suitable_fiat_currency',
+                    currency: event.data.data.currencyFiat,
+                })
+            }
+
+            const amount = amountToBigint(
+                event.data.data.amountFiat.toString(10),
+                currency.fraction
+            )
+
+            return success({
+                type: 'unblock_onramp_pending',
+                fiat: {
+                    amount,
+                    currencyId: currency.id,
+                },
+                address: event.data.data.walletAddress,
+                createdAt: event.createdAt,
+                updatedAt: event.updatedAt,
+                transactionUuid: event.data.data.transactionUuid,
+            })
+        })
+
 const parseUnblockOfframpTransactionInProgressEvent = (
     input: unknown,
     knownCurrencies: KnownCurrencies
@@ -1285,6 +1353,43 @@ const parseUnblockOfframpTransactionFailedEvent = (
             updatedAt: rawObj.updatedAt,
         }))
 
+const parseUnblockOfframpTransactionPendingEvent = (
+    input: unknown
+): Result<unknown, OffRampPendingEvent> =>
+    object(input)
+        .andThen((obj) =>
+            shape({
+                data: string(obj.data)
+                    .andThen(parseJSON)
+                    .andThen(object)
+                    .andThen((event) =>
+                        shape({
+                            type: match('cryptoToFiat' as const, event.type),
+                            subType: match('PENDING' as const, event.subType),
+                            data: object(event.data).andThen((eventDataObj) =>
+                                shape({
+                                    transactionUuid: string(
+                                        eventDataObj.transactionUuid
+                                    ),
+                                    transactionHash: string(
+                                        eventDataObj.transactionHash
+                                    ),
+                                })
+                            ),
+                        })
+                    ),
+                createdAt: number(obj.createdAt),
+                updatedAt: number(obj.updatedAt),
+            })
+        )
+        .map((rawObj) => ({
+            type: 'unblock_offramp_pending',
+            transactionUuid: rawObj.data.data.transactionHash,
+            transactionHash: rawObj.data.data.transactionHash,
+            createdAt: rawObj.createdAt,
+            updatedAt: rawObj.updatedAt,
+        }))
+
 const parseUnblockOnRampTransactionEvent = (
     input: unknown,
     knownCurrencies: KnownCurrencies
@@ -1312,7 +1417,8 @@ const parseUnblockOnRampTransactionEvent = (
             input,
             knownCurrencies
         ),
-        parseUnblockOnrampTransactionFailedEvent(input, knownCurrencies),
+        parseUnblockOnrampTransactionFailedEvent(input, knownCurrencies), // Replaced by PENDING, but we still need to parse it to support old webhook events
+        parseUnblockOnrampTransactionPendingEvent(input, knownCurrencies),
     ])
 
 const parseUnblockOffRampTransactionEvent = (
@@ -1331,7 +1437,8 @@ const parseUnblockOffRampTransactionEvent = (
             knownCurrencies
         ),
         parseUnblockOfframpTransactionSuccessEvent(input, knownCurrencies),
-        parseUnblockOfframpTransactionFailedEvent(input),
+        parseUnblockOfframpTransactionFailedEvent(input), // Replaced by PENDING, but we still need to parse it to support old webhook events
+        parseUnblockOfframpTransactionPendingEvent(input),
     ])
 
 export const fetchUnblockEvents = ({

@@ -2,6 +2,7 @@ import { FormattedMessage } from 'react-intl'
 
 import Web3 from 'web3'
 
+import { Column } from '@zeal/uikit/Column'
 import { Content } from '@zeal/uikit/Content'
 import { Screen } from '@zeal/uikit/Screen'
 
@@ -71,7 +72,19 @@ type Props = {
 }
 
 type Msg =
-    | MsgOf<typeof Flow>
+    | Extract<
+          MsgOf<typeof Flow>,
+          {
+              type:
+                  | 'on_minimize_click'
+                  | 'on_cancel_confirm_transaction_clicked'
+                  | 'on_submit_click'
+                  | 'on_expand_request'
+                  | 'drag'
+                  | 'on_4337_gas_currency_selected'
+                  | 'on_user_confirmed_transaction_for_signing'
+          }
+      >
     | MsgOf<typeof ConnectedMinimized>
     | { type: 'on_cancel_confirm_transaction_clicked' }
 
@@ -172,16 +185,29 @@ const simulateSafeTransaction = async ({
                 entrypoint,
             }
 
-            const simulation =
-                await fetchAccountAbstractionTransactionSimulation({
-                    initialUserOperation,
-                    dApp,
-                    network,
-                    signal,
-                })
-
-            if (await safeInstance.owners.includes(localSignerAddress)) {
+            if (safeInstance.owners.includes(localSignerAddress)) {
                 const entrypoint = safeInstance.entrypoint
+                const [simulation, feeForecast] = await Promise.all([
+                    fetchAccountAbstractionTransactionSimulation({
+                        initialUserOperation,
+                        dApp,
+                        network,
+                        signal,
+                    }),
+                    fetchGasAbstractionTransactionFees({
+                        network,
+                        initCode: null,
+                        metaTransactionDatas: [requestMetaTransaction],
+                        sender: safeAddress,
+                        verificationGasLimitBuffer:
+                            EOA_SIGNATURE_VERIFICATION_GAS_LIMIT_BUFFER,
+                        entrypoint,
+                        networkRPCMap,
+                        portfolio,
+                        dummySignature: DUMMY_EOA_SIGNATURE,
+                        signal,
+                    }),
+                ])
                 const userOperationRequest: SimulatedWithoutDeploymentBundleUserOperationRequest =
                     {
                         type: 'simulated_safe_without_deployment_bundle_user_operation_request',
@@ -196,19 +222,7 @@ const simulateSafeTransaction = async ({
                     }
 
                 return {
-                    feeForecast: await fetchGasAbstractionTransactionFees({
-                        network,
-                        initCode: null,
-                        metaTransactionDatas: [requestMetaTransaction],
-                        sender: safeAddress,
-                        verificationGasLimitBuffer:
-                            EOA_SIGNATURE_VERIFICATION_GAS_LIMIT_BUFFER,
-                        entrypoint,
-                        networkRPCMap,
-                        portfolio,
-                        dummySignature: DUMMY_EOA_SIGNATURE,
-                        signal,
-                    }),
+                    feeForecast,
                     userOperationRequest,
                 }
             } else {
@@ -233,22 +247,14 @@ const simulateSafeTransaction = async ({
 
                 const entrypoint = safeInstance.entrypoint
 
-                const userOperationRequest: SimulatedWithAddOwnerUserOperationRequest =
-                    {
-                        type: 'simulated_safe_with_add_owner_user_operation_request',
-                        account,
+                const [simulation, feeForecast] = await Promise.all([
+                    fetchAccountAbstractionTransactionSimulation({
+                        initialUserOperation,
                         dApp,
                         network,
-                        rpcRequest: rpcRequestToBundle,
-                        simulationResult: simulation,
-                        metaTransactionData: requestMetaTransaction,
-                        addOwnerMetaTransactionData,
-                        initCode: null,
-                        entrypoint,
-                    }
-
-                return {
-                    feeForecast: await fetchGasAbstractionTransactionFees({
+                        signal,
+                    }),
+                    fetchGasAbstractionTransactionFees({
                         network,
                         initCode: null,
                         metaTransactionDatas: [
@@ -264,6 +270,24 @@ const simulateSafeTransaction = async ({
                         dummySignature: DUMMY_PASSKEY_SIGNATURE,
                         signal,
                     }),
+                ])
+
+                const userOperationRequest: SimulatedWithAddOwnerUserOperationRequest =
+                    {
+                        type: 'simulated_safe_with_add_owner_user_operation_request',
+                        account,
+                        dApp,
+                        network,
+                        rpcRequest: rpcRequestToBundle,
+                        simulationResult: simulation,
+                        metaTransactionData: requestMetaTransaction,
+                        addOwnerMetaTransactionData,
+                        initCode: null,
+                        entrypoint,
+                    }
+
+                return {
+                    feeForecast,
                     userOperationRequest,
                 }
             }
@@ -289,14 +313,6 @@ const simulateSafeTransaction = async ({
                 entrypoint,
             }
 
-            const simulation =
-                await fetchAccountAbstractionTransactionSimulation({
-                    initialUserOperation: simulationUserOperation,
-                    dApp,
-                    network,
-                    signal,
-                })
-
             const web3 = new Web3(
                 new ZealWeb3RPCProvider({ network, networkRPCMap })
             )
@@ -316,22 +332,14 @@ const simulateSafeTransaction = async ({
                 operation: OperationType.Call,
             }
 
-            const userOperationRequest: SimulatedWithDeploymentBundleUserOperationRequest =
-                {
-                    type: 'simulated_safe_deployment_bundle_user_operation_request',
-                    account,
+            const [simulation, feeForecast] = await Promise.all([
+                fetchAccountAbstractionTransactionSimulation({
+                    initialUserOperation: simulationUserOperation,
                     dApp,
                     network,
-                    rpcRequest: rpcRequestToBundle,
-                    simulationResult: simulation,
-                    metaTransactionData: requestMetaTransaction,
-                    addOwnerMetaTransactionData,
-                    initCode: safeInstance.deploymentInitCode,
-                    entrypoint,
-                }
-
-            return {
-                feeForecast: await fetchGasAbstractionTransactionFees({
+                    signal,
+                }),
+                fetchGasAbstractionTransactionFees({
                     network,
                     initCode: safeInstance.deploymentInitCode,
                     metaTransactionDatas: [
@@ -347,6 +355,24 @@ const simulateSafeTransaction = async ({
                     dummySignature: DUMMY_PASSKEY_SIGNATURE,
                     signal,
                 }),
+            ])
+
+            const userOperationRequest: SimulatedWithDeploymentBundleUserOperationRequest =
+                {
+                    type: 'simulated_safe_deployment_bundle_user_operation_request',
+                    account,
+                    dApp,
+                    network,
+                    rpcRequest: rpcRequestToBundle,
+                    simulationResult: simulation,
+                    metaTransactionData: requestMetaTransaction,
+                    addOwnerMetaTransactionData,
+                    initCode: safeInstance.deploymentInitCode,
+                    entrypoint,
+                }
+
+            return {
+                feeForecast,
                 userOperationRequest,
             }
         }
@@ -470,7 +496,38 @@ export const Confirm = ({
                             portfolio={portfolio}
                             visualState={state}
                             actionSource={actionSource}
-                            onMsg={onMsg}
+                            onMsg={(msg) => {
+                                switch (msg.type) {
+                                    case 'on_minimize_click':
+                                    case 'on_cancel_confirm_transaction_clicked':
+                                    case 'on_submit_click':
+                                    case 'on_expand_request':
+                                    case 'drag':
+                                    case 'on_4337_gas_currency_selected':
+                                    case 'on_user_confirmed_transaction_for_signing':
+                                        onMsg(msg)
+                                        break
+                                    case 'on_edit_approval_form_submit':
+                                        setLoadable({
+                                            type: 'loading',
+                                            params: {
+                                                rpcRequestToBundle:
+                                                    msg.updatedEthSendTransaction,
+                                                network,
+                                                account,
+                                                networkRPCMap,
+                                                keyStore,
+                                                portfolio,
+                                                dApp: dAppInfo,
+                                                sessionPassword,
+                                            },
+                                        })
+                                        break
+                                    /* istanbul ignore next */
+                                    default:
+                                        return notReachable(msg)
+                                }
+                            }}
                         />
                     )
 
@@ -552,27 +609,33 @@ const LoadingLayout = ({
 
         case 'maximised':
             return (
-                <Screen background="light" padding="form">
-                    <ActionBar
-                        title={null}
-                        account={account}
-                        actionSource={actionSource}
-                        network={null}
-                        onMsg={onMsg}
-                    />
-
-                    <Content>
-                        <Content.Splash
-                            onAnimationComplete={null}
-                            variant="spinner"
-                            title={
-                                <FormattedMessage
-                                    id="SendSafeTransaction.Confirm.loading"
-                                    defaultMessage="Doing safety checks…"
-                                />
-                            }
+                <Screen
+                    background="light"
+                    padding="form"
+                    onNavigateBack={() => onMsg({ type: 'on_minimize_click' })}
+                >
+                    <Column spacing={12} fill>
+                        <ActionBar
+                            title={null}
+                            account={account}
+                            actionSource={actionSource}
+                            network={null}
+                            onMsg={onMsg}
                         />
-                    </Content>
+
+                        <Content>
+                            <Content.Splash
+                                onAnimationComplete={null}
+                                variant="spinner"
+                                title={
+                                    <FormattedMessage
+                                        id="SendSafeTransaction.Confirm.loading"
+                                        defaultMessage="Doing safety checks…"
+                                    />
+                                }
+                            />
+                        </Content>
+                    </Column>
                 </Screen>
             )
         /* istanbul ignore next */

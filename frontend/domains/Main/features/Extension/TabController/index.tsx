@@ -12,14 +12,19 @@ import {
 } from '@zeal/domains/Account/api/fetchAccounts'
 import { groupBySecretPhrase } from '@zeal/domains/Account/helpers/groupBySecretPhrase'
 import { Address } from '@zeal/domains/Address'
-import { CurrencyHiddenMap, CurrencyPinMap } from '@zeal/domains/Currency'
+import { CardConfig } from '@zeal/domains/Card'
+import {
+    CurrencyHiddenMap,
+    CurrencyPinMap,
+    GasCurrencyPresetMap,
+} from '@zeal/domains/Currency'
 import { SubmittedOfframpTransaction } from '@zeal/domains/Currency/domains/BankTransfer'
 import { SubmitedBridgesMap } from '@zeal/domains/Currency/domains/Bridge'
 import { ConnectionMap } from '@zeal/domains/DApp/domains/ConnectionState'
+import { WalletConnectInstanceLoadable } from '@zeal/domains/DApp/domains/WalletConnect/api/fetchWalletConnectInstance'
 import { ImperativeError } from '@zeal/domains/Error'
 import { captureError } from '@zeal/domains/Error/helpers/captureError'
 import { KeyStoreMap } from '@zeal/domains/KeyStore'
-import { getKeyStore } from '@zeal/domains/KeyStore/helpers/getKeyStore'
 import { Mode } from '@zeal/domains/Main'
 import { Manifest } from '@zeal/domains/Manifest'
 import {
@@ -30,6 +35,7 @@ import {
 import { PortfolioMap } from '@zeal/domains/Portfolio'
 import { BankTransferInfo, CustomCurrencyMap } from '@zeal/domains/Storage'
 import { Submited } from '@zeal/domains/TransactionRequest'
+import { FeePresetMap } from '@zeal/domains/Transactions/api/fetchFeeForecast'
 
 import { Layout } from './Layout'
 import { Modal, State as ModalState } from './Modal'
@@ -59,7 +65,10 @@ type Props = {
     bankTransferInfo: BankTransferInfo
     currencyHiddenMap: CurrencyHiddenMap
     currencyPinMap: CurrencyPinMap
-    userMadeActionOnNextBestActionIds: string[]
+    feePresetMap: FeePresetMap
+    gasCurrencyPresetMap: GasCurrencyPresetMap
+    walletConnectInstanceLoadable: WalletConnectInstanceLoadable
+    cardConfig: CardConfig
     onMsg: (msg: Msg) => void
 }
 
@@ -70,6 +79,7 @@ export type Msg =
               type:
                   | 'on_profile_change_confirm_click'
                   | 'reload_button_click'
+                  | 'on_refresh_pulled'
                   | 'on_recovery_kit_setup'
                   | 'on_account_label_change_submit'
                   | 'confirm_account_delete_click'
@@ -102,6 +112,11 @@ export type Msg =
                   | 'on_zwidget_expand_request'
                   | 'on_send_clicked'
                   | 'on_bank_clicked'
+                  | 'on_card_owner_address_selected'
+                  | 'on_card_onboarded_account_state_received'
+                  | 'card_tab_choose_wallet_on_import_new_wallet_clicked'
+                  | 'on_order_new_card_gnosis_pay_click'
+                  | 'on_card_imported_success_animation_complete'
           }
       >
     | Extract<
@@ -152,15 +167,13 @@ export const TabController = ({
     bankTransferInfo,
     currencyHiddenMap,
     currencyPinMap,
-    userMadeActionOnNextBestActionIds,
+    feePresetMap,
+    gasCurrencyPresetMap,
+    walletConnectInstanceLoadable,
+    cardConfig,
     onMsg,
 }: Props) => {
     const [modalState, setModalState] = useState<ModalState>({ type: 'closed' })
-
-    const keyStore = getKeyStore({
-        keyStoreMap: keystoreMap,
-        address: account.address,
-    })
 
     const onBankTransferSelected = () => {
         switch (bankTransferInfo.type) {
@@ -203,10 +216,11 @@ export const TabController = ({
     return (
         <>
             <Layout
+                cardConfig={cardConfig}
+                feePresetMap={feePresetMap}
+                gasCurrencyPresetMap={gasCurrencyPresetMap}
+                walletConnectInstanceLoadable={walletConnectInstanceLoadable}
                 sessionPassword={sessionPassword}
-                userMadeActionOnNextBestActionIds={
-                    userMadeActionOnNextBestActionIds
-                }
                 installationId={installationId}
                 mode={mode}
                 customCurrencyMap={customCurrencyMap}
@@ -262,28 +276,6 @@ export const TabController = ({
                             onBankTransferSelected()
                             break
 
-                        case 'on_token_settings_click':
-                        case 'on_receive_selected':
-                            switch (keyStore.type) {
-                                case 'track_only':
-                                    setModalState({
-                                        type: 'tracked_only_wallet_selected',
-                                    })
-                                    break
-                                case 'private_key_store':
-                                case 'ledger':
-                                case 'secret_phrase_key':
-                                case 'trezor':
-                                case 'safe_4337':
-                                    setModalState({ type: 'receive_token' })
-                                    break
-                                /* istanbul ignore next */
-                                default:
-                                    return notReachable(keyStore)
-                            }
-
-                            break
-
                         case 'on_send_clicked':
                         case 'on_swap_clicked':
                         case 'on_bridge_clicked':
@@ -298,6 +290,7 @@ export const TabController = ({
                         case 'on_custom_currency_update_request':
                         case 'on_profile_change_confirm_click':
                         case 'reload_button_click':
+                        case 'on_refresh_pulled':
                         case 'on_recovery_kit_setup':
                         case 'on_account_label_change_submit':
                         case 'confirm_account_delete_click':
@@ -319,14 +312,17 @@ export const TabController = ({
                         case 'on_open_fullscreen_view_click':
                         case 'from_any_wallet_click':
                         case 'transaction_request_replaced':
-                        case 'on_nba_close_click':
-                        case 'on_nba_cta_click':
                         case 'on_refresh_button_clicked':
                         case 'on_zwidget_expand_request':
                         case 'on_bank_clicked':
                         case 'add_wallet_clicked':
                         case 'hardware_wallet_clicked':
                         case 'safe_wallet_clicked':
+                        case 'on_card_owner_address_selected':
+                        case 'on_card_onboarded_account_state_received':
+                        case 'card_tab_choose_wallet_on_import_new_wallet_clicked':
+                        case 'on_card_imported_success_animation_complete':
+                        case 'on_order_new_card_gnosis_pay_click':
                             onMsg(msg)
                             break
 
@@ -338,6 +334,8 @@ export const TabController = ({
             />
 
             <Modal
+                feePresetMap={feePresetMap}
+                gasCurrencyPresetMap={gasCurrencyPresetMap}
                 currencyHiddenMap={currencyHiddenMap}
                 currencyPinMap={currencyPinMap}
                 networkMap={networkMap}
@@ -385,38 +383,12 @@ export const TabController = ({
                             onBankTransferSelected()
                             break
 
+                        case 'on_receive_selected':
+                            setModalState({ type: 'receive_token' })
+                            break
+
                         case 'on_swap_clicked':
                         case 'on_bridge_clicked':
-                            if (!keyStore) {
-                                setModalState({
-                                    type: 'tracked_only_wallet_selected',
-                                })
-                            } else {
-                                onMsg(msg)
-                            }
-                            break
-
-                        case 'on_receive_selected':
-                            switch (keyStore.type) {
-                                case 'track_only':
-                                    setModalState({
-                                        type: 'tracked_only_wallet_selected',
-                                    })
-                                    break
-                                case 'private_key_store':
-                                case 'ledger':
-                                case 'secret_phrase_key':
-                                case 'trezor':
-                                case 'safe_4337':
-                                    setModalState({ type: 'receive_token' })
-                                    break
-                                /* istanbul ignore next */
-                                default:
-                                    return notReachable(keyStore)
-                            }
-
-                            break
-
                         case 'track_wallet_clicked':
                         case 'add_wallet_clicked':
                         case 'hardware_wallet_clicked':
@@ -438,18 +410,6 @@ export const TabController = ({
                         case 'on_token_hide_click':
                             setModalState({ type: 'closed' })
                             onMsg(msg)
-                            break
-
-                        case 'on_add_active_wallet_clicked':
-                            setModalState({
-                                type: 'select_type_of_account_to_add',
-                            })
-                            break
-
-                        case 'tracked_only_wallet_selected':
-                            setModalState({
-                                type: 'tracked_only_wallet_selected',
-                            })
                             break
 
                         /* istanbul ignore next */

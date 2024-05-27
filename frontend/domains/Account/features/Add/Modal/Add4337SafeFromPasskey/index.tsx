@@ -1,7 +1,5 @@
 import { FormattedMessage } from 'react-intl'
 
-import { signWithPasskey } from '@zeal/passkeys'
-
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Actions } from '@zeal/uikit/Actions'
 import { Button } from '@zeal/uikit/Button'
@@ -10,19 +8,19 @@ import { Header } from '@zeal/uikit/Header'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { OutlineFingerprint } from '@zeal/uikit/Icon/OutlineFingerprint'
 import { IconButton } from '@zeal/uikit/IconButton'
-import { LoadingLayout } from '@zeal/uikit/LoadingLayout'
+import { LoadingLayout as UILoadingLayout } from '@zeal/uikit/LoadingLayout'
 import { Screen } from '@zeal/uikit/Screen'
 
 import { notReachable } from '@zeal/toolkit'
-import { encrypt, getRandomIntArray } from '@zeal/toolkit/Crypto'
-import * as Hexadecimal from '@zeal/toolkit/Hexadecimal'
 import { useLazyLoadableData } from '@zeal/toolkit/LoadableData/LazyLoadableData'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
 import { AccountsMap } from '@zeal/domains/Account'
 import { AppErrorPopup } from '@zeal/domains/Error/components/AppErrorPopup'
 import { parseAppError } from '@zeal/domains/Error/parsers/parseAppError'
-import { Safe4337 } from '@zeal/domains/KeyStore'
+import { SignWithPasskeyPopup } from '@zeal/domains/KeyStore/domains/Passkey/components/SignWithPasskeyPopup'
+import { getPasskeyId } from '@zeal/domains/KeyStore/domains/Passkey/helpers/getPasskeyId'
 import { Network, NetworkRPCMap } from '@zeal/domains/Network'
 
 import { RestoreSafe } from './RestoreSafe'
@@ -46,31 +44,6 @@ type Msg =
           }
       >
 
-const getPasskey = async ({
-    sessionPassword,
-}: {
-    sessionPassword: string
-}): Promise<{
-    encryptedCredentialId: Safe4337['safeDeplymentConfig']['passkeyOwner']['encryptedCredentialId']
-    recoveryId: Safe4337['safeDeplymentConfig']['passkeyOwner']['recoveryId']
-}> => {
-    const { credentialId, userId } = await signWithPasskey({
-        challenge: getRandomIntArray(new Uint8Array(26)),
-        rpId: 'sample-associated-domain.web.app',
-        allowedCredentials: [],
-    })
-
-    const encryptedCredentialId = await encrypt(
-        sessionPassword,
-        Hexadecimal.fromBuffer(credentialId)
-    )
-
-    return {
-        encryptedCredentialId,
-        recoveryId: Hexadecimal.fromBuffer(userId),
-    }
-}
-
 export const Add4337SafeFromPasskey = ({
     onMsg,
     sessionPassword,
@@ -78,7 +51,7 @@ export const Add4337SafeFromPasskey = ({
     network,
     accountsMap,
 }: Props) => {
-    const [loadable, setLoadable] = useLazyLoadableData(getPasskey)
+    const [loadable, setLoadable] = useLazyLoadableData(getPasskeyId)
 
     switch (loadable.type) {
         case 'not_asked':
@@ -103,24 +76,7 @@ export const Add4337SafeFromPasskey = ({
                 />
             )
         case 'loading':
-            return (
-                <LoadingLayout
-                    actionBar={
-                        <ActionBar
-                            left={
-                                <IconButton
-                                    variant="on_light"
-                                    onClick={() => onMsg({ type: 'close' })}
-                                >
-                                    {({ color }) => (
-                                        <BackIcon size={24} color={color} />
-                                    )}
-                                </IconButton>
-                            }
-                        />
-                    }
-                />
-            )
+            return <LoadingLayout onMsg={onMsg} />
         case 'loaded':
             return (
                 <RestoreSafe
@@ -233,7 +189,11 @@ type LayoutProps = {
 type LayoutMsg = { type: 'close' } | { type: 'on_continue_click' }
 
 const Layout = ({ onMsg }: LayoutProps) => (
-    <Screen padding="form" background="light">
+    <Screen
+        padding="form"
+        background="light"
+        onNavigateBack={() => onMsg({ type: 'close' })}
+    >
         <ActionBar
             left={
                 <IconButton
@@ -277,3 +237,59 @@ const Layout = ({ onMsg }: LayoutProps) => (
         </Actions>
     </Screen>
 )
+
+const LoadingLayout = ({
+    onMsg,
+}: {
+    onMsg: (msg: { type: 'close' }) => void
+}) => {
+    switch (ZealPlatform.OS) {
+        case 'ios':
+        case 'android':
+            return (
+                <UILoadingLayout
+                    onClose={() => onMsg({ type: 'close' })}
+                    actionBar={
+                        <ActionBar
+                            left={
+                                <IconButton
+                                    variant="on_light"
+                                    onClick={() => onMsg({ type: 'close' })}
+                                >
+                                    {({ color }) => (
+                                        <BackIcon size={24} color={color} />
+                                    )}
+                                </IconButton>
+                            }
+                        />
+                    }
+                />
+            )
+        case 'web':
+            return (
+                <>
+                    <UILoadingLayout
+                        onClose={() => onMsg({ type: 'close' })}
+                        actionBar={
+                            <ActionBar
+                                left={
+                                    <IconButton
+                                        variant="on_light"
+                                        onClick={() => onMsg({ type: 'close' })}
+                                    >
+                                        {({ color }) => (
+                                            <BackIcon size={24} color={color} />
+                                        )}
+                                    </IconButton>
+                                }
+                            />
+                        }
+                    />
+                    <SignWithPasskeyPopup onMsg={onMsg} />
+                </>
+            )
+        /* istanbul ignore next */
+        default:
+            return notReachable(ZealPlatform.OS)
+    }
+}

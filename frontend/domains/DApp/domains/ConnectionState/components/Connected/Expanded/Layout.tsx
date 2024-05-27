@@ -57,7 +57,7 @@ export const Layout = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen padding="form" background="light" onNavigateBack={null}>
             <ActionBar
                 left={
                     <Text variant="title3" weight="medium" color="textPrimary">
@@ -143,26 +143,24 @@ const MetaMaskButton = ({
     switch (alternativeProvider) {
         case 'metamask':
             return (
-                <Actions>
-                    <Button
-                        variant="warning"
-                        size="regular"
-                        onClick={() => {
-                            postUserEvent({
-                                type: 'ConnectionToggledToMetamaskEvent',
-                                installationId,
-                            })
-                            return onMsg({
-                                type: 'use_meta_mask_instead_clicked',
-                            })
-                        }}
-                    >
-                        <FormattedMessage
-                            id="connection_state.connect.changeToMetamask"
-                            defaultMessage="Change to MetaMask 🦊"
-                        />
-                    </Button>
-                </Actions>
+                <Button
+                    variant="warning"
+                    size="regular"
+                    onClick={() => {
+                        postUserEvent({
+                            type: 'ConnectionToggledToMetamaskEvent',
+                            installationId,
+                        })
+                        return onMsg({
+                            type: 'use_meta_mask_instead_clicked',
+                        })
+                    }}
+                >
+                    <FormattedMessage
+                        id="connection_state.connect.changeToMetamask"
+                        defaultMessage="Change to MetaMask 🦊"
+                    />
+                </Button>
             )
         case 'provider_unavailable':
             return null

@@ -1,7 +1,8 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { FlatList } from 'react-native'
+
+import { range } from 'lodash'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Actions } from '@zeal/uikit/Actions'
@@ -56,11 +57,26 @@ type Msg =
           }[]
       }
 
-const fetch = async (
-    ...args: Parameters<typeof generateSecretPhraseAddress>
-): Promise<{ address: Address; path: string }[]> => {
-    const addressWithPath = await generateSecretPhraseAddress(...args)
-    return [addressWithPath]
+const fetch = async ({
+    offset,
+    sessionPassword,
+    limit,
+    encryptedPhrase,
+}: {
+    sessionPassword: string
+    encryptedPhrase: string
+    offset: number
+    limit: number
+}): Promise<{ address: Address; path: string }[]> => {
+    return Promise.all(
+        range(offset, offset + limit).map(async (currentOffset) => {
+            return await generateSecretPhraseAddress({
+                encryptedPhrase,
+                sessionPassword,
+                offset: currentOffset,
+            })
+        })
+    )
 }
 
 const toggleSelected = (selected: Address[], address: Address): Address[] =>
@@ -89,6 +105,7 @@ export const SelectAccount = ({
             params: {
                 encryptedPhrase: keystore.encryptedPhrase,
                 offset: 0,
+                limit: 10,
                 sessionPassword,
             },
         },
@@ -100,7 +117,11 @@ export const SelectAccount = ({
     )
 
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -152,6 +173,9 @@ export const SelectAccount = ({
                                 case 'loaded':
                                     return (
                                         <FlatList
+                                            keyExtractor={(item) =>
+                                                item.address
+                                            }
                                             style={{ flexGrow: 1 }}
                                             showsVerticalScrollIndicator={false}
                                             data={reloadable.data}
@@ -167,9 +191,7 @@ export const SelectAccount = ({
                                                     customCurrencies={
                                                         customCurrencies
                                                     }
-                                                    accounts={values(
-                                                        accountsMap
-                                                    )}
+                                                    accounts={accounts}
                                                     address={item.address}
                                                     index={index}
                                                     isSelected={
@@ -196,13 +218,17 @@ export const SelectAccount = ({
                                                     type: 'reloading',
                                                     data: reloadable.data,
                                                     params: {
+                                                        limit: reloadable.params
+                                                            .limit,
                                                         encryptedPhrase:
                                                             keystore.encryptedPhrase,
                                                         sessionPassword:
                                                             sessionPassword,
                                                         offset:
                                                             reloadable.params
-                                                                .offset + 1,
+                                                                .offset +
+                                                            reloadable.params
+                                                                .limit,
                                                     },
                                                 })
                                             }
@@ -211,6 +237,9 @@ export const SelectAccount = ({
                                 case 'reloading':
                                     return (
                                         <FlatList
+                                            keyExtractor={(item) =>
+                                                item.address
+                                            }
                                             style={{ flexGrow: 1 }}
                                             showsVerticalScrollIndicator={false}
                                             data={reloadable.data}
@@ -226,9 +255,7 @@ export const SelectAccount = ({
                                                     customCurrencies={
                                                         customCurrencies
                                                     }
-                                                    accounts={values(
-                                                        accountsMap
-                                                    )}
+                                                    accounts={accounts}
                                                     address={item.address}
                                                     index={index}
                                                     isSelected={
@@ -262,6 +289,9 @@ export const SelectAccount = ({
                                     return (
                                         <>
                                             <FlatList
+                                                keyExtractor={(item) =>
+                                                    item.address
+                                                }
                                                 showsVerticalScrollIndicator={
                                                     false
                                                 }
@@ -281,9 +311,7 @@ export const SelectAccount = ({
                                                         customCurrencies={
                                                             customCurrencies
                                                         }
-                                                        accounts={values(
-                                                            accountsMap
-                                                        )}
+                                                        accounts={accounts}
                                                         address={item.address}
                                                         index={index}
                                                         isSelected={

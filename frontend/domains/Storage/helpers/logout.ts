@@ -1,40 +1,25 @@
 // TODO :: consider to move to Entry Point domain
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import * as SecureStore from 'expo-secure-store' // TODO @resetko-zeal will peer dependency work?
+import * as storage from '@zeal/toolkit/Storage'
 
-import { notReachable } from '@zeal/toolkit/notReachable'
-import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
-
-import { LS_KEY, SESSION_PASSWORD_KEY } from '@zeal/domains/Storage/constants'
+import {
+    INSTALL_ID_STORE_KEY,
+    PIN_KEY,
+    SESSION_PASSWORD_KEY,
+} from '@zeal/domains/Storage/constants'
 
 // I'm not sure about this one... but lets see
 export const logout = async () => {
-    await lock()
-
-    switch (ZealPlatform.OS) {
-        case 'ios':
-        case 'android':
-            return AsyncStorage.removeItem(LS_KEY)
-
-        case 'web':
-            return chrome.storage.local.remove(LS_KEY)
-
-        default:
-            return notReachable(ZealPlatform.OS)
-    }
+    const keysToDelete = (await storage.local.getAllKeys()).filter(
+        (key) => key !== INSTALL_ID_STORE_KEY
+    )
+    await Promise.all([
+        await storage.local.removeMany(keysToDelete),
+        await lock(),
+        await storage.secure.remove({ key: PIN_KEY }),
+    ])
 }
 
 export const lock = async () => {
-    switch (ZealPlatform.OS) {
-        case 'ios':
-        case 'android':
-            return SecureStore.deleteItemAsync(SESSION_PASSWORD_KEY)
-
-        case 'web':
-            return chrome.storage.session.remove(SESSION_PASSWORD_KEY)
-
-        default:
-            return notReachable(ZealPlatform.OS)
-    }
+    await storage.session.remove({ key: SESSION_PASSWORD_KEY })
 }

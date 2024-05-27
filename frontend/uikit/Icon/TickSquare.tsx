@@ -1,5 +1,7 @@
 import React from 'react'
-import Svg, { Path } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const TickSquare = ({ color, size }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             fill="none"
             viewBox="0 0 20 20"
             width={size}
@@ -34,6 +35,6 @@ export const TickSquare = ({ color, size }: Props) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

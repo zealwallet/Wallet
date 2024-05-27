@@ -1,7 +1,8 @@
 import React from 'react'
-import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
 
 import { Color, colors } from '@zeal/uikit/colors'
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
@@ -9,8 +10,7 @@ type Props = {
 }
 
 export const NotSelected = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         viewBox="0 0 20 20"
         width={size}
         height={size}
@@ -28,5 +28,5 @@ export const NotSelected = ({ size, color }: Props) => (
                 <Rect width="20" height="20" fill="white" />
             </ClipPath>
         </Defs>
-    </Svg>
+    </SvgIcon>
 )

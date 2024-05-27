@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 
 import { Color } from '@zeal/uikit/colors'
+import { Extractor } from '@zeal/uikit/Extractor'
 
 import { notReachable } from '@zeal/toolkit'
 import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
@@ -16,6 +17,7 @@ const styles = StyleSheet.create({
     // @ts-ignore
     pressable: {
         flexShrink: 1,
+        justifyContent: 'center',
         ...(() => {
             switch (ZealPlatform.OS) {
                 case 'ios':
@@ -32,20 +34,32 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         gap: 4,
     },
+    size_default: {
+        minHeight: 40,
+        minWidth: 40,
+    },
+    size_small: {
+        flexBasis: 'auto',
+    },
 })
+
+type Size = Extractor<keyof typeof styles, 'size'>
 
 type Props = {
     children: (props: { color: IconColor }) => React.ReactNode
     'aria-label'?: string // TODO Should not be optional
     'aria-pressed'?: boolean
+    disabled?: boolean
     variant: Variant
     testID?: string
     onClick: (e: GestureResponderEvent) => void
+    size?: Size
 }
 
-type State = 'pressed' | 'hovered' | 'default'
+type State = 'pressed' | 'hovered' | 'default' | 'disabled'
 type Variant = 'on_light' | 'on_color'
 
 type IconColor = Extract<
@@ -53,17 +67,25 @@ type IconColor = Extract<
     | 'iconPressed'
     | 'iconHover'
     | 'iconDefault'
+    | 'iconDisabled'
     | 'textOnColorSecondary'
     | 'textOnColorSecondaryHover'
     | 'textOnColorSecondaryPressed'
+    | 'textOnColorSecondaryDisabled'
 >
 
 const getIconColor = (
     variant: Variant,
-    states: PressableStateCallbackType
+    states: PressableStateCallbackType & { disabled: boolean }
 ): IconColor => {
     const colorOption: `${Variant}_${State}` = `${variant}_${
-        states.pressed ? 'pressed' : states.hovered ? 'hovered' : 'default'
+        states.disabled
+            ? 'disabled'
+            : states.pressed
+            ? 'pressed'
+            : states.hovered
+            ? 'hovered'
+            : 'default'
     }`
 
     switch (colorOption) {
@@ -73,6 +95,8 @@ const getIconColor = (
             return 'iconHover'
         case 'on_light_default':
             return 'iconDefault'
+        case 'on_light_disabled':
+            return 'iconDisabled'
 
         case 'on_color_pressed':
             return 'textOnColorSecondary'
@@ -80,6 +104,8 @@ const getIconColor = (
             return 'textOnColorSecondaryHover'
         case 'on_color_default':
             return 'textOnColorSecondaryPressed'
+        case 'on_color_disabled':
+            return 'textOnColorSecondaryDisabled'
 
         default:
             return notReachable(colorOption)
@@ -93,10 +119,12 @@ export const IconButton = ({
     children,
     onClick,
     variant,
+    size = 'default',
+    disabled = false,
 }: Props) => {
     return (
         <Pressable
-            style={[styles.pressable]}
+            style={[styles.pressable, styles[`size_${size}`]]}
             role="button"
             aria-label={ariaLabel}
             aria-pressed={ariaPressed}
@@ -106,7 +134,11 @@ export const IconButton = ({
             {({ pressed, hovered }) => (
                 <View style={[styles.container]}>
                     {children({
-                        color: getIconColor(variant, { pressed, hovered }),
+                        color: getIconColor(variant, {
+                            pressed,
+                            hovered,
+                            disabled,
+                        }),
                     })}
                 </View>
             )}

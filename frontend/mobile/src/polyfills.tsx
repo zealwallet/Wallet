@@ -2,6 +2,7 @@ import '@formatjs/intl-getcanonicallocales/polyfill'
 import '@formatjs/intl-locale/polyfill'
 import '@formatjs/intl-pluralrules/polyfill'
 import '@formatjs/intl-pluralrules/locale-data/en'
+import { decode, encode } from 'base-64'
 import { Buffer } from 'buffer'
 import { TextEncoder } from 'text-encoding'
 
@@ -11,21 +12,12 @@ window.fetch = fetch
 window.Buffer = global.Buffer = Buffer
 window.TextEncoder = global.TextEncoder = TextEncoder
 
-window.atob = global.atob = (encoded: string) => {
-    if (typeof encoded !== 'string') {
-        throw new Error('Invalid encoded string')
-    }
-    const decoded = Buffer.from(encoded, 'base64').toString('utf8')
-    return decoded
+if (!global.btoa) {
+    global.btoa = encode
 }
 
-window.btoa = global.btoa = (encoded: string) => {
-    if (typeof encoded !== 'string') {
-        throw new Error('Invalid encoded string')
-    }
-
-    const decoded = Buffer.from(encoded, 'utf8').toString('base64')
-    return decoded
+if (!global.atob) {
+    global.atob = decode
 }
 
 // eslint-disable-next-line no-extend-native

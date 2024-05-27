@@ -86,7 +86,11 @@ export const Loaded = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar onMsg={onMsg} />
             <Column shrink alignY="stretch" spacing={24}>
                 <Column shrink spacing={24}>

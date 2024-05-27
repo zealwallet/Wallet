@@ -335,20 +335,6 @@ const calculateOptimismPreVerificationGas = async ({
     dummySignature: string
 }): Promise<bigint> => {
     const web3 = new Web3()
-    const blockResponse = await fetchRPCResponse({
-        network,
-        networkRPCMap,
-        request: {
-            id: generateRandomNumber(),
-            jsonrpc: '2.0',
-            method: 'eth_getBlockByNumber',
-            params: ['latest', false],
-        },
-    })
-
-    const baseFeePerGas = object(blockResponse)
-        .andThen((obj) => bigint(obj.baseFeePerGas))
-        .getSuccessResultOrThrow('Failed to parse OP baseFeePerGas')
 
     const preVerificationGas = calculateGenericPreVerificationGas({
         initialUserOperation,
@@ -382,25 +368,41 @@ const calculateOptimismPreVerificationGas = async ({
         ]
     )
 
-    const l1FeeResponse = await fetchRPCResponse({
-        network,
-        networkRPCMap,
-        request: {
-            id: generateRandomNumber(),
-            jsonrpc: '2.0',
-            method: 'eth_call',
-            params: [
-                {
-                    to: OP_STACK_GAS_PRICE_ORACLE_ADDRESS,
-                    data: web3.eth.abi.encodeFunctionCall(
-                        OPTIMISM_GET_L1_FEE_ABI_FRAGMENT,
-                        [handleOpsData]
-                    ),
-                },
-                'latest',
-            ],
-        },
-    })
+    const [blockResponse, l1FeeResponse] = await Promise.all([
+        fetchRPCResponse({
+            network,
+            networkRPCMap,
+            request: {
+                id: generateRandomNumber(),
+                jsonrpc: '2.0',
+                method: 'eth_getBlockByNumber',
+                params: ['latest', false],
+            },
+        }),
+        fetchRPCResponse({
+            network,
+            networkRPCMap,
+            request: {
+                id: generateRandomNumber(),
+                jsonrpc: '2.0',
+                method: 'eth_call',
+                params: [
+                    {
+                        to: OP_STACK_GAS_PRICE_ORACLE_ADDRESS,
+                        data: web3.eth.abi.encodeFunctionCall(
+                            OPTIMISM_GET_L1_FEE_ABI_FRAGMENT,
+                            [handleOpsData]
+                        ),
+                    },
+                    'latest',
+                ],
+            },
+        }),
+    ])
+
+    const baseFeePerGas = object(blockResponse)
+        .andThen((obj) => bigint(obj.baseFeePerGas))
+        .getSuccessResultOrThrow('Failed to parse OP baseFeePerGas')
 
     const l1Fee = string(l1FeeResponse)
         .andThen((str) => bigint(str))
@@ -454,6 +456,8 @@ export const calculatePreVerificationGas = async ({
                 case 'Optimism':
                 case 'OptimismGoerli':
                 case 'Base':
+                case 'OPBNB':
+                case 'Blast':
                     return calculateOptimismPreVerificationGas({
                         feeAndGasEstimates,
                         paymasterAndData,
@@ -467,6 +471,7 @@ export const calculatePreVerificationGas = async ({
                 case 'BSC':
                 case 'Polygon':
                 case 'PolygonZkevm':
+                case 'Linea':
                 case 'Fantom':
                 case 'Gnosis':
                 case 'Celo':

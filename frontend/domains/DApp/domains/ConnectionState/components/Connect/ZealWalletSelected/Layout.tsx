@@ -20,6 +20,7 @@ import { InputButton as NetworkInputButton } from '@zeal/domains/Network/compone
 import { Portfolio } from '@zeal/domains/Portfolio'
 import { ConnectionSafetyChecksResponse } from '@zeal/domains/SafetyCheck/api/fetchConnectionSafetyChecks'
 import { ConnectionBadge } from '@zeal/domains/SafetyCheck/components/ConnectionBadge'
+import { ConnectionSafetyChecksFooter } from '@zeal/domains/SafetyCheck/components/ConnectionSafetyChecksFooter'
 import { getHighlighting } from '@zeal/domains/SafetyCheck/helpers/getTextHighlighting'
 
 import { Actions } from './Actions'
@@ -29,7 +30,6 @@ import {
     Disconnected as DisconnectedState,
     NotInteracted as NotInteractedState,
 } from '../../..'
-import { SafetyChecks } from '../SafetyChecks'
 
 type Props = {
     alternativeProvider: AlternativeProvider
@@ -70,7 +70,7 @@ export const Layout = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen background="light" padding="form">
+        <Screen background="light" padding="form" onNavigateBack={null}>
             <ActionBar
                 left={
                     <Text variant="title3" weight="medium" color="textPrimary">
@@ -85,7 +85,7 @@ export const Layout = ({
             <Column spacing={12} alignY="stretch">
                 <Content
                     footer={
-                        <SafetyChecks
+                        <ConnectionSafetyChecksFooter
                             safetyChecksLoadable={safetyChecksLoadable}
                             onMsg={onMsg}
                         />

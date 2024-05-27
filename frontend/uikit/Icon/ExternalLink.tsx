@@ -1,5 +1,7 @@
 import React from 'react'
-import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const ExternalLink = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 14 14"
             width={size}
             height={size}
@@ -33,6 +34,6 @@ export const ExternalLink = ({ size, color }: Props) => {
                     />
                 </ClipPath>
             </Defs>
-        </Svg>
+        </SvgIcon>
     )
 }

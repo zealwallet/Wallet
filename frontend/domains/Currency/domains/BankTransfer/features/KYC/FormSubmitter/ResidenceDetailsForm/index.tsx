@@ -22,7 +22,7 @@ type Props = {
 
 export type Msg = Extract<
     MsgOf<typeof Layout>,
-    { type: 'on_form_submitted' | 'close' | 'on_back_button_clicked' }
+    { type: 'on_form_submitted' | 'close' }
 >
 
 export const ResidenceDetailsForm = ({
@@ -50,7 +50,6 @@ export const ResidenceDetailsForm = ({
                             setModalState({ type: 'select_country' })
                             break
                         case 'on_form_submitted':
-                        case 'on_back_button_clicked':
                         case 'close':
                             onMsg(msg)
                             break

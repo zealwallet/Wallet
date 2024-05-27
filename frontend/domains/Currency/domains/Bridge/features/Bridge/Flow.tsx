@@ -173,7 +173,7 @@ export const Flow = ({
                                 break
 
                             case 'transaction_submited':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'cancel_submitted':
                             case 'transaction_request_replaced':
                                 // We do not report bridge transaction statuses to upper components

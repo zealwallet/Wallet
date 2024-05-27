@@ -86,7 +86,7 @@ export type Msg =
                   | 'transaction_failure_accepted'
                   | 'transaction_submited'
                   | 'on_transaction_completed_splash_animation_screen_competed'
-                  | 'transaction_cancel_success'
+                  | 'on_transaction_cancelled_successfully_close_clicked'
                   | 'cancel_submitted'
                   | 'transaction_cancel_failure_accepted'
                   | 'on_close_transaction_status_not_found_modal'
@@ -198,7 +198,7 @@ export const SendRegularTransaction = ({
                                 break
                             case 'transaction_submited':
                             case 'on_sign_cancel_button_clicked':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'transaction_cancel_failure_accepted':
                             case 'on_completed_transaction_close_click':
                             case 'transaction_failure_accepted':

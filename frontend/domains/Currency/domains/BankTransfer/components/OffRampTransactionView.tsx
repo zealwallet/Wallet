@@ -256,6 +256,7 @@ const FiatStatusIcon = ({
         case 'unblock_offramp_failed':
         case 'unblock_offramp_fiat_transfer_issued':
         case 'unblock_offramp_on_hold_compliance':
+        case 'unblock_offramp_pending':
             return (
                 <Spinner
                     aria-label={formatMessage({

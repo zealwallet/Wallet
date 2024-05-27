@@ -32,7 +32,7 @@ export const GetStarted = ({ onGetStartedClicked, mode }: Props) => {
     }, [mode, onGetStartedClickedLive])
 
     return (
-        <Screen padding="form" background="splashScreen">
+        <Screen padding="form" background="splashScreen" onNavigateBack={null}>
             <Column spacing={0} alignY="center" alignX="center" fill>
                 <ZealSplashScreenLogo />
             </Column>

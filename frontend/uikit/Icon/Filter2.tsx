@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const Filter2 = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             color={color && colors[color]}
             height={size}
             fill="transparent"
@@ -30,6 +31,6 @@ export const Filter2 = ({ size, color }: Props) => {
                 d="M7.49984 14.9993C7.49984 14.5391 7.87293 14.166 8.33317 14.166H11.6665C12.1267 14.166 12.4998 14.5391 12.4998 14.9993C12.4998 15.4596 12.1267 15.8327 11.6665 15.8327H8.33317C7.87293 15.8327 7.49984 15.4596 7.49984 14.9993Z"
                 fill="currentColor"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

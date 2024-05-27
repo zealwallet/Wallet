@@ -52,7 +52,11 @@ export const ViewSecretPhrase = ({
     })
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -64,7 +68,7 @@ export const ViewSecretPhrase = ({
                 }
             />
 
-            <Column spacing={24}>
+            <Column spacing={24} alignX="center">
                 <Header
                     title={
                         <FormattedMessage
@@ -109,7 +113,7 @@ export const ViewSecretPhrase = ({
 
                         case 'loaded':
                             return (
-                                <>
+                                <Column spacing={24} fill>
                                     <BlurCurtain
                                         unblurElement={
                                             <Tag bg="surfaceDefault">
@@ -165,10 +169,12 @@ export const ViewSecretPhrase = ({
                                         />
                                     </BlurCurtain>
 
-                                    <CopyPhraseButton
-                                        decryptedPhrase={loadable.data}
-                                    />
-                                </>
+                                    <Column spacing={0} alignX="center">
+                                        <CopyPhraseButton
+                                            decryptedPhrase={loadable.data}
+                                        />
+                                    </Column>
+                                </Column>
                             )
 
                         case 'error':

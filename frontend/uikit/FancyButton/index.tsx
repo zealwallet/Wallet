@@ -24,9 +24,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        height: 24,
+        paddingVertical: 8,
+        paddingHorizontal: 8,
     },
     rounded: {
         borderRadius: 50,
@@ -43,7 +42,10 @@ const styles = StyleSheet.create({
     background_Arbitrum: { backgroundColor: '#e4f4ff' },
     background_Avalanche: { backgroundColor: '#ffebeb' },
     background_Aurora: { backgroundColor: '#e5fddd' },
-    background_Base: { backgroundColor: '#e5fddd' },
+    background_Linea: { backgroundColor: '#f4e7ff' }, // FIXME @resetko-zeal apply correct color
+    background_Blast: { backgroundColor: '#e5fddd' }, // FIXME @resetko-zeal apply correct color
+    background_OPBNB: { backgroundColor: '#e5fddd' }, // FIXME @resetko-zeal apply correct color
+    background_Base: { backgroundColor: '#e4f4ff' },
     background_zkSync: { backgroundColor: '#e5fddd' },
 })
 
@@ -80,6 +82,8 @@ export const FancyButton = ({
                 return 'networkPolygon'
             case 'PolygonZkevm':
                 return 'networkPolygonZkevm'
+            case 'Linea':
+                return 'networkLinea'
             case 'Ethereum':
                 return 'networkEthereum'
             case 'Optimism':
@@ -98,6 +102,10 @@ export const FancyButton = ({
                 return 'networkAurora'
             case 'Base':
                 return 'networkBase'
+            case 'Blast':
+                return 'networkBlast'
+            case 'OPBNB':
+                return 'networkOPBNB'
             case 'zkSync':
                 return 'networkzkSync'
             case 'secondary':

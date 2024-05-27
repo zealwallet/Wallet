@@ -57,7 +57,11 @@ export const SumSubWrapper = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 account={account}
                 keystore={getKeyStore({
@@ -84,7 +88,9 @@ export const SumSubWrapper = ({
                         switch (msg) {
                             case 'idCheck.onApplicantSubmitted':
                             case 'idCheck.onApplicantResubmitted':
-                                onMsg({ type: 'application_submitted' })
+                                onMsg({
+                                    type: 'application_submitted',
+                                })
                                 break
                             case 'idCheck.applicantStatus':
                             case 'idCheck.onApplicantStatusChanged':
@@ -113,7 +119,9 @@ export const SumSubWrapper = ({
                     expirationHandler={() => {
                         // TODO: Refresh token if this becomes a problem
                         captureError(
-                            new ImperativeError('SumSub access token expired')
+                            new ImperativeError(
+                                'SumSub access token expired [web SDK]'
+                            )
                         )
                         return sumSubAccessToken
                     }}

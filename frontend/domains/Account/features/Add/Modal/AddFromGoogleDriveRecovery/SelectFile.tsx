@@ -46,7 +46,11 @@ export type Msg =
 
 export const SelectFile = ({ files, onMsg }: Props) => {
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton

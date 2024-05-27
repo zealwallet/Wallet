@@ -7,11 +7,13 @@ import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
 import { Header } from '@zeal/uikit/Header'
 import { ArrowDown } from '@zeal/uikit/Icon/ArrowDown'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { QuestionCircle } from '@zeal/uikit/Icon/QuestionCircle'
+import { IconButton } from '@zeal/uikit/IconButton'
 import { Input } from '@zeal/uikit/Input'
 import { InputButton } from '@zeal/uikit/InputButton'
 import { Screen } from '@zeal/uikit/Screen'
-import { Spacer } from '@zeal/uikit/Spacer'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Text } from '@zeal/uikit/Text'
 
 import { notReachable } from '@zeal/toolkit'
@@ -419,7 +421,11 @@ export const Form = ({
 
     return (
         <>
-            <Screen background="light" padding="form">
+            <Screen
+                background="light"
+                padding="form"
+                onNavigateBack={() => onMsg({ type: 'close' })}
+            >
                 <ActionBar
                     account={account}
                     keystore={getKeyStore({
@@ -427,452 +433,519 @@ export const Form = ({
                         address: account.address,
                     })}
                     network={network}
+                    left={
+                        <IconButton
+                            variant="on_light"
+                            onClick={() => onMsg({ type: 'close' })}
+                        >
+                            {({ color }) => (
+                                <BackIcon size={24} color={color} />
+                            )}
+                        </IconButton>
+                    }
                 />
-                <Column spacing={24}>
-                    <Header
-                        title={
-                            <FormattedMessage
-                                id="currency.bank_transfer.create_unblock_withdraw_account.title"
-                                defaultMessage="Link your bank account"
-                            />
-                        }
-                    />
-
-                    <Column spacing={8}>
-                        <Column spacing={8}>
-                            <Text
-                                variant="paragraph"
-                                weight="regular"
-                                color="textSecondary"
-                            >
+                <Column spacing={8} fill>
+                    <Column spacing={24} fill>
+                        <Header
+                            title={
                                 <FormattedMessage
-                                    id="currency.bank_transfer.create_unblock_withdraw_account.bank_country"
-                                    defaultMessage="Bank country"
+                                    id="currency.bank_transfer.create_unblock_withdraw_account.title"
+                                    defaultMessage="Link your bank account"
                                 />
-                            </Text>
-
-                            <InputButton
-                                leftIcon={
-                                    form.country ? (
-                                        <CountryIcon
-                                            countryCode={form.country.code}
-                                            size={28}
-                                        />
-                                    ) : (
-                                        <QuestionCircle
-                                            size={28}
-                                            color="iconDefault"
-                                        />
-                                    )
-                                }
-                                rightIcon={
-                                    <ArrowDown color="iconDisabled" size={24} />
-                                }
-                                onClick={() => {
-                                    setModalState({
-                                        type: 'select_country',
-                                    })
-                                }}
-                            >
-                                {form.country?.name || (
-                                    <FormattedMessage
-                                        id="bank_transfer.setup_unblock_bank_account.country_placeholder"
-                                        defaultMessage="Country"
-                                    />
-                                )}
-                            </InputButton>
-                        </Column>
-
-                        <Column spacing={8}>
-                            <Text
-                                variant="paragraph"
-                                weight="regular"
-                                color="textSecondary"
-                            >
-                                <FormattedMessage
-                                    id="currency.bank_transfer.create_unblock_withdraw_account.preferred_currency"
-                                    defaultMessage="Preferred currency"
-                                />
-                            </Text>
-
-                            <InputButton
-                                leftIcon={
-                                    form.currency ? (
-                                        <Avatar
-                                            size={28}
-                                            border="borderSecondary"
-                                        >
-                                            <Text
-                                                variant="caption1"
-                                                weight="medium"
-                                                color="textPrimary"
-                                                align="center"
-                                            >
-                                                {form.currency.symbol}
-                                            </Text>
-                                        </Avatar>
-                                    ) : (
-                                        <QuestionCircle
-                                            size={28}
-                                            color="iconDefault"
-                                        />
-                                    )
-                                }
-                                rightIcon={
-                                    <ArrowDown color="iconDisabled" size={24} />
-                                }
-                                onClick={() => {
-                                    setModalState({
-                                        type: 'select_currency',
-                                    })
-                                }}
-                            >
-                                {form.currency?.name || 'Currency'}
-                            </InputButton>
-                        </Column>
-
-                        {form.bankDetails?.type === 'uk' && (
-                            <Column spacing={8}>
-                                <Text
-                                    variant="paragraph"
-                                    weight="regular"
-                                    color="textSecondary"
-                                >
-                                    <FormattedMessage
-                                        id="currency.bank_transfer.create_unblock_withdraw_account.account_number"
-                                        defaultMessage="Account number"
-                                    />
-                                </Text>
-
-                                <Input
-                                    keyboardType="number-pad"
-                                    onSubmitEditing={onSubmit}
-                                    onChange={(e) =>
-                                        setForm((form) => ({
-                                            ...form,
-                                            bankDetails: form.bankDetails && {
-                                                ...form.bankDetails,
-                                                accountNumber:
-                                                    e.nativeEvent.text,
-                                            },
-                                        }))
-                                    }
-                                    state={
-                                        error.accountNumber ? 'error' : 'normal'
-                                    }
-                                    placeholder="00000000"
-                                    variant="regular"
-                                    value={(() => {
-                                        switch (form.bankDetails?.type) {
-                                            case 'uk':
-                                                return (
-                                                    form.bankDetails
-                                                        .accountNumber || ''
-                                                )
-
-                                            default:
-                                                return ''
-                                        }
-                                    })()}
-                                    message={
-                                        error.accountNumber && (
-                                            <AccountNumberErrorMessage
-                                                error={error.accountNumber}
-                                            />
-                                        )
-                                    }
-                                />
-                            </Column>
-                        )}
-
-                        {form.bankDetails?.type === 'uk' && (
-                            <Column spacing={8}>
-                                <Text
-                                    variant="paragraph"
-                                    weight="regular"
-                                    color="textSecondary"
-                                >
-                                    <FormattedMessage
-                                        id="currency.bank_transfer.create_unblock_withdraw_account.sort_code"
-                                        defaultMessage="Sort code"
-                                    />
-                                </Text>
-
-                                <Input
-                                    keyboardType="number-pad"
-                                    onSubmitEditing={onSubmit}
-                                    onChange={(e) =>
-                                        setForm((form) => ({
-                                            ...form,
-                                            bankDetails: form.bankDetails && {
-                                                ...form.bankDetails,
-                                                sortCode: parsedSortCode(
-                                                    e.nativeEvent.text,
-                                                    form.bankDetails
-                                                ),
-                                            },
-                                        }))
-                                    }
-                                    state={error.sortCode ? 'error' : 'normal'}
-                                    placeholder="00-00-00"
-                                    variant="regular"
-                                    value={(() => {
-                                        switch (form.bankDetails?.type) {
-                                            case 'uk':
-                                                return formatSortCode(
-                                                    form.bankDetails.sortCode
-                                                )
-
-                                            default:
-                                                return ''
-                                        }
-                                    })()}
-                                    message={
-                                        error.sortCode && (
-                                            <SortCodeErrorMessage
-                                                error={error.sortCode}
-                                            />
-                                        )
-                                    }
-                                />
-                            </Column>
-                        )}
-
-                        {form.bankDetails?.type === 'ngn' && (
-                            <Column spacing={8}>
-                                <Text
-                                    variant="paragraph"
-                                    weight="regular"
-                                    color="textSecondary"
-                                >
-                                    <FormattedMessage
-                                        id="currency.bank_transfer.create_unblock_withdraw_account.account_number"
-                                        defaultMessage="Account number"
-                                    />
-                                </Text>
-
-                                <Input
-                                    keyboardType="number-pad"
-                                    onSubmitEditing={onSubmit}
-                                    onChange={(e) =>
-                                        setForm((form) => ({
-                                            ...form,
-                                            bankDetails: form.bankDetails && {
-                                                ...form.bankDetails,
-                                                accountNumber:
-                                                    e.nativeEvent.text,
-                                            },
-                                        }))
-                                    }
-                                    state={
-                                        error.accountNumber ? 'error' : 'normal'
-                                    }
-                                    placeholder="0000000000"
-                                    variant="regular"
-                                    value={(() => {
-                                        switch (form.bankDetails?.type) {
-                                            case 'ngn':
-                                                return (
-                                                    form.bankDetails
-                                                        .accountNumber || ''
-                                                )
-
-                                            default:
-                                                return ''
-                                        }
-                                    })()}
-                                    message={
-                                        error.accountNumber && (
-                                            <AccountNumberErrorMessage
-                                                error={error.accountNumber}
-                                            />
-                                        )
-                                    }
-                                />
-                            </Column>
-                        )}
-
-                        {form.bankDetails?.type === 'ngn' && (
-                            <>
-                                <Column spacing={8}>
-                                    <Text
-                                        variant="paragraph"
-                                        weight="regular"
-                                        color="textSecondary"
-                                    >
-                                        <FormattedMessage
-                                            id="currency.bank_transfer.create_unblock_withdraw_account.bank_code"
-                                            defaultMessage="Bank code"
-                                        />
-                                    </Text>
-
-                                    <Input
-                                        keyboardType="default"
-                                        onSubmitEditing={onSubmit}
-                                        onChange={(e) =>
-                                            setForm((form) => ({
-                                                ...form,
-                                                bankDetails:
-                                                    form.bankDetails && {
-                                                        ...form.bankDetails,
-                                                        bankCode:
-                                                            e.nativeEvent.text,
-                                                    },
-                                            }))
-                                        }
-                                        state={
-                                            error.bankCode ? 'error' : 'normal'
-                                        }
-                                        placeholder="101"
-                                        variant="regular"
-                                        value={(() => {
-                                            switch (form.bankDetails?.type) {
-                                                case 'ngn':
-                                                    return (
-                                                        form.bankDetails
-                                                            .bankCode || ''
-                                                    )
-
-                                                default:
-                                                    return ''
-                                            }
-                                        })()}
-                                        message={
-                                            error.bankCode && (
-                                                <BankCodeErrorMessage
-                                                    error={error.bankCode}
-                                                />
-                                            )
-                                        }
-                                    />
-                                </Column>
-                                <Column spacing={8}>
-                                    <Text
-                                        variant="paragraph"
-                                        weight="regular"
-                                        color="textSecondary"
-                                    >
-                                        <FormattedMessage
-                                            id="currency.bank_transfer.create_unblock_withdraw_account.bvn"
-                                            defaultMessage="Bank verification number (BVN)"
-                                        />
-                                    </Text>
-
-                                    <Input
-                                        keyboardType="number-pad"
-                                        onSubmitEditing={onSubmit}
-                                        onChange={(e) =>
-                                            setForm((form) => ({
-                                                ...form,
-                                                bankDetails:
-                                                    form.bankDetails && {
-                                                        ...form.bankDetails,
-                                                        bankVerificationNumber:
-                                                            e.nativeEvent.text,
-                                                    },
-                                            }))
-                                        }
-                                        state={
-                                            error.bankVerificationNumber
-                                                ? 'error'
-                                                : 'normal'
-                                        }
-                                        placeholder="98765432345"
-                                        variant="regular"
-                                        value={(() => {
-                                            switch (form.bankDetails?.type) {
-                                                case 'ngn':
-                                                    return (
-                                                        form.bankDetails
-                                                            .bankVerificationNumber ||
-                                                        ''
-                                                    )
-
-                                                default:
-                                                    return ''
-                                            }
-                                        })()}
-                                        message={
-                                            error.bankVerificationNumber && (
-                                                <BankVerificationNumberErrorMessage
-                                                    error={
-                                                        error.bankVerificationNumber
-                                                    }
-                                                />
-                                            )
-                                        }
-                                    />
-                                </Column>
-                            </>
-                        )}
-
-                        {form.bankDetails?.type === 'iban' && (
-                            <Column spacing={8}>
-                                <Text
-                                    variant="paragraph"
-                                    weight="regular"
-                                    color="textSecondary"
-                                >
-                                    <FormattedMessage
-                                        id="currency.bank_transfer.create_unblock_withdraw_account.iban"
-                                        defaultMessage="IBAN"
-                                    />
-                                </Text>
-
-                                <Input
-                                    keyboardType="default"
-                                    onSubmitEditing={onSubmit}
-                                    onChange={(e) =>
-                                        setForm((form) => ({
-                                            ...form,
-                                            bankDetails: form.bankDetails && {
-                                                ...form.bankDetails,
-                                                iban: e.nativeEvent.text,
-                                            },
-                                        }))
-                                    }
-                                    state={error.iban ? 'error' : 'normal'}
-                                    placeholder={`${form.country?.code}0000000000000000`}
-                                    variant="regular"
-                                    value={(() => {
-                                        switch (form.bankDetails?.type) {
-                                            case 'iban':
-                                                return (
-                                                    form.bankDetails.iban || ''
-                                                )
-
-                                            default:
-                                                return ''
-                                        }
-                                    })()}
-                                    message={
-                                        error.iban && (
-                                            <IBANErrorMessage
-                                                error={error.iban}
-                                            />
-                                        )
-                                    }
-                                />
-                            </Column>
-                        )}
-                    </Column>
-                </Column>
-
-                <Spacer />
-
-                <Actions>
-                    <Button
-                        size="regular"
-                        variant="primary"
-                        disabled={!!error.submit}
-                        onClick={onSubmit}
-                    >
-                        <FormattedMessage
-                            id="action.continue"
-                            defaultMessage="Continue"
+                            }
                         />
-                    </Button>
-                </Actions>
+                        <ScrollContainer>
+                            <Column spacing={8} fill>
+                                <Column spacing={8}>
+                                    <Text
+                                        variant="paragraph"
+                                        weight="regular"
+                                        color="textSecondary"
+                                    >
+                                        <FormattedMessage
+                                            id="currency.bank_transfer.create_unblock_withdraw_account.bank_country"
+                                            defaultMessage="Bank country"
+                                        />
+                                    </Text>
+
+                                    <InputButton
+                                        leftIcon={
+                                            form.country ? (
+                                                <CountryIcon
+                                                    countryCode={
+                                                        form.country.code
+                                                    }
+                                                    size={28}
+                                                />
+                                            ) : (
+                                                <QuestionCircle
+                                                    size={28}
+                                                    color="iconDefault"
+                                                />
+                                            )
+                                        }
+                                        rightIcon={
+                                            <ArrowDown
+                                                color="iconDisabled"
+                                                size={24}
+                                            />
+                                        }
+                                        onClick={() => {
+                                            setModalState({
+                                                type: 'select_country',
+                                            })
+                                        }}
+                                    >
+                                        {form.country?.name || (
+                                            <FormattedMessage
+                                                id="bank_transfer.setup_unblock_bank_account.country_placeholder"
+                                                defaultMessage="Country"
+                                            />
+                                        )}
+                                    </InputButton>
+                                </Column>
+
+                                <Column spacing={8}>
+                                    <Text
+                                        variant="paragraph"
+                                        weight="regular"
+                                        color="textSecondary"
+                                    >
+                                        <FormattedMessage
+                                            id="currency.bank_transfer.create_unblock_withdraw_account.preferred_currency"
+                                            defaultMessage="Preferred currency"
+                                        />
+                                    </Text>
+
+                                    <InputButton
+                                        leftIcon={
+                                            form.currency ? (
+                                                <Avatar
+                                                    size={28}
+                                                    border="borderSecondary"
+                                                >
+                                                    <Text
+                                                        variant="caption1"
+                                                        weight="medium"
+                                                        color="textPrimary"
+                                                        align="center"
+                                                    >
+                                                        {form.currency.symbol}
+                                                    </Text>
+                                                </Avatar>
+                                            ) : (
+                                                <QuestionCircle
+                                                    size={28}
+                                                    color="iconDefault"
+                                                />
+                                            )
+                                        }
+                                        rightIcon={
+                                            <ArrowDown
+                                                color="iconDisabled"
+                                                size={24}
+                                            />
+                                        }
+                                        onClick={() => {
+                                            setModalState({
+                                                type: 'select_currency',
+                                            })
+                                        }}
+                                    >
+                                        {form.currency?.name || 'Currency'}
+                                    </InputButton>
+                                </Column>
+
+                                {form.bankDetails?.type === 'uk' && (
+                                    <Column spacing={8}>
+                                        <Text
+                                            variant="paragraph"
+                                            weight="regular"
+                                            color="textSecondary"
+                                        >
+                                            <FormattedMessage
+                                                id="currency.bank_transfer.create_unblock_withdraw_account.account_number"
+                                                defaultMessage="Account number"
+                                            />
+                                        </Text>
+
+                                        <Input
+                                            keyboardType="number-pad"
+                                            onSubmitEditing={onSubmit}
+                                            onChange={(e) =>
+                                                setForm((form) => ({
+                                                    ...form,
+                                                    bankDetails:
+                                                        form.bankDetails && {
+                                                            ...form.bankDetails,
+                                                            accountNumber:
+                                                                e.nativeEvent
+                                                                    .text,
+                                                        },
+                                                }))
+                                            }
+                                            state={
+                                                error.accountNumber
+                                                    ? 'error'
+                                                    : 'normal'
+                                            }
+                                            placeholder="00000000"
+                                            variant="regular"
+                                            value={(() => {
+                                                switch (
+                                                    form.bankDetails?.type
+                                                ) {
+                                                    case 'uk':
+                                                        return (
+                                                            form.bankDetails
+                                                                .accountNumber ||
+                                                            ''
+                                                        )
+
+                                                    default:
+                                                        return ''
+                                                }
+                                            })()}
+                                            message={
+                                                error.accountNumber && (
+                                                    <AccountNumberErrorMessage
+                                                        error={
+                                                            error.accountNumber
+                                                        }
+                                                    />
+                                                )
+                                            }
+                                        />
+                                    </Column>
+                                )}
+
+                                {form.bankDetails?.type === 'uk' && (
+                                    <Column spacing={8}>
+                                        <Text
+                                            variant="paragraph"
+                                            weight="regular"
+                                            color="textSecondary"
+                                        >
+                                            <FormattedMessage
+                                                id="currency.bank_transfer.create_unblock_withdraw_account.sort_code"
+                                                defaultMessage="Sort code"
+                                            />
+                                        </Text>
+
+                                        <Input
+                                            keyboardType="number-pad"
+                                            onSubmitEditing={onSubmit}
+                                            onChange={(e) =>
+                                                setForm((form) => ({
+                                                    ...form,
+                                                    bankDetails:
+                                                        form.bankDetails && {
+                                                            ...form.bankDetails,
+                                                            sortCode:
+                                                                parsedSortCode(
+                                                                    e
+                                                                        .nativeEvent
+                                                                        .text,
+                                                                    form.bankDetails
+                                                                ),
+                                                        },
+                                                }))
+                                            }
+                                            state={
+                                                error.sortCode
+                                                    ? 'error'
+                                                    : 'normal'
+                                            }
+                                            placeholder="00-00-00"
+                                            variant="regular"
+                                            value={(() => {
+                                                switch (
+                                                    form.bankDetails?.type
+                                                ) {
+                                                    case 'uk':
+                                                        return formatSortCode(
+                                                            form.bankDetails
+                                                                .sortCode
+                                                        )
+
+                                                    default:
+                                                        return ''
+                                                }
+                                            })()}
+                                            message={
+                                                error.sortCode && (
+                                                    <SortCodeErrorMessage
+                                                        error={error.sortCode}
+                                                    />
+                                                )
+                                            }
+                                        />
+                                    </Column>
+                                )}
+
+                                {form.bankDetails?.type === 'ngn' && (
+                                    <Column spacing={8}>
+                                        <Text
+                                            variant="paragraph"
+                                            weight="regular"
+                                            color="textSecondary"
+                                        >
+                                            <FormattedMessage
+                                                id="currency.bank_transfer.create_unblock_withdraw_account.account_number"
+                                                defaultMessage="Account number"
+                                            />
+                                        </Text>
+
+                                        <Input
+                                            keyboardType="number-pad"
+                                            onSubmitEditing={onSubmit}
+                                            onChange={(e) =>
+                                                setForm((form) => ({
+                                                    ...form,
+                                                    bankDetails:
+                                                        form.bankDetails && {
+                                                            ...form.bankDetails,
+                                                            accountNumber:
+                                                                e.nativeEvent
+                                                                    .text,
+                                                        },
+                                                }))
+                                            }
+                                            state={
+                                                error.accountNumber
+                                                    ? 'error'
+                                                    : 'normal'
+                                            }
+                                            placeholder="0000000000"
+                                            variant="regular"
+                                            value={(() => {
+                                                switch (
+                                                    form.bankDetails?.type
+                                                ) {
+                                                    case 'ngn':
+                                                        return (
+                                                            form.bankDetails
+                                                                .accountNumber ||
+                                                            ''
+                                                        )
+
+                                                    default:
+                                                        return ''
+                                                }
+                                            })()}
+                                            message={
+                                                error.accountNumber && (
+                                                    <AccountNumberErrorMessage
+                                                        error={
+                                                            error.accountNumber
+                                                        }
+                                                    />
+                                                )
+                                            }
+                                        />
+                                    </Column>
+                                )}
+
+                                {form.bankDetails?.type === 'ngn' && (
+                                    <>
+                                        <Column spacing={8}>
+                                            <Text
+                                                variant="paragraph"
+                                                weight="regular"
+                                                color="textSecondary"
+                                            >
+                                                <FormattedMessage
+                                                    id="currency.bank_transfer.create_unblock_withdraw_account.bank_code"
+                                                    defaultMessage="Bank code"
+                                                />
+                                            </Text>
+
+                                            <Input
+                                                keyboardType="default"
+                                                onSubmitEditing={onSubmit}
+                                                onChange={(e) =>
+                                                    setForm((form) => ({
+                                                        ...form,
+                                                        bankDetails:
+                                                            form.bankDetails && {
+                                                                ...form.bankDetails,
+                                                                bankCode:
+                                                                    e
+                                                                        .nativeEvent
+                                                                        .text,
+                                                            },
+                                                    }))
+                                                }
+                                                state={
+                                                    error.bankCode
+                                                        ? 'error'
+                                                        : 'normal'
+                                                }
+                                                placeholder="101"
+                                                variant="regular"
+                                                value={(() => {
+                                                    switch (
+                                                        form.bankDetails?.type
+                                                    ) {
+                                                        case 'ngn':
+                                                            return (
+                                                                form.bankDetails
+                                                                    .bankCode ||
+                                                                ''
+                                                            )
+
+                                                        default:
+                                                            return ''
+                                                    }
+                                                })()}
+                                                message={
+                                                    error.bankCode && (
+                                                        <BankCodeErrorMessage
+                                                            error={
+                                                                error.bankCode
+                                                            }
+                                                        />
+                                                    )
+                                                }
+                                            />
+                                        </Column>
+                                        <Column spacing={8}>
+                                            <Text
+                                                variant="paragraph"
+                                                weight="regular"
+                                                color="textSecondary"
+                                            >
+                                                <FormattedMessage
+                                                    id="currency.bank_transfer.create_unblock_withdraw_account.bvn"
+                                                    defaultMessage="Bank verification number (BVN)"
+                                                />
+                                            </Text>
+
+                                            <Input
+                                                keyboardType="number-pad"
+                                                onSubmitEditing={onSubmit}
+                                                onChange={(e) =>
+                                                    setForm((form) => ({
+                                                        ...form,
+                                                        bankDetails:
+                                                            form.bankDetails && {
+                                                                ...form.bankDetails,
+                                                                bankVerificationNumber:
+                                                                    e
+                                                                        .nativeEvent
+                                                                        .text,
+                                                            },
+                                                    }))
+                                                }
+                                                state={
+                                                    error.bankVerificationNumber
+                                                        ? 'error'
+                                                        : 'normal'
+                                                }
+                                                placeholder="98765432345"
+                                                variant="regular"
+                                                value={(() => {
+                                                    switch (
+                                                        form.bankDetails?.type
+                                                    ) {
+                                                        case 'ngn':
+                                                            return (
+                                                                form.bankDetails
+                                                                    .bankVerificationNumber ||
+                                                                ''
+                                                            )
+
+                                                        default:
+                                                            return ''
+                                                    }
+                                                })()}
+                                                message={
+                                                    error.bankVerificationNumber && (
+                                                        <BankVerificationNumberErrorMessage
+                                                            error={
+                                                                error.bankVerificationNumber
+                                                            }
+                                                        />
+                                                    )
+                                                }
+                                            />
+                                        </Column>
+                                    </>
+                                )}
+
+                                {form.bankDetails?.type === 'iban' && (
+                                    <Column spacing={8}>
+                                        <Text
+                                            variant="paragraph"
+                                            weight="regular"
+                                            color="textSecondary"
+                                        >
+                                            <FormattedMessage
+                                                id="currency.bank_transfer.create_unblock_withdraw_account.iban"
+                                                defaultMessage="IBAN"
+                                            />
+                                        </Text>
+
+                                        <Input
+                                            keyboardType="default"
+                                            onSubmitEditing={onSubmit}
+                                            onChange={(e) =>
+                                                setForm((form) => ({
+                                                    ...form,
+                                                    bankDetails:
+                                                        form.bankDetails && {
+                                                            ...form.bankDetails,
+                                                            iban: e.nativeEvent
+                                                                .text,
+                                                        },
+                                                }))
+                                            }
+                                            state={
+                                                error.iban ? 'error' : 'normal'
+                                            }
+                                            placeholder={`${form.country?.code}0000000000000000`}
+                                            variant="regular"
+                                            value={(() => {
+                                                switch (
+                                                    form.bankDetails?.type
+                                                ) {
+                                                    case 'iban':
+                                                        return (
+                                                            form.bankDetails
+                                                                .iban || ''
+                                                        )
+
+                                                    default:
+                                                        return ''
+                                                }
+                                            })()}
+                                            message={
+                                                error.iban && (
+                                                    <IBANErrorMessage
+                                                        error={error.iban}
+                                                    />
+                                                )
+                                            }
+                                        />
+                                    </Column>
+                                )}
+                            </Column>
+                        </ScrollContainer>
+                    </Column>
+                    <Actions>
+                        <Button
+                            size="regular"
+                            variant="primary"
+                            disabled={!!error.submit}
+                            onClick={onSubmit}
+                        >
+                            <FormattedMessage
+                                id="action.continue"
+                                defaultMessage="Continue"
+                            />
+                        </Button>
+                    </Actions>
+                </Column>
             </Screen>
 
             <Modal

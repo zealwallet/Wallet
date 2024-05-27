@@ -11,6 +11,7 @@ import {
     OnRampTransactionFailedEvent,
     OnRampTransactionOnHoldComplianceEvent,
     OnRampTransactionOutsideTransferInReviewEvent,
+    OnRampTransactionPendingEvent,
     OnRampTransactionTransferApprovedEvent,
     OnRampTransactionTransferReceivedEvent,
 } from '@zeal/domains/Currency/domains/BankTransfer'
@@ -31,6 +32,7 @@ type Props = {
         | OnRampTransactionTransferApprovedEvent
         | OnRampTransactionTransferReceivedEvent
         | OnRampTransactionCryptoTransferIssuedEvent
+        | OnRampTransactionPendingEvent
     now: number
     startedAt: number
     form: OnRampFeeParams

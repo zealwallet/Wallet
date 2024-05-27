@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const OutlineQRCode = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             color={color && colors[color]}
             height={size}
             viewBox="0 0 24 24"
@@ -50,6 +51,6 @@ export const OutlineQRCode = ({ size, color }: Props) => {
                 d="M17.3318 10.8223H14.408C13.729 10.8223 13.1766 10.27 13.1766 9.5911V6.66729C13.1766 5.98832 13.729 5.43591 14.408 5.43591H17.3318C18.0107 5.43591 18.5632 5.98832 18.5632 6.66729V9.5911C18.5632 10.27 18.0108 10.8223 17.3318 10.8223V10.8223ZM14.7162 9.28272H17.0235V6.97552H14.7162V9.28272Z"
                 fill="currentColor"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

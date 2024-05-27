@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { Column } from '@zeal/uikit/Column'
 import { Content } from '@zeal/uikit/Content'
 import { GroupHeader, Section } from '@zeal/uikit/Group'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { ExternalLink } from '@zeal/uikit/Icon/ExternalLink'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { Progress } from '@zeal/uikit/Progress'
@@ -163,7 +163,11 @@ export const Pending = ({
         case 'reloading':
         case 'subsequent_failed':
             return (
-                <Screen padding="form" background="light">
+                <Screen
+                    padding="form"
+                    background="light"
+                    onNavigateBack={() => onMsg({ type: 'close' })}
+                >
                     <AccountActionBar
                         keystore={getKeyStore({
                             keyStoreMap: keystoreMap,
@@ -171,7 +175,7 @@ export const Pending = ({
                         })}
                         network={null}
                         account={account}
-                        right={
+                        left={
                             <IconButton
                                 variant="on_light"
                                 onClick={() => onMsg({ type: 'close' })}
@@ -181,7 +185,7 @@ export const Pending = ({
                                 })}
                             >
                                 {({ color }) => (
-                                    <CloseCross size={24} color={color} />
+                                    <BackIcon size={24} color={color} />
                                 )}
                             </IconButton>
                         }
@@ -229,6 +233,7 @@ export const Pending = ({
 
                                         <IconButton
                                             variant="on_light"
+                                            size="small"
                                             onClick={() =>
                                                 openExplorerLink(
                                                     bridgeSubmitted

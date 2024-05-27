@@ -138,7 +138,6 @@ export const KycLogin = ({
                         switch (msg.type) {
                             case 'close':
                             case 'kyc_data_updated':
-                            case 'on_back_button_clicked':
                                 onMsg({ type: 'close' })
                                 break
                             case 'kyc_applicant_created':

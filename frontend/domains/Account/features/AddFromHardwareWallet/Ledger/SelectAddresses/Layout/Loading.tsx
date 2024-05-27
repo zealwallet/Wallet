@@ -23,7 +23,11 @@ export type Msg = ActionBarMsg | HeaderMsg
 
 export const Loading = ({ onMsg }: Props) => {
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar onMsg={onMsg} />
             <Column spacing={24}>
                 <Header />

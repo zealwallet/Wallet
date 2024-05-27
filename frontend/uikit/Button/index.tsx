@@ -3,13 +3,11 @@ import {
     GestureResponderEvent,
     Pressable,
     StyleSheet,
-    Text,
     View,
 } from 'react-native'
 
 import { colors } from '@zeal/uikit/colors'
-import { Extractor } from '@zeal/uikit/Extractor'
-import { styles as textStyles } from '@zeal/uikit/Text'
+import { Text, TextStyles } from '@zeal/uikit/Text'
 
 import { notReachable } from '@zeal/toolkit'
 import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
@@ -21,79 +19,80 @@ declare module 'react-native' {
     }
 }
 
-const labelStyles = StyleSheet.create({
-    base: {
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        includeFontPadding: false,
-    },
-    variant_tertiary: {
-        color: colors.textSecondary,
-    },
-    hover_variant_tertiary: {
-        color: colors.textPrimary,
-    },
-    active_variant_tertiary: {
-        color: colors.actionPrimaryPressed,
-    },
-    disabled_variant_tertiary: {
-        color: colors.textDisabled,
-    },
+type State = 'idle' | 'hover' | 'pressed' | 'disabled'
+type Variant = 'primary' | 'secondary' | 'warning' | 'tertiary'
+type Size = 'compressed' | 'regular' | 'small'
 
-    variant_secondary: {
-        color: colors.textPrimary,
-    },
-    hover_variant_secondary: {
-        color: colors.textPrimary,
-    },
-    active_variant_secondary: {
-        color: colors.textPrimary,
-    },
-    disabled_variant_secondary: {
-        color: colors.textDisabled,
-    },
+const getTextStyles = ({
+    size,
+    state,
+    variant,
+}: {
+    state: State
+    variant: Variant
+    size: Size
+}): TextStyles => {
+    const textVariant = ((): TextStyles['variant'] => {
+        switch (size) {
+            case 'regular':
+            case 'compressed':
+                return 'paragraph'
+            case 'small':
+                return 'caption1'
 
-    variant_primary: {
-        color: colors.textOnPrimary,
-    },
-    hover_variant_primary: {
-        color: colors.textOnPrimary,
-    },
-    active_variant_primary: {
-        color: colors.textOnPrimary,
-    },
-    disabled_variant_primary: {
-        color: colors.textDisabled,
-    },
+            default:
+                return notReachable(size)
+        }
+    })()
 
-    variant_warning: {
-        color: colors.textStatusWarningOnColor,
-    },
-    hover_variant_warning: {
-        color: colors.textStatusWarningOnColorHover,
-    },
-    active_variant_warning: {
-        color: colors.textStatusWarningOnColor,
-    },
-    disabled_variant_warning: {
-        color: colors.textStatusWarningOnColorDisabled,
-    },
+    const weight: TextStyles['weight'] = 'medium' as const
 
-    size_compressed: {
-        ...textStyles.variant_paragraph,
-        ...textStyles.weight_medium,
-    },
+    const color = ((): TextStyles['color'] => {
+        const colorOption: `${Variant}_${State}` =
+            `${variant}_${state}` as const
 
-    size_regular: {
-        ...textStyles.variant_paragraph,
-        ...textStyles.weight_medium,
-    },
+        switch (colorOption) {
+            case 'primary_disabled':
+                return 'textDisabled'
+            case 'primary_hover':
+            case 'primary_idle':
+            case 'primary_pressed':
+                return 'textOnPrimary'
 
-    size_small: {
-        ...textStyles.variant_caption1,
-        ...textStyles.weight_medium,
-    },
-})
+            case 'secondary_disabled':
+                return 'textDisabled'
+            case 'secondary_hover':
+            case 'secondary_idle':
+            case 'secondary_pressed':
+                return 'textPrimary'
+
+            case 'tertiary_disabled':
+                return 'textDisabled'
+            case 'tertiary_hover':
+                return 'textPrimary'
+            case 'tertiary_idle':
+                return 'textSecondary'
+            case 'tertiary_pressed':
+                return 'actionPrimaryPressed'
+
+            case 'warning_disabled':
+                return 'textStatusWarningOnColorDisabled'
+            case 'warning_hover':
+                return 'textStatusWarningOnColorHover'
+            case 'warning_idle':
+            case 'warning_pressed':
+                return 'textStatusWarningOnColor'
+            default:
+                return notReachable(colorOption)
+        }
+    })()
+
+    return {
+        variant: textVariant,
+        weight,
+        color,
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -240,18 +239,15 @@ const styles = StyleSheet.create({
     },
 
     size_compressed: {
-        height: 40,
         padding: 12,
     },
 
     size_regular: {
-        height: 42,
         paddingVertical: 12,
         paddingHorizontal: 18,
     },
 
     size_small: {
-        height: 31,
         paddingVertical: 8,
         paddingHorizontal: 12,
     },
@@ -259,8 +255,8 @@ const styles = StyleSheet.create({
 
 type Props = {
     'aria-label'?: string
-    variant: Extractor<keyof typeof styles, 'variant'>
-    size: Extractor<keyof typeof styles, 'size'>
+    variant: Variant
+    size: Size
     disabled?: boolean
     onClick?: (e: GestureResponderEvent) => void
     children: React.ReactNode
@@ -282,33 +278,42 @@ export const Button = ({
             disabled={disabled}
             onPress={onClick}
         >
-            {({ pressed, hovered }) => (
-                <View
-                    style={[
-                        styles.base,
-                        styles[`variant_${variant}`],
-                        styles[`size_${size}`],
-                        hovered && styles[`hover_variant_${variant}`],
-                        pressed && styles[`active_variant_${variant}`],
-                        disabled && styles[`disabled_variant_${variant}`],
-                    ]}
-                >
-                    <Text
-                        numberOfLines={1}
+            {({ pressed, hovered }) => {
+                const state: State = disabled
+                    ? 'disabled'
+                    : pressed
+                    ? 'pressed'
+                    : hovered
+                    ? 'hover'
+                    : 'idle'
+
+                const textStylesProps = getTextStyles({
+                    size,
+                    state,
+                    variant,
+                })
+                return (
+                    <View
                         style={[
-                            labelStyles.base,
-                            labelStyles[`variant_${variant}`],
-                            labelStyles[`size_${size}`],
-                            hovered && labelStyles[`hover_variant_${variant}`],
-                            pressed && labelStyles[`active_variant_${variant}`],
-                            disabled &&
-                                labelStyles[`disabled_variant_${variant}`],
+                            styles.base,
+                            styles[`variant_${variant}`],
+                            styles[`size_${size}`],
+                            hovered && styles[`hover_variant_${variant}`],
+                            pressed && styles[`active_variant_${variant}`],
+                            disabled && styles[`disabled_variant_${variant}`],
                         ]}
                     >
-                        {children}
-                    </Text>
-                </View>
-            )}
+                        <Text
+                            ellipsis
+                            color={textStylesProps.color}
+                            variant={textStylesProps.variant}
+                            weight={textStylesProps.weight}
+                        >
+                            {children}
+                        </Text>
+                    </View>
+                )
+            }}
         </Pressable>
     )
 }

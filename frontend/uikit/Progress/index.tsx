@@ -19,20 +19,15 @@ import { styles as textStyles, Text } from '../Text'
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.surfaceDefault,
-        overflow: 'hidden',
-        paddingVertical: 10,
-        paddingHorizontal: 12,
     },
     roundedContainer: {
         borderRadius: 8,
     },
-
-    bar: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        right: 0,
+    content: {
+        flexGrow: 1,
+        overflow: 'hidden',
+        paddingVertical: 10,
+        paddingHorizontal: 12,
     },
 
     bar_default_neutral: {
@@ -119,7 +114,6 @@ export const Progress = ({
 }: Props) => {
     const [labelId] = useState(uuid())
     const [descriptionId] = useState(uuid())
-    const [width, setWidth] = useState<number>(0)
 
     const current = useRef(
         new Animated.Value(initialProgress ?? progress)
@@ -138,9 +132,6 @@ export const Progress = ({
 
     return (
         <Pressable
-            onLayout={(e) => {
-                setWidth(e.nativeEvent.layout.width)
-            }}
             aria-labelledby={labelId}
             aria-describedby={descriptionId}
             role={onClick ? 'button' : 'progressbar'}
@@ -152,7 +143,7 @@ export const Progress = ({
                 <>
                     <Animated.View
                         style={[
-                            styles.bar,
+                            StyleSheet.absoluteFill,
                             styles[
                                 `bar_${
                                     pressed
@@ -163,39 +154,41 @@ export const Progress = ({
                                 }_${variant}`
                             ],
                             {
-                                right: current.interpolate({
+                                width: current.interpolate({
                                     inputRange: [0, 100],
-                                    outputRange: [width, 0],
+                                    outputRange: ['0%', '100%'],
                                 }),
                             },
                         ]}
                     />
 
-                    <Column spacing={8}>
-                        <Row spacing={4} alignX="stretch">
-                            <View>
-                                <NativeText
-                                    id={labelId}
-                                    style={styles[`title_${variant}`]}
+                    <View style={styles.content}>
+                        <Column spacing={8}>
+                            <Row spacing={4} alignX="stretch">
+                                <View>
+                                    <NativeText
+                                        id={labelId}
+                                        style={styles[`title_${variant}`]}
+                                    >
+                                        {title}
+                                    </NativeText>
+                                </View>
+
+                                {right}
+                            </Row>
+
+                            {subtitle && (
+                                <Text
+                                    id={descriptionId}
+                                    variant="paragraph"
+                                    weight="regular"
+                                    color="textPrimary"
                                 >
-                                    {title}
-                                </NativeText>
-                            </View>
-
-                            {right}
-                        </Row>
-
-                        {subtitle && (
-                            <Text
-                                id={descriptionId}
-                                variant="paragraph"
-                                weight="regular"
-                                color="textPrimary"
-                            >
-                                {subtitle}
-                            </Text>
-                        )}
-                    </Column>
+                                    {subtitle}
+                                </Text>
+                            )}
+                        </Column>
+                    </View>
                 </>
             )}
         </Pressable>

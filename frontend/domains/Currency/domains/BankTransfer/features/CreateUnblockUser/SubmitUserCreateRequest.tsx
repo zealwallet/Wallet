@@ -180,6 +180,7 @@ export const SubmitUserCreateRequest = ({
         case 'loading':
             return (
                 <LoadingLayout
+                    onClose={() => onMsg({ type: 'close' })}
                     actionBar={
                         <ActionBar
                             account={account}
@@ -210,6 +211,7 @@ export const SubmitUserCreateRequest = ({
             return (
                 <>
                     <LoadingLayout
+                        onClose={() => onMsg({ type: 'close' })}
                         actionBar={
                             <ActionBar
                                 account={account}

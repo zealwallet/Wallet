@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const BoldEyeClosed = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             color={color && colors[color]}
             height={size}
             viewBox="0 0 24 24"
@@ -28,6 +29,6 @@ export const BoldEyeClosed = ({ size, color }: Props) => {
                 d="M12.6692 8.30953C12.753 8.32462 12.8395 8.2998 12.8997 8.2396L14.8493 6.29007C14.9816 6.15772 14.9267 5.93281 14.7464 5.88252C13.879 5.64055 12.9571 5.5 12 5.5C9.38223 5.5 7.02801 6.55139 5.33162 7.85335C4.48232 8.50519 3.78544 9.22913 3.29649 9.93368C2.81686 10.6248 2.5 11.3515 2.5 12C2.5 12.6485 2.81686 13.3752 3.29649 14.0663C3.7138 14.6676 4.28257 15.2831 4.96829 15.8558C5.06614 15.9375 5.20993 15.9294 5.30008 15.8393L8.2396 12.8997C8.2998 12.8395 8.32462 12.753 8.30953 12.6692C8.27042 12.452 8.25 12.2284 8.25 12C8.25 9.92893 9.92893 8.25 12 8.25C12.2284 8.25 12.452 8.27042 12.6692 8.30953Z"
                 fill="currentColor"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

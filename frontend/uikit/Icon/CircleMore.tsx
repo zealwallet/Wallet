@@ -1,7 +1,8 @@
 import React from 'react'
-import Svg, { Path } from 'react-native-svg'
+import { Path } from 'react-native-svg'
 
 import { Color, colors } from '@zeal/uikit/colors'
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
@@ -9,8 +10,7 @@ type Props = {
 }
 export const CircleMore = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 18 18"
             width={size}
             height={size}
@@ -47,6 +47,6 @@ export const CircleMore = ({ size, color }: Props) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

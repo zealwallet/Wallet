@@ -42,6 +42,7 @@ class PasskeyManager(private val context: Context, private val currentActivity: 
                     else -> exception.toString()
                 }
             }
+            is CreateCredentialCancellationException -> USER_CANCELLED_REQUEST_MESSAGE
             else -> exception.toString()
         }
     }

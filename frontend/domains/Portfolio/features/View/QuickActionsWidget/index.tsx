@@ -54,6 +54,7 @@ export const QuickActionsWidget = ({
                         case 'on_bank_clicked':
                             onMsg(msg)
                             break
+
                         case 'on_send_clicked':
                             postUserEvent({
                                 type: 'SendFlowEnteredEvent',

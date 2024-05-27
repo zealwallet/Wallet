@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Shadow } from 'react-native-shadow-2'
 
 import { colors } from '@zeal/uikit/colors'
 
@@ -29,18 +30,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'stretch',
         overflow: 'hidden',
-        elevation: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.15,
-        shadowRadius: 15,
         padding: 12,
         backgroundColor: colors.surfaceDefault,
     },
 })
 
 type LayoutProps = {
-    tabs: React.ReactNode[]
+    tabs: React.ReactNode
     content: React.ReactNode
 }
 
@@ -66,13 +62,24 @@ export const TabsContainer = ({ children }: ContainerProps) => {
 const TabsShadowContainer = ({ children }: ContainerProps) => {
     const inset = useSafeAreaInsets()
     return (
-        <View
+        <Shadow
+            distance={10}
+            startColor="#00000010"
+            stretch
+            paintInside={true}
+            corners={{
+                topStart: true,
+                topEnd: true,
+                bottomStart: false,
+                bottomEnd: false,
+            }}
+            sides={{ start: true, end: true, top: true, bottom: false }}
             style={[
                 styles.shadowContainer,
                 inset.bottom > 0 && { paddingBottom: inset.bottom },
             ]}
         >
             {children}
-        </View>
+        </Shadow>
     )
 }

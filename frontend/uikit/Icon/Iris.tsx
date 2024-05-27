@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const Iris = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 24 24"
             width={size}
             height={size}
@@ -41,6 +42,6 @@ export const Iris = ({ size, color }: Props) => {
                 d="M11.998 17.825c3.01 0 5.764-2.165 7.315-5.773-1.55-3.608-4.304-5.772-7.315-5.772h.004c-3.01 0-5.764 2.164-7.315 5.772 1.55 3.608 4.304 5.773 7.315 5.773h-.004Z"
                 clipRule="evenodd"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

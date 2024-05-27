@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 
 import { colors } from '@zeal/uikit/colors'
 
-type Variant = 'compressed' | 'default'
+type Variant = 'compressed' | 'default' | 'widget'
 
 type GroupProps = {
     'aria-labelledby'?: string
@@ -22,10 +22,19 @@ export const styles = StyleSheet.create({
         width: '100%',
         borderRadius: 8,
     },
-    variant_compressed: {},
+    variant_compressed: {
+        rowGap: 0,
+        padding: 0,
+    },
     variant_default: {
         padding: 8,
         rowGap: 8,
+    },
+    variant_widget: {
+        borderRadius: 16,
+        padding: 8,
+        paddingTop: 4,
+        rowGap: 0,
     },
     scroll: {
         // @ts-ignore

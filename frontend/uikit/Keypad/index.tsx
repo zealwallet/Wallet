@@ -10,6 +10,8 @@ import {
 import { Color, colors } from '@zeal/uikit/colors'
 import { Text } from '@zeal/uikit/Text'
 
+import { Content, Layout } from './Layout'
+
 import { Backspace } from '../Icon/Backspace'
 
 type IconColor = Extract<Color, 'textPrimary' | 'textDisabled'>
@@ -37,6 +39,7 @@ const buttonStyles = StyleSheet.create({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexShrink: 0,
     },
     row: {
         flex: 1,
@@ -55,8 +58,8 @@ export const KeyPad = ({
     leftAction,
 }: {
     disabled: boolean
-    leftAction: ReactNode // exported button
-    rightAction: ReactNode // exported button
+    leftAction: ReactNode
+    rightAction: ReactNode
     onPress: (key: number) => void
 }) => {
     const { formatMessage } = useIntl()
@@ -310,3 +313,5 @@ const BackSpaceButton = ({
 
 KeyPad.Button = KeypadButton
 KeyPad.BackSpaceButton = BackSpaceButton
+KeyPad.Layout = Layout
+KeyPad.Content = Content

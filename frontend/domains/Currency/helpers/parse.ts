@@ -1,4 +1,5 @@
 import {
+    failure,
     match,
     number,
     object,
@@ -7,6 +8,7 @@ import {
     Result,
     shape,
     string,
+    success,
 } from '@zeal/toolkit/Result'
 
 import { parse as parseAddress } from '@zeal/domains/Address/helpers/parse'
@@ -14,6 +16,7 @@ import {
     CryptoCurrency,
     Currency,
     FiatCurrency,
+    FiatCurrencyCode,
     KnownCurrencies,
 } from '@zeal/domains/Currency'
 import { parse as parseNetworkHexId } from '@zeal/domains/Network/helpers/parse'
@@ -32,6 +35,21 @@ export const parseKnownCurrencies = (
             valueParser: parse,
         })
     )
+
+export const parseFiatCurrencyCode = (
+    code: string
+): Result<unknown, FiatCurrencyCode> => {
+    const map: Record<FiatCurrencyCode, true> = {
+        EUR: true,
+        GBP: true,
+        NGN: true,
+        PLN: true,
+    }
+
+    return map[code as FiatCurrencyCode]
+        ? success(code as FiatCurrencyCode)
+        : failure({ type: 'unknown_fiat_currency_code', code })
+}
 
 export const parseFiatCurrency = (
     obj: Record<string, unknown>

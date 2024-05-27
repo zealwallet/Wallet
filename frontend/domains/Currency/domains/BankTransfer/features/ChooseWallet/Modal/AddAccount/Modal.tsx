@@ -9,7 +9,7 @@ import { Account, AccountsMap } from '@zeal/domains/Account'
 import { Add } from '@zeal/domains/Account/features/Add'
 import { AddFromHardwareWallet } from '@zeal/domains/Account/features/AddFromHardwareWallet'
 import { AddFromSecretPhrase } from '@zeal/domains/Account/features/AddFromSecretPhrase'
-import { CreateNewSafe4337 } from '@zeal/domains/Account/features/CreateNewSafe4337'
+import { CreateNewSafe4337WithStories } from '@zeal/domains/Account/features/CreateNewSafe4337WithStories'
 import { TrackWallet } from '@zeal/domains/Account/features/TrackWallet'
 import { EncryptedPhrase } from '@zeal/domains/Account/helpers/groupBySecretPhrase'
 import { CurrencyHiddenMap } from '@zeal/domains/Currency'
@@ -35,7 +35,7 @@ export type Msg =
     | MsgOf<typeof AddFromSecretPhrase>
     | MsgOf<typeof TrackWallet>
     | MsgOf<typeof AddFromHardwareWallet>
-    | MsgOf<typeof CreateNewSafe4337>
+    | MsgOf<typeof CreateNewSafe4337WithStories>
     | MsgOf<typeof Add>
 
 export type State =
@@ -137,7 +137,7 @@ export const Modal = ({
         case 'safe_4337_wallet_creation':
             return (
                 <UIModal>
-                    <CreateNewSafe4337
+                    <CreateNewSafe4337WithStories
                         installationId={installationId}
                         sessionPassword={sessionPassword}
                         networkRPCMap={networkRPCMap}

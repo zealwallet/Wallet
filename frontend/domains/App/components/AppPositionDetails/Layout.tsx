@@ -44,7 +44,11 @@ export const Layout = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 top={
                     <Row spacing={8}>
@@ -102,6 +106,7 @@ export const Layout = ({
             />
 
             <FlatList
+                keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
                 data={app.protocols}
                 renderItem={({ item: protocol }) => (

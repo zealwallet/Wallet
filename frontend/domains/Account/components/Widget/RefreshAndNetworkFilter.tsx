@@ -19,7 +19,7 @@ type Msg =
 export const RefreshAndNetworkFilter = ({ currentNetwork, onMsg }: Props) => {
     const { formatMessage } = useIntl()
     return (
-        <Row spacing={16}>
+        <Row spacing={0}>
             <IconButton
                 variant="on_color"
                 aria-label={formatMessage({

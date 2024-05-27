@@ -168,6 +168,8 @@ export const Title = ({ error }: { error: AppError }) => {
         case 'passkey_signer_not_found_error':
         case 'rpc_error_unknown':
         case 'biometric_prompt_cancelled':
+        case 'app_not_associated_with_domain':
+        case 'unknown_merchant_code':
             return (
                 <FormattedMessage
                     id="error.unknown_error.title"

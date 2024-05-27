@@ -23,7 +23,7 @@ export const AVATAR_SIZE = 32
 export type IconRenderProps = {
     size: typeof ICON_SIZE
 }
-export const ICON_SIZE = 20
+export const ICON_SIZE = 24
 
 type PrimaryTextIconRenderProps = {
     size: typeof PRIMARY_TEXT_ICON
@@ -45,11 +45,10 @@ export type Props = {
     shortTextId?: string
     side?: {
         rightIcon?: (iconRenderProps: IconRenderProps) => React.ReactNode
-        leftIcon?: (iconRenderProps: IconRenderProps) => React.ReactNode
-    } & (
-        | { title: React.ReactNode; subtitle?: React.ReactNode }
-        | { title?: never }
-    )
+        // leftIcon?: (iconRenderProps: IconRenderProps) => React.ReactNode
+        title?: React.ReactNode
+        subtitle?: React.ReactNode
+    }
 }
 
 const styles = StyleSheet.create({
@@ -68,6 +67,7 @@ const styles = StyleSheet.create({
     },
     sideColumn: {
         alignItems: 'flex-end',
+        justifyContent: 'space-between',
         rowGap: 3,
     },
 })
@@ -87,58 +87,42 @@ export const InternalItem = ({
             <View style={[styles.left_row]}>
                 {avatar && avatar({ size: AVATAR_SIZE })}
                 <View style={styles.mainColumn}>
-                    <Row spacing={4}>
-                        {(() => {
-                            switch (size) {
-                                case 'regular':
-                                    return (
-                                        <Text
-                                            id={primaryTextId}
-                                            ellipsis
-                                            color="textPrimary"
-                                            variant="paragraph"
-                                            weight="medium"
-                                        >
-                                            {primaryText}
-                                        </Text>
-                                    )
+                    <Row spacing={12} grow alignX="stretch">
+                        <Row spacing={4}>
+                            {(() => {
+                                switch (size) {
+                                    case 'regular':
+                                        return (
+                                            <Text
+                                                id={primaryTextId}
+                                                ellipsis
+                                                color="textPrimary"
+                                                variant="paragraph"
+                                                weight="medium"
+                                            >
+                                                {primaryText}
+                                            </Text>
+                                        )
 
-                                case 'large':
-                                    return (
-                                        <Text
-                                            id={primaryTextId}
-                                            ellipsis
-                                            color="textPrimary"
-                                            variant="callout"
-                                            weight="medium"
-                                        >
-                                            {primaryText}
-                                        </Text>
-                                    )
-                                default:
-                                    return notReachable(size)
-                            }
-                        })()}
-                        {primaryTextIcon?.({ size: PRIMARY_TEXT_ICON })}
-                    </Row>
-                    {shortText && (
-                        <Text
-                            ellipsis
-                            id={shortTextId}
-                            color="textSecondary"
-                            variant="footnote"
-                            weight="regular"
-                        >
-                            {shortText}
-                        </Text>
-                    )}
-                </View>
-            </View>
-            {side && (
-                <Row spacing={8}>
-                    {side.leftIcon?.({ size: ICON_SIZE })}
-                    {side.title && (
-                        <View style={styles.sideColumn}>
+                                    case 'large':
+                                        return (
+                                            <Text
+                                                id={primaryTextId}
+                                                ellipsis
+                                                color="textPrimary"
+                                                variant="callout"
+                                                weight="medium"
+                                            >
+                                                {primaryText}
+                                            </Text>
+                                        )
+                                    default:
+                                        return notReachable(size)
+                                }
+                            })()}
+                            {primaryTextIcon?.({ size: PRIMARY_TEXT_ICON })}
+                        </Row>
+                        {side?.title && (
                             <Text
                                 ellipsis
                                 color="textPrimary"
@@ -147,7 +131,22 @@ export const InternalItem = ({
                             >
                                 {side.title}
                             </Text>
-                            {side.subtitle && (
+                        )}
+                    </Row>
+                    {(shortText || (side && side.subtitle)) && (
+                        <Row spacing={12} grow alignX="stretch">
+                            {shortText && (
+                                <Text
+                                    ellipsis
+                                    id={shortTextId}
+                                    color="textSecondary"
+                                    variant="footnote"
+                                    weight="regular"
+                                >
+                                    {shortText}
+                                </Text>
+                            )}
+                            {side && side.subtitle && (
                                 <Text
                                     ellipsis
                                     color="textSecondary"
@@ -157,8 +156,12 @@ export const InternalItem = ({
                                     {side.subtitle}
                                 </Text>
                             )}
-                        </View>
+                        </Row>
                     )}
+                </View>
+            </View>
+            {side && (
+                <Row spacing={8}>
                     {side.rightIcon ? (
                         <Row spacing={0} alignY="center">
                             {side.rightIcon({ size: ICON_SIZE })}

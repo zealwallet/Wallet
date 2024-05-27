@@ -2,7 +2,7 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import {
-    bridgeQuoteEthereumUSDCPolygonUSDT,
+    bridgeQuoteArbitrumUSDCEBaseUSDbC,
     bridgeQuotePolygonUSDCArbitrumUSDT,
     bridgeQuotePolygonUSDCArbitrumUSDTRefuel,
 } from '@zeal/domains/Currency/domains/Bridge/api/fixtures/bridgeQuote'
@@ -11,12 +11,12 @@ import {
     bridgeStatusPolygonUSDCArbitrumUSDTRefuelPendingAll,
     bridgeStatusPolygonUSDCArbitrumUSDTRefuelPendingRefuel,
 } from '@zeal/domains/Currency/domains/Bridge/api/fixtures/bridgeStatus'
-import { buildAllowanceTxEthereumUSDC } from '@zeal/domains/Currency/domains/Bridge/api/fixtures/buildAllowanceTx'
+import { buildAllowanceTxEthereumUSDC as buildAllowanceTxArbitrumUSDCe } from '@zeal/domains/Currency/domains/Bridge/api/fixtures/buildAllowanceTx'
 import {
-    buildTxEthereumUSDCPolygonUSDT,
+    buildTxEthereumUSDCPolygonUSDT as buildTxArbitrumUSDCeBaseUSDbC,
     buildTxPolygonUSDCArbitrumUSDT,
 } from '@zeal/domains/Currency/domains/Bridge/api/fixtures/buildTx'
-import { checkAllowanceEthereumUSDC } from '@zeal/domains/Currency/domains/Bridge/api/fixtures/checkAllowanceEthereumUSDC'
+import { checkAllowanceArbitrumUSDCe } from '@zeal/domains/Currency/domains/Bridge/api/fixtures/checkAllowanceArbitrumUSDCe'
 import { allowancePolygonUSDC } from '@zeal/domains/Currency/domains/SwapQuote/api/fixtures/allowancePolygonUSDC'
 import { buildTxApprovalPolygonUSDC } from '@zeal/domains/Currency/domains/SwapQuote/api/fixtures/buildTxApprovalPolygonUSDC'
 import { swapQuotePolygonMaticUSDCNoRoutes } from '@zeal/domains/Currency/domains/SwapQuote/api/fixtures/swapQuote'
@@ -25,11 +25,12 @@ import { ethBlockNumberAfterTransaction } from '@zeal/domains/RPCRequest/api/fix
 import { ethGetTransactionByHashWithBlockNumber } from '@zeal/domains/RPCRequest/api/fixtures/ethGetTransactionByHash'
 import { ethGetTransactionReceipt } from '@zeal/domains/RPCRequest/api/fixtures/ethGetTransactionReceipt'
 import {
+    emptyPortfolioMap,
     onlyPKAccount,
-    onlyPKAccountEmptyPortfolio,
     pendingBridge,
+    portfolioMap,
 } from '@zeal/domains/Storage/api/fixtures/localStorage'
-import { LS_KEY } from '@zeal/domains/Storage/constants'
+import { LS_KEY, PORTFOLIO_MAP_KEY } from '@zeal/domains/Storage/constants'
 
 import { cleanEnv, mockEnv, TestEnvironment } from 'src/tests/env'
 import { runLottieListeners } from 'src/tests/mocks/lottie'
@@ -74,12 +75,12 @@ test(`As a user I should be able to open bridge flow even is my portfolio is emp
     As a user I should be able to set slippage from available options or provide custom, so I make sure my swap parameters during bridge are under control
     As a user I should be able to select destination token, so I can choose which token I want to swap to`, async () => {
     env.chromeMocks.storages.session = {}
-    env.chromeMocks.storages.local[LS_KEY] = JSON.stringify(
-        onlyPKAccountEmptyPortfolio
-    )
+    env.chromeMocks.storages.local[LS_KEY] = JSON.stringify(onlyPKAccount)
+    env.chromeMocks.storages.local[PORTFOLIO_MAP_KEY] =
+        JSON.stringify(emptyPortfolioMap)
 
     renderPage(
-        '/page_entrypoint.html?type=bridge&fromAddress=0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932'
+        '/page_entrypoint.html?type=bridge&fromAddress=0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932'
     )
 
     await userEvent.type(
@@ -87,7 +88,7 @@ test(`As a user I should be able to open bridge flow even is my portfolio is emp
         `${testPassword}{enter}`
     )
 
-    expect(await screen.findByText('0x26D0...8932')).toBeInTheDocument()
+    expect(await screen.findByText('0x26d0...8932')).toBeInTheDocument()
     expect(await screen.findByText('Private Key 1')).toBeInTheDocument()
     expect(await screen.findByText('Bridge')).toBeInTheDocument()
 
@@ -97,25 +98,34 @@ test(`As a user I should be able to open bridge flow even is my portfolio is emp
 
     // From token
     expect(
-        await screen.findByRole('button', { name: 'Ethereum' })
+        await screen.findByRole('button', { name: 'Arbitrum' })
     ).toBeInTheDocument()
-    await userEvent.click(await screen.findByRole('button', { name: 'ETH' }))
+    await userEvent.click(
+        await within(await screen.findByLabelText('From')).findByRole(
+            'button',
+            { name: 'ETH' }
+        )
+    )
     let tokens = await screen.findByLabelText('Tokens')
     await userEvent.type(
         await within(tokens).findByPlaceholderText('Search'),
         'USDC'
     )
-    await userEvent.click(await within(tokens).findByLabelText('USDC'))
+    await userEvent.click(await within(tokens).findByLabelText('USDC.e'))
     expect(tokens).not.toBeInTheDocument()
     expect(
-        await screen.findByRole('button', { name: 'USDC' })
+        await screen.findByRole('button', { name: 'USDC.e' })
     ).toBeInTheDocument()
 
     // To token
     expect(
-        await screen.findByRole('button', { name: 'Polygon' })
+        await screen.findByRole('button', { name: 'Base' })
     ).toBeInTheDocument()
-    await userEvent.click(await screen.findByRole('button', { name: 'MATIC' }))
+    await userEvent.click(
+        await within(await screen.findByLabelText('To')).findByRole('button', {
+            name: 'ETH',
+        })
+    )
     tokens = await screen.findByLabelText('Tokens')
     await userEvent.type(
         await within(tokens).findByPlaceholderText('Search'),
@@ -125,29 +135,33 @@ test(`As a user I should be able to open bridge flow even is my portfolio is emp
         await within(tokens).findByText('We found no tokens')
     ).toBeInTheDocument()
     await userEvent.clear(await within(tokens).findByPlaceholderText('Search'))
-    await userEvent.click(await within(tokens).findByLabelText('USDT'))
+    await userEvent.type(
+        await within(tokens).findByPlaceholderText('Search'),
+        'USD'
+    )
+    await userEvent.click(await within(tokens).findByLabelText('USDbC'))
     expect(tokens).not.toBeInTheDocument()
     expect(
-        await screen.findByRole('button', { name: 'USDT' })
+        await screen.findByRole('button', { name: 'USDbC' })
     ).toBeInTheDocument()
 
     await userEvent.type(await screen.findByLabelText('Amount to bridge'), '10')
 
     env.api['@socket/quote'] = jest.fn(() => [
         200,
-        bridgeQuoteEthereumUSDCPolygonUSDT,
+        bridgeQuoteArbitrumUSDCEBaseUSDbC,
     ])
     env.api['@socket/approval/check-allowance'] = jest.fn(() => [
         200,
-        checkAllowanceEthereumUSDC,
+        checkAllowanceArbitrumUSDCe,
     ])
     env.api['@socket/approval/build-tx'] = jest.fn(() => [
         200,
-        buildAllowanceTxEthereumUSDC,
+        buildAllowanceTxArbitrumUSDCe,
     ])
     env.api['@socket/build-tx'] = jest.fn(() => [
         200,
-        buildTxEthereumUSDCPolygonUSDT,
+        buildTxArbitrumUSDCeBaseUSDbC,
     ])
 
     expect(
@@ -166,52 +180,53 @@ test(`As a user I should be able to open bridge flow even is my portfolio is emp
                 defaultBridgeSlippage: '0.50',
                 defaultSwapSlippage: '0.50',
                 fromAmount: '10000000',
-                fromChainId: '0x1',
-                fromTokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-                recipient: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
+                fromChainId: '0xa4b1',
+                fromTokenAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+                recipient: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
                 singleTxOnly: true,
-                toChainId: '0x89',
-                toTokenAddress: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
-                userAddress: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
+                sort: 'output',
+                toChainId: '0x2105',
+                toTokenAddress: '0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca',
+                userAddress: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
             }),
         })
     )
     expect(env.api['@socket/approval/check-allowance']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: expect.objectContaining({
-                allowanceTarget: '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
-                chainID: '1',
-                owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+                allowanceTarget: '0x3a23f943181408eac424116af7b7790c94cb97a5',
+                chainID: '42161',
+                owner: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
+                tokenAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
             }),
         })
     )
     expect(env.api['@socket/approval/build-tx']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: {
-                allowanceTarget: '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
+                allowanceTarget: '0x3a23f943181408eac424116af7b7790c94cb97a5',
                 amount: '100000000',
-                chainID: '1',
-                owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+                chainID: '42161',
+                owner: '0x40fcdd8c164ea13cfd85a871e8755e977d885da4',
+                tokenAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
             },
         })
     )
 
     // Route
     expect(await screen.findByLabelText('Destination amount')).toHaveValue(
-        '99.54'
+        '99.76'
     )
     expect(await screen.findByLabelText('Across')).toHaveAccessibleDescription(
-        '1 minNetwork fees $9.81'
+        '1 minNetwork fees $0.03'
     )
     await userEvent.click(await screen.findByLabelText('Across'))
     const providerModal = await screen.findByLabelText('Bridge provider')
     const across = await within(providerModal).findByLabelText('Across')
-    expect(await within(across).findByText('99.54 USDT')).toBeInTheDocument()
+    expect(await within(across).findByText('99.76 USDbC')).toBeInTheDocument()
     expect(await within(across).findByText('1 min')).toBeInTheDocument()
     expect(
-        await within(across).findByText('Network fees $9.81')
+        await within(across).findByText('Network fees $0.03')
     ).toBeInTheDocument()
     expect(
         await within(across).findByLabelText('Best return route')
@@ -219,23 +234,23 @@ test(`As a user I should be able to open bridge flow even is my portfolio is emp
     expect(
         await within(across).findByLabelText('Best service time route')
     ).toBeInTheDocument()
-    const hyphen = await within(providerModal).findByLabelText('Hyphen')
-    expect(await within(hyphen).findByText('99.72 USDT')).toBeInTheDocument()
-    expect(await within(hyphen).findByText('6 min')).toBeInTheDocument()
+    const stargate = await within(providerModal).findByLabelText('Stargate')
+    expect(await within(stargate).findByText('98.78 USDbC')).toBeInTheDocument()
+    expect(await within(stargate).findByText('1 min')).toBeInTheDocument()
     expect(
-        await within(hyphen).findByText('Network fees $11.29')
+        await within(stargate).findByText('Network fees $0.05')
     ).toBeInTheDocument()
     expect(
-        within(hyphen).queryByLabelText('Best return route')
+        within(stargate).queryByLabelText('Best return route')
     ).not.toBeInTheDocument()
     expect(
-        within(hyphen).queryByLabelText('Best service time route')
+        within(stargate).queryByLabelText('Best service time route')
     ).not.toBeInTheDocument()
 
-    await userEvent.click(hyphen)
-    expect(await screen.findByLabelText('Hyphen')).toHaveAccessibleDescription(
-        '6 minNetwork fees $11.29'
-    )
+    await userEvent.click(stargate)
+    expect(
+        await screen.findByLabelText('Stargate')
+    ).toHaveAccessibleDescription('1 minNetwork fees $0.05')
 
     // Slippage
     await userEvent.click(
@@ -304,6 +319,9 @@ test(`As a user I should be able to open bridge with source token specified, so 
     window.open = jest.fn()
     env.chromeMocks.storages.session = {}
     env.chromeMocks.storages.local[LS_KEY] = JSON.stringify(onlyPKAccount)
+    env.chromeMocks.storages.local[PORTFOLIO_MAP_KEY] =
+        JSON.stringify(portfolioMap)
+
     env.api['/wallet/rpc/'].eth_getTransactionByHash = jest.fn(() => [
         200,
         ethGetTransactionByHashWithBlockNumber,
@@ -334,7 +352,7 @@ test(`As a user I should be able to open bridge with source token specified, so 
     ])
 
     renderPage(
-        '/page_entrypoint.html?type=bridge&fromAddress=0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932&fromCurrencyId=Polygon%7C0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
+        '/page_entrypoint.html?type=bridge&fromAddress=0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932&fromCurrencyId=Polygon%7C0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
     )
 
     await userEvent.type(
@@ -342,7 +360,7 @@ test(`As a user I should be able to open bridge with source token specified, so 
         `${testPassword}{enter}`
     )
 
-    expect(await screen.findByText('0x26D0...8932')).toBeInTheDocument()
+    expect(await screen.findByText('0x26d0...8932')).toBeInTheDocument()
     expect(await screen.findByText('Private Key 1')).toBeInTheDocument()
     expect(await screen.findByText('Bridge')).toBeInTheDocument()
 
@@ -357,12 +375,9 @@ test(`As a user I should be able to open bridge with source token specified, so 
     expect(
         await screen.findByRole('button', { name: 'USDC' })
     ).toBeInTheDocument()
-    await userEvent.click(
-        await screen.findByRole('button', { name: 'Ethereum' })
-    )
-    await userEvent.click(
+    expect(
         await screen.findByRole('button', { name: 'Arbitrum' })
-    )
+    ).toBeInTheDocument()
     await userEvent.click(await screen.findByRole('button', { name: 'ETH' }))
     const tokens = await screen.findByLabelText('Tokens')
     await userEvent.click(await within(tokens).findByLabelText('USDT'))
@@ -408,32 +423,32 @@ test(`As a user I should be able to open bridge with source token specified, so 
                 defaultSwapSlippage: '0.50',
                 fromAmount: '1160000000',
                 fromChainId: '0x89',
-                fromTokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-                recipient: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
+                fromTokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+                recipient: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
                 toChainId: '0xa4b1',
-                toTokenAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
-                userAddress: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
+                toTokenAddress: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
+                userAddress: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
             }),
         })
     )
     expect(env.api['@socket/approval/check-allowance']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: expect.objectContaining({
-                allowanceTarget: '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
+                allowanceTarget: '0x3a23f943181408eac424116af7b7790c94cb97a5',
                 chainID: '137',
-                owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                tokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+                owner: '0x61640a8d48bca205ba91b16b0b7745e7abc61084',
+                tokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             }),
         })
     )
     expect(env.api['@socket/approval/build-tx']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: {
-                allowanceTarget: '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
+                allowanceTarget: '0x3a23f943181408eac424116af7b7790c94cb97a5',
                 amount: '157223311',
                 chainID: '137',
-                owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                tokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+                owner: '0x61640a8d48bca205ba91b16b0b7745e7abc61084',
+                tokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             },
         })
     )
@@ -584,8 +599,6 @@ test(`As a user I should be able to open bridge with source token specified, so 
         )
     ).toBeInTheDocument()
 
-    jest.useRealTimers()
-
     await userEvent.click(
         await within(await screen.findByLabelText('Bridge')).findByRole(
             'button',
@@ -593,7 +606,14 @@ test(`As a user I should be able to open bridge with source token specified, so 
         )
     )
 
+    await act(() => {
+        jest.runOnlyPendingTimers()
+        jest.advanceTimersByTime(5000)
+    })
+
     expect(
         await screen.findByRole('button', { name: 'Portfolio' })
     ).toBeInTheDocument()
+
+    jest.useRealTimers()
 })

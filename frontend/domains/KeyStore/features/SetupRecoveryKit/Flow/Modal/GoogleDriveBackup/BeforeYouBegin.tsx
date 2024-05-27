@@ -68,7 +68,11 @@ export const BeforeYouBegin = ({ onMsg }: Props) => {
     const validationError = validate(form).getFailureReason() || {}
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton

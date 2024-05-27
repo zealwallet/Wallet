@@ -9,7 +9,7 @@ import { App } from '@zeal/domains/App'
 import { AppPositionDetails } from '@zeal/domains/App/components/AppPositionDetails'
 import { AppsList } from '@zeal/domains/App/components/AppsList'
 import { CurrencyHiddenMap, CurrencyPinMap } from '@zeal/domains/Currency'
-import { KeyStore } from '@zeal/domains/KeyStore'
+import { KeyStore, KeyStoreMap } from '@zeal/domains/KeyStore'
 import {
     CurrentNetwork,
     NetworkMap,
@@ -21,7 +21,8 @@ import {
 } from '@zeal/domains/NFTCollection'
 import { AllNFTsList } from '@zeal/domains/NFTCollection/components/AllNFTsList'
 import { DetailsView } from '@zeal/domains/NFTCollection/components/DetailsView'
-import { Portfolio } from '@zeal/domains/Portfolio'
+import { Portfolio, PortfolioMap } from '@zeal/domains/Portfolio'
+import { CustomCurrencyMap } from '@zeal/domains/Storage'
 import { TokenList } from '@zeal/domains/Token/components/TokenList'
 
 type Props = {
@@ -29,12 +30,15 @@ type Props = {
     account: Account
     currentNetwork: CurrentNetwork
     portfolio: Portfolio
+    portfolioMap: PortfolioMap
     keystore: KeyStore
     networkMap: NetworkMap
     networkRPCMap: NetworkRPCMap
     currencyHiddenMap: CurrencyHiddenMap
     currencyPinMap: CurrencyPinMap
     installationId: string
+    keystoreMap: KeyStoreMap
+    customCurrencyMap: CustomCurrencyMap
     onMsg: (msg: Msg) => void
 }
 
@@ -63,12 +67,15 @@ export const Modal = ({
     account,
     currentNetwork,
     portfolio,
+    portfolioMap,
     keystore,
     networkMap,
     networkRPCMap,
     currencyHiddenMap,
     currencyPinMap,
     installationId,
+    keystoreMap,
+    customCurrencyMap,
     onMsg,
 }: Props) => {
     switch (state.type) {
@@ -97,10 +104,13 @@ export const Modal = ({
                         networkMap={networkMap}
                         keystore={keystore}
                         portfolio={portfolio}
+                        portfolioMap={portfolioMap}
                         nftCollections={portfolio.nftCollections}
                         account={account}
-                        currincies={portfolio.currencies}
+                        currencies={portfolio.currencies}
                         selectedNetwork={currentNetwork}
+                        networkRPCMap={networkRPCMap}
+                        keystoreMap={keystoreMap}
                         onMsg={onMsg}
                     />
                 </UIModal>
@@ -109,11 +119,15 @@ export const Modal = ({
             return (
                 <UIModal>
                     <AppsList
+                        networkRPCMap={networkRPCMap}
+                        keystoreMap={keystoreMap}
+                        currencyHiddenMap={currencyHiddenMap}
+                        portfolioMap={portfolioMap}
                         installationId={installationId}
                         networkMap={networkMap}
                         keystore={keystore}
                         apps={portfolio.apps}
-                        currincies={portfolio.currencies}
+                        currencies={portfolio.currencies}
                         account={account}
                         selectedNetwork={currentNetwork}
                         onMsg={onMsg}
@@ -126,12 +140,15 @@ export const Modal = ({
                     <TokenList
                         installationId={installationId}
                         currencyHiddenMap={currencyHiddenMap}
+                        customCurrencyMap={customCurrencyMap}
                         currencyPinMap={currencyPinMap}
                         networkMap={networkMap}
                         networkRPCMap={networkRPCMap}
+                        portfolioMap={portfolioMap}
                         portfolio={portfolio}
                         account={account}
-                        selectedNetwork={currentNetwork}
+                        currentNetwork={currentNetwork}
+                        keystoreMap={keystoreMap}
                         onMsg={onMsg}
                     />
                 </UIModal>
@@ -139,11 +156,13 @@ export const Modal = ({
 
         case 'add_funds':
             return (
-                <AddFunds
-                    installationId={installationId}
-                    account={account}
-                    onMsg={onMsg}
-                />
+                <UIModal>
+                    <AddFunds
+                        installationId={installationId}
+                        account={account}
+                        onMsg={onMsg}
+                    />
+                </UIModal>
             )
 
         case 'app_position':

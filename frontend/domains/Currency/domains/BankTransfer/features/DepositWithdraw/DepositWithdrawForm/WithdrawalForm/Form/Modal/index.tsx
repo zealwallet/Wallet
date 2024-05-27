@@ -136,7 +136,6 @@ export const Modal = ({
                         onMsg={(msg) => {
                             switch (msg.type) {
                                 case 'close':
-                                case 'on_back_button_clicked':
                                 case 'on_do_bank_transfer_clicked':
                                     onMsg({ type: 'close' })
                                     break

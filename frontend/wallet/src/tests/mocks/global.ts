@@ -5,6 +5,9 @@ import './chrome'
 import './crypto'
 
 jest.mock('@ledgerhq/hw-transport-webhid', () => ({}))
+jest.mock('@walletconnect/core', () => ({}))
+jest.mock('@walletconnect/web3wallet', () => ({}))
+jest.mock('expo-camera/next', () => ({}))
 
 const mockStyleSheet = {
     create: (sheet: Record<string, object>) => {
@@ -16,6 +19,12 @@ const mockStyleSheet = {
 
         return mockSheet
     },
+    flatten: (style: Record<string, object> | Record<string, object>[]) => {
+        if (Array.isArray(style)) {
+            return style.reduce((acc, s) => ({ ...acc, ...s }), {})
+        }
+        return style
+    },
 }
 
 const mockAnimated = {
@@ -26,7 +35,9 @@ const mockAnimated = {
         stopAnimation() {}
     },
     View: () => '',
-    timing: () => ({ start: () => {} }),
+    timing: () => ({
+        start: () => {},
+    }),
     createAnimatedComponent: (component: unknown) => component,
 }
 
@@ -73,3 +84,21 @@ jest.mock('@zeal/domains/RPCRequest/helpers/signEthSendTransaction.ts', () => ({
         params: ['0x0'],
     }),
 }))
+
+Object.defineProperty(globalThis, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+    })),
+})
+
+jest.mock('react-native-reanimated', () =>
+    jest.requireActual('react-native-reanimated/mock')
+)

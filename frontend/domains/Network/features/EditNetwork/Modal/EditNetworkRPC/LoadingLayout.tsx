@@ -18,7 +18,11 @@ type Msg = { type: 'close' }
 
 export const LoadingLayout = ({ onMsg }: Props) => (
     <Modal>
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 right={
                     <IconButton

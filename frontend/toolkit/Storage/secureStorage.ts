@@ -1,5 +1,6 @@
 import {
     AuthenticationType,
+    isEnrolledAsync,
     supportedAuthenticationTypesAsync,
 } from 'expo-local-authentication'
 import * as SecureStore from 'expo-secure-store'
@@ -8,6 +9,8 @@ import { notReachable } from '@zeal/toolkit/notReachable'
 import { failure, Result, success } from '@zeal/toolkit/Result'
 
 import { ImperativeError } from '@zeal/domains/Error'
+
+import * as localStorage from './localStorage'
 
 import { ZealPlatform } from '../OS/ZealPlatform'
 
@@ -42,8 +45,9 @@ export const fetchPrimaryBiometricType =
             case 'ios':
             case 'android': {
                 const biometricTypes = await supportedAuthenticationTypesAsync()
+                const isEnrolled = await isEnrolledAsync()
 
-                if (!biometricTypes.length) {
+                if (!biometricTypes.length || !isEnrolled) {
                     return { type: 'not_available' }
                 }
 
@@ -79,7 +83,7 @@ export const get = async ({ key }: { key: string }): Promise<string | null> => {
             return SecureStore.getItemAsync(key)
 
         case 'web':
-            throw new ImperativeError('Secure storage is not supported on web')
+            return localStorage.get(key)
         default:
             return notReachable(ZealPlatform.OS)
     }
@@ -100,7 +104,21 @@ export const set = async ({
             })
 
         case 'web':
-            throw new ImperativeError('Secure storage is not supported on web')
+            return localStorage.set(key, value)
+
+        default:
+            return notReachable(ZealPlatform.OS)
+    }
+}
+
+export const remove = async ({ key }: { key: string }): Promise<void> => {
+    switch (ZealPlatform.OS) {
+        case 'ios':
+        case 'android':
+            return SecureStore.deleteItemAsync(key)
+
+        case 'web':
+            return localStorage.remove(key)
 
         default:
             return notReachable(ZealPlatform.OS)

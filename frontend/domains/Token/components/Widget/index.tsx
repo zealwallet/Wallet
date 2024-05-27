@@ -51,17 +51,17 @@ export const Widget = ({
     const filteredTokens = tokens.filter(filterByHideMap(currencyHiddenMap))
     return (
         <Section aria-labelledby={labelId}>
-            <TokensGroupHeader
-                labelId={labelId}
-                onClick={
-                    filteredTokens.length
-                        ? () => onMsg({ type: 'show_all_tokens_click' })
-                        : null
-                }
-                tokens={filteredTokens}
-                knownCurrencies={knownCurrencies}
-            />
-            <Group variant="default">
+            <Group variant="widget">
+                <TokensGroupHeader
+                    labelId={labelId}
+                    onClick={
+                        filteredTokens.length
+                            ? () => onMsg({ type: 'show_all_tokens_click' })
+                            : null
+                    }
+                    tokens={filteredTokens}
+                    knownCurrencies={knownCurrencies}
+                />
                 {filteredTokens.length ? (
                     filteredTokens.slice(0, NUM_OF_ELEMENTS).map((token) => (
                         <TokenListItem

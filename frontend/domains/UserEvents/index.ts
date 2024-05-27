@@ -57,7 +57,7 @@ export type UserEvent =
       }
     | {
           type: 'AppDisconnectedEvent'
-          location: 'settings' | 'zwidget'
+          location: 'settings' | 'zwidget' | 'wallet_connect'
           scope: 'all' | 'single'
       }
     | {
@@ -113,7 +113,7 @@ export type UserEvent =
           type: 'ConnectionAcceptedEvent'
           keystoreType: components['schemas']['KeystoreType']
           keystoreId: string
-          network: string
+          network: string | null
       }
     | {
           type: 'SendFlowEnteredEvent'
@@ -173,6 +173,23 @@ export type UserEvent =
     | { type: 'FilterAppliedEvent' }
     | { type: 'NFTListEnteredEvent' }
     | { type: 'TokenListEnteredEvent' }
+    | { type: 'BrowserOpenedEvent' }
+    | {
+          type: 'DappLinkClickedEvent'
+          dapp: string
+          location: 'home' | 'browser' | 'defi'
+          installationId: string
+      }
+    | { type: 'CardOrderFlowEnteredEvent'; state: 'new' | 'existing' }
+    | { type: 'CardImportSuccessEvent' }
+    | { type: 'GnosisHomepageEnteredEvent' }
+    | { type: 'ClickOrderCardButtonEvent' }
+    | { type: 'ClickActivateCardButtonEvent' }
+    | { type: 'ClickJumperButtonEvent' }
+    | {
+          type: 'ClickCardQuickActionsButtonEvent'
+          action: 'add_cash' | 'details' | 'freeze'
+      }
 
 export const keystoreToUserEventType = (
     keystore: KeyStore

@@ -22,7 +22,11 @@ export type Msg = { type: 'on_connect_button_click' } | { type: 'close' }
 
 export const Connect = ({ onMsg, isLoading }: Props) => {
     return (
-        <Screen background="default" padding="form">
+        <Screen
+            background="default"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton

@@ -183,7 +183,7 @@ const ConnectionSuccess = ({
 }) => {
     return (
         <UIModal>
-            <Screen background="light" padding="form">
+            <Screen background="light" padding="form" onNavigateBack={null}>
                 <ActionBar
                     keystore={keystore}
                     network={selectedNetwork}

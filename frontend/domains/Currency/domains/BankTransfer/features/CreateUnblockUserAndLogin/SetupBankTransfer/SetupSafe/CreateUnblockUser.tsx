@@ -142,6 +142,7 @@ export const CreateUnblockUser = ({
         case 'loading':
             return (
                 <LoadingLayout
+                    onClose={() => onMsg({ type: 'close' })}
                     actionBar={
                         <ActionBar
                             account={account}
@@ -166,6 +167,7 @@ export const CreateUnblockUser = ({
             return (
                 <>
                     <LoadingLayout
+                        onClose={() => onMsg({ type: 'close' })}
                         actionBar={
                             <ActionBar
                                 account={account}

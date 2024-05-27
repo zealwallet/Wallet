@@ -172,13 +172,17 @@ export const signEthSendTransaction = async ({
 
         case 'secret_phrase_key':
         case 'private_key_store': {
-            const { pk } = await getPrivateKey({ keyStore, sessionPassword })
+            const { privateKey } = await getPrivateKey({
+                keyStore,
+                sessionPassword,
+            })
+
             const w3 = new Web3(
                 new ZealWeb3RPCProvider({ network, networkRPCMap })
             )
             const signed = await w3.eth.accounts.signTransaction(
                 transactionConfig,
-                pk
+                privateKey
             )
             return {
                 id: sendTransactionRequest.id,

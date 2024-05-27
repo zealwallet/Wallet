@@ -34,7 +34,11 @@ export const Modal = ({ state, onMsg }: Props) => {
         case 'supported_networks_list':
             return (
                 <UIModal>
-                    <Screen background="light" padding="form">
+                    <Screen
+                        background="light"
+                        padding="form"
+                        onNavigateBack={() => onMsg({ type: 'close' })}
+                    >
                         <ActionBar
                             left={
                                 <IconButton

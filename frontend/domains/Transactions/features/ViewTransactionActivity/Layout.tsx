@@ -81,7 +81,11 @@ export const Layout = ({
     )
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="controller_tabs_fullscreen_scroll"
+            background="light"
+            onNavigateBack={null}
+        >
             <ActionBar
                 top={
                     <ActionBarAccountSelector
@@ -100,7 +104,7 @@ export const Layout = ({
                     </Text>
                 }
                 right={
-                    <Row spacing={12}>
+                    <Row spacing={0}>
                         {(() => {
                             switch (selectedNetwork.type) {
                                 case 'all_networks':

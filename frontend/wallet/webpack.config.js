@@ -177,7 +177,11 @@ const common = {
             'react-native$': 'react-native-web',
             '@zeal/assets': path.join(FRONTEND_ROOT, 'mobile/assets'),
             'expo-image': false,
+            'expo-camera/next': false,
             'cbor-rn-prereqs': false,
+            '@sumsub/react-native-mobilesdk-module': false,
+            '@react-native-firebase/app': false,
+            '@react-native-firebase/messaging': false,
         },
         fallback: {
             zlib: false,

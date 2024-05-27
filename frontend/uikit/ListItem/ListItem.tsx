@@ -13,6 +13,7 @@ import { InternalItem, Props as InternalItemProps } from './InternalItem'
 type Props = {
     variant?: Extractor<keyof typeof styles, 'variant'>
     onClick?: () => void
+    disabled?: boolean
     'aria-current': boolean
 } & InternalItemProps
 
@@ -74,11 +75,27 @@ export const styles = StyleSheet.create({
     clickable_active: {
         backgroundColor: colors.actionSecondaryPressed,
     },
+    disabled: {
+        opacity: 0.3,
+        ...(() => {
+            switch (ZealPlatform.OS) {
+                case 'ios':
+                case 'android':
+                    return {}
+                case 'web':
+                    return { cursor: 'not-allowed' }
+                /* istanbul ignore next */
+                default:
+                    return notReachable(ZealPlatform.OS)
+            }
+        })(),
+    },
 })
 
 export const ListItem = ({
     variant = 'default',
     onClick,
+    disabled,
     primaryText,
     primaryTextIcon,
     shortText,
@@ -94,6 +111,7 @@ export const ListItem = ({
         <Pressable
             style={[styles.pressable]}
             onPress={onClick}
+            disabled={disabled}
             role="button"
             aria-labelledby={labelId}
             aria-describedby={descriptionId}
@@ -106,6 +124,7 @@ export const ListItem = ({
                         styles.clickable,
                         hovered && styles.clickable_hover,
                         pressed && styles.clickable_active,
+                        disabled && styles.disabled,
                         ariaCurrent && styles.selected,
                     ]}
                 >
@@ -128,7 +147,13 @@ export const ListItem = ({
             aria-labelledby={labelId}
             aria-describedby={descriptionId}
         >
-            <View style={[styles.container, styles[`variant_${variant}`]]}>
+            <View
+                style={[
+                    styles.container,
+                    styles[`variant_${variant}`],
+                    disabled && styles.disabled,
+                ]}
+            >
                 <InternalItem
                     size={size}
                     primaryText={primaryText}

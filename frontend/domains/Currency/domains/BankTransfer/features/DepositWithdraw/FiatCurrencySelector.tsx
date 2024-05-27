@@ -4,7 +4,7 @@ import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Column } from '@zeal/uikit/Column'
 import { Group } from '@zeal/uikit/Group'
 import { Header } from '@zeal/uikit/Header'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { ListItem } from '@zeal/uikit/ListItem'
 import { Screen } from '@zeal/uikit/Screen'
@@ -31,14 +31,15 @@ export const FiatCurrencySelector = ({
         background="light"
         padding="form"
         aria-labelledby="choose-currency-id"
+        onNavigateBack={() => onMsg({ type: 'close' })}
     >
         <ActionBar
-            right={
+            left={
                 <IconButton
                     variant="on_light"
                     onClick={() => onMsg({ type: 'close' })}
                 >
-                    {({ color }) => <CloseCross size={24} color={color} />}
+                    {({ color }) => <BackIcon size={24} color={color} />}
                 </IconButton>
             }
         />

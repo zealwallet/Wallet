@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl'
 import { Column } from '@zeal/uikit/Column'
 import { Group } from '@zeal/uikit/Group'
 import { Header } from '@zeal/uikit/Header'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { ListItem } from '@zeal/uikit/ListItem'
@@ -25,7 +24,6 @@ type Props = {
 
 type Msg =
     | { type: 'on_source_of_funds_selected'; source: PredefinedSourceOfFunds }
-    | { type: 'on_back_button_clicked' }
     | { type: 'on_other_source_of_funds_clicked' }
     | {
           type: 'close'
@@ -33,7 +31,11 @@ type Msg =
 
 export const Layout = ({ onMsg, account, network, keyStoreMap }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 network={network}
                 account={account}
@@ -44,19 +46,9 @@ export const Layout = ({ onMsg, account, network, keyStoreMap }: Props) => {
                 left={
                     <IconButton
                         variant="on_light"
-                        onClick={() =>
-                            onMsg({ type: 'on_back_button_clicked' })
-                        }
-                    >
-                        {({ color }) => <BackIcon size={24} color={color} />}
-                    </IconButton>
-                }
-                right={
-                    <IconButton
-                        variant="on_light"
                         onClick={() => onMsg({ type: 'close' })}
                     >
-                        {({ color }) => <CloseCross size={24} color={color} />}
+                        {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
             />

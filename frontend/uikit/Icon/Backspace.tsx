@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -9,8 +11,7 @@ type Props = {
 }
 
 export const Backspace = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         color={color && colors[color]}
         height={size}
         viewBox="0 0 33 32"
@@ -27,5 +28,5 @@ export const Backspace = ({ size, color }: Props) => (
             d="M12.0413 6.59888C10.5066 6.59888 9.05685 7.30373 8.10895 8.51079L3.36028 14.5578C2.69599 15.4037 2.69599 16.5941 3.36028 17.44L8.10895 23.487C9.05685 24.694 10.5066 25.3989 12.0413 25.3989H26.2369C28.262 25.3989 29.9036 23.7573 29.9036 21.7322V10.2655C29.9036 8.2405 28.262 6.59888 26.2369 6.59888H12.0413ZM9.68191 9.74602C10.2506 9.02179 11.1205 8.59888 12.0413 8.59888H26.2369C27.1574 8.59888 27.9036 9.34507 27.9036 10.2655V21.7322C27.9036 22.6527 27.1574 23.3989 26.2369 23.3989H12.0413C11.1205 23.3989 10.2506 22.976 9.68191 22.2517L4.93323 16.2048C4.83834 16.0839 4.83834 15.9138 4.93323 15.793L9.68191 9.74602Z"
             fill="currentColor"
         />
-    </Svg>
+    </SvgIcon>
 )

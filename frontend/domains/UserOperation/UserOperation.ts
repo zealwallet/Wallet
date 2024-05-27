@@ -1,3 +1,5 @@
+import { Hexadecimal } from '@zeal/toolkit/Hexadecimal'
+
 import { Address } from '@zeal/domains/Address'
 
 export type InitialUserOperation = {
@@ -53,7 +55,7 @@ export type UserOperationWithSignature = {
 export type UserOperationHash = {
     type: 'user_operation_hash'
 
-    encodedValidFrom: string
-    encodedValidUntil: string
-    hash: string
+    encodedValidFrom: Hexadecimal
+    encodedValidUntil: Hexadecimal
+    hash: Hexadecimal
 }

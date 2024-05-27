@@ -67,7 +67,6 @@ export type Msg =
                   | 'on_token_un_hide_click'
           }
       >
-    | { type: 'tracked_only_wallet_selected' }
 
 type State =
     | { type: 'select_send_or_receive_token' }

@@ -4,7 +4,11 @@ import { notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
 
 import { CountryISOCode } from '@zeal/domains/Country'
-import { CountrySelector } from '@zeal/domains/Country/components/CountrySelector'
+import {
+    CountrySelector,
+    PRIORITY_COUNTRIES,
+    Title,
+} from '@zeal/domains/Country/components/CountrySelector'
 import { UNBLOCK_SUPPORTED_COUNTRIES } from '@zeal/domains/Currency/domains/BankTransfer/constants'
 
 type Props = {
@@ -23,6 +27,8 @@ export const Modal = ({ currentCountryCode, state, onMsg }: Props) => {
             return (
                 <UIModal>
                     <CountrySelector
+                        title={<Title />}
+                        priorityCountries={PRIORITY_COUNTRIES}
                         selectedCountry={currentCountryCode}
                         countries={UNBLOCK_SUPPORTED_COUNTRIES}
                         onMsg={(msg) => {

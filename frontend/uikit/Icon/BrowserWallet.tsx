@@ -1,25 +1,14 @@
 import React from 'react'
-import {
-    Defs,
-    G,
-    LinearGradient,
-    Mask,
-    Path,
-    Stop,
-    Svg,
-} from 'react-native-svg'
+import { Defs, G, LinearGradient, Mask, Path, Stop } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
 }
 
 export const BrowserWallet = ({ size }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
-        viewBox="0 0 28 28"
-        width={size}
-        height={size}
-    >
+    <SvgIcon viewBox="0 0 28 28" width={size} height={size}>
         <Path
             d="M9.9165 1.16699H4.08317C2.47234 1.16699 1.1665 2.47283 1.1665 4.08366V9.91699C1.1665 11.5278 2.47234 12.8337 4.08317 12.8337H9.9165C11.5273 12.8337 12.8332 11.5278 12.8332 9.91699V4.08366C12.8332 2.47283 11.5273 1.16699 9.9165 1.16699Z"
             fill="#FFF0E1"
@@ -384,5 +373,5 @@ export const BrowserWallet = ({ size }: Props) => (
                 <Stop offset="0.983895" stopColor="#D1D8FF" />
             </LinearGradient>
         </Defs>
-    </Svg>
+    </SvgIcon>
 )

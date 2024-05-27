@@ -94,7 +94,7 @@ export const Send = ({
 
     switch (loadable.type) {
         case 'loading':
-            return <LoadingLayout actionBar={null} />
+            return <LoadingLayout actionBar={null} onClose={null} />
         case 'loaded':
             switch (entrypoint.type) {
                 case 'send_nft':
@@ -146,7 +146,7 @@ export const Send = ({
         case 'error':
             return (
                 <>
-                    <LoadingLayout actionBar={null} />
+                    <LoadingLayout actionBar={null} onClose={null} />
                     <AppErrorPopup
                         error={parseAppError(loadable.error)}
                         onMsg={(msg) => {

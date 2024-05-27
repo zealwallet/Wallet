@@ -53,7 +53,11 @@ export class ErrorBoundary extends React.Component<Props, State> {
         if (this.state.hasError) {
             return (
                 <SafeAreaProvider style={styles.safeAreaProvider}>
-                    <Screen background="default" padding="form">
+                    <Screen
+                        background="default"
+                        padding="form"
+                        onNavigateBack={null}
+                    >
                         <Header title="Something went wrong" />
 
                         <Spacer />

@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.actionSecondaryOnGreyPressed,
     },
     icon: {
-        padding: 7,
+        padding: 4,
     },
 })
 

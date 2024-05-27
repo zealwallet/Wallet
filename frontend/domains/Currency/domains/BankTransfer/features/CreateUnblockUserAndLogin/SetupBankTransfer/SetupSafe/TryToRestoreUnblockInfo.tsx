@@ -78,6 +78,7 @@ export const TryToRestoreUnblockInfo = ({
         case 'loading':
             return (
                 <LoadingLayout
+                    onClose={() => onMsg({ type: 'close' })}
                     actionBar={
                         <ActionBar
                             account={account}
@@ -101,6 +102,7 @@ export const TryToRestoreUnblockInfo = ({
             return (
                 <>
                     <LoadingLayout
+                        onClose={() => onMsg({ type: 'close' })}
                         actionBar={
                             <ActionBar
                                 account={account}

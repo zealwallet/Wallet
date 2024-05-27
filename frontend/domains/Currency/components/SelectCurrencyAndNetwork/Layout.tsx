@@ -129,6 +129,7 @@ export const Layout = ({
             background="light"
             padding="form"
             aria-labelledby="select-currency-and-network-label"
+            onNavigateBack={() => onMsg({ type: 'close' })}
         >
             <UIActionBar
                 top={
@@ -301,6 +302,7 @@ export const Layout = ({
                                 return (
                                     <SectionList
                                         variant="grouped"
+                                        keyboardShouldPersistTaps="handled"
                                         itemSpacing={8}
                                         sectionSpacing={8}
                                         sections={sections}

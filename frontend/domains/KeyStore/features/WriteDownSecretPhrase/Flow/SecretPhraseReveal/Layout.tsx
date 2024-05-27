@@ -50,7 +50,13 @@ export const Layout = ({ keystore, sessionPassword, onMsg }: Props) => {
     })
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() =>
+                onMsg({ type: 'on_secret_phrase_reveal_back_clicked' })
+            }
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -89,7 +95,7 @@ export const Layout = ({ keystore, sessionPassword, onMsg }: Props) => {
 
                         case 'loaded':
                             return (
-                                <>
+                                <Column spacing={24} fill>
                                     <BlurCurtain
                                         unblurElement={
                                             <Tag bg="surfaceDefault">
@@ -148,10 +154,12 @@ export const Layout = ({ keystore, sessionPassword, onMsg }: Props) => {
                                         />
                                     </BlurCurtain>
 
-                                    <CopyPhraseButton
-                                        decryptedPhrase={loadable.data}
-                                    />
-                                </>
+                                    <Column spacing={0} alignX="center">
+                                        <CopyPhraseButton
+                                            decryptedPhrase={loadable.data}
+                                        />
+                                    </Column>
+                                </Column>
                             )
 
                         case 'error':

@@ -71,7 +71,7 @@ export const Completed = ({
             return (
                 <Column spacing={12}>
                     <BannerOutline icon={null}>
-                        <Row spacing={0} alignX="stretch" fullWidth>
+                        <Row spacing={0} alignX="stretch">
                             <Text
                                 variant="paragraph"
                                 color="textPrimary"
@@ -79,7 +79,7 @@ export const Completed = ({
                             >
                                 <FormattedMessage
                                     id="confirmTransaction.networkFee"
-                                    defaultMessage="Network fee"
+                                    defaultMessage="Final network fee"
                                 />
                             </Text>
 

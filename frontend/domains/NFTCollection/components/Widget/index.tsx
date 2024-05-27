@@ -34,18 +34,18 @@ const NUM_OF_ELEMENTS = 3
 export const Widget = ({ nftCollections, currencies, onMsg }: Props) => {
     return (
         <Section>
-            <GroupHeader
-                onClick={
-                    nftCollections.length
-                        ? () => {
-                              onMsg({ type: 'show_all_nft_click' })
-                          }
-                        : null
-                }
-                knownCurrencies={currencies}
-                nftCollections={nftCollections}
-            />
-            <Group variant="default">
+            <Group variant="widget">
+                <GroupHeader
+                    onClick={
+                        nftCollections.length
+                            ? () => {
+                                  onMsg({ type: 'show_all_nft_click' })
+                              }
+                            : null
+                    }
+                    knownCurrencies={currencies}
+                    nftCollections={nftCollections}
+                />
                 {nftCollections.length ? (
                     <>
                         <Row spacing={4} wrap wrapSpacing={4}>

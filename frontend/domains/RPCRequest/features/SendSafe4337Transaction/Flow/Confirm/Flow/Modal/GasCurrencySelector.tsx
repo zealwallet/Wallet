@@ -130,7 +130,11 @@ export const GasCurrencySelector = ({
     ]
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 top={
                     <Row spacing={8}>

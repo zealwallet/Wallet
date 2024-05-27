@@ -1,5 +1,6 @@
 import { FormattedMessage } from 'react-intl'
 
+import { Column } from '@zeal/uikit/Column'
 import { Content } from '@zeal/uikit/Content'
 import { Screen } from '@zeal/uikit/Screen'
 
@@ -95,27 +96,35 @@ export const Flow = ({
 
                 case 'maximised':
                     return (
-                        <Screen background="light" padding="form">
-                            <ActionBar
-                                title={null}
-                                account={account}
-                                actionSource={actionSource}
-                                network={null}
-                                onMsg={onMsg}
-                            />
-
-                            <Content>
-                                <Content.Splash
-                                    onAnimationComplete={null}
-                                    variant="spinner"
-                                    title={
-                                        <FormattedMessage
-                                            id="Sign.Simuation.Skeleton.title"
-                                            defaultMessage="Doing safety checks…"
-                                        />
-                                    }
+                        <Screen
+                            background="light"
+                            padding="form"
+                            onNavigateBack={() =>
+                                onMsg({ type: 'on_minimize_click' })
+                            }
+                        >
+                            <Column spacing={12} fill>
+                                <ActionBar
+                                    title={null}
+                                    account={account}
+                                    actionSource={actionSource}
+                                    network={null}
+                                    onMsg={onMsg}
                                 />
-                            </Content>
+
+                                <Content>
+                                    <Content.Splash
+                                        onAnimationComplete={null}
+                                        variant="spinner"
+                                        title={
+                                            <FormattedMessage
+                                                id="Sign.Simuation.Skeleton.title"
+                                                defaultMessage="Doing safety checks…"
+                                            />
+                                        }
+                                    />
+                                </Content>
+                            </Column>
                         </Screen>
                     )
 

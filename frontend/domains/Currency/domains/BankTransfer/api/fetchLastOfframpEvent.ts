@@ -33,6 +33,7 @@ export const fetchLastOfframpEvent = async ({
                 case 'unblock_offramp_on_hold_compliance':
                 case 'unblock_offramp_on_hold_kyc':
                 case 'unblock_offramp_failed':
+                case 'unblock_offramp_pending':
                     return event.transactionHash === transactionHash
                 case 'kyc_event_status_changed':
                 case 'unblock_onramp_transfer_received':
@@ -43,6 +44,7 @@ export const fetchLastOfframpEvent = async ({
                 case 'unblock_onramp_transfer_on_hold_compliance':
                 case 'unblock_onramp_transfer_on_hold_kyc':
                 case 'unblock_onramp_failed':
+                case 'unblock_onramp_pending':
                     return false
 
                 default:

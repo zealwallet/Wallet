@@ -150,6 +150,7 @@ type ColorsMap = {
 
     networkPolygon: RGBAColor
     networkPolygonZkevm: RGBAColor
+    networkLinea: RGBAColor
     networkEthereum: RGBAColor
     networkOptimism: RGBAColor
     networkBSC: RGBAColor
@@ -159,11 +160,14 @@ type ColorsMap = {
     networkAvalanche: RGBAColor
     networkAurora: RGBAColor
     networkBase: RGBAColor
+    networkBlast: RGBAColor
+    networkOPBNB: RGBAColor
     networkzkSync: RGBAColor
 
     /* Other */
 
     backgroundOverlay: RGBAColor
+    backgroundOverlayClosed: RGBAColor
 
     backgroundWidget: RGBAColor
     backgroundWidgetPressed: RGBAColor
@@ -330,12 +334,16 @@ export const colors: ColorsMap = {
     networkArbitrum: 'rgba(7, 71, 114, 1)',
     networkAvalanche: 'rgba(159, 2, 2, 1)',
     networkAurora: 'rgba(27, 95, 0, 1)',
-    networkBase: 'rgba(55, 115, 245, 1)',
+    networkBase: 'rgba(7, 71, 114, 1)',
+    networkLinea: 'rgba(3, 3, 3, 3)', // FIXME @resetko-zeal apply correct color
+    networkBlast: 'rgba(1, 1, 1, 1)', // FIXME @resetko-zeal apply correct color
+    networkOPBNB: 'rgba(2, 2, 2, 2)', // FIXME @resetko-zeal apply correct color
     networkzkSync: 'rgba(0, 0, 0, 1)',
 
     /* Other */
 
     backgroundOverlay: 'rgba(26, 54, 75, 0.8)',
+    backgroundOverlayClosed: 'rgba(26, 54, 75, 0)',
 
     backgroundWidget: 'rgba(0, 255, 255, 1)',
     backgroundWidgetPressed: 'rgba(0, 233, 233, 1)',

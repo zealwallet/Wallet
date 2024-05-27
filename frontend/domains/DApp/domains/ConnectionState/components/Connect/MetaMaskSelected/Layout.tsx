@@ -25,10 +25,9 @@ import {
 import { ConnectionSafetyCheck } from '@zeal/domains/SafetyCheck'
 import { ConnectionSafetyChecksResponse } from '@zeal/domains/SafetyCheck/api/fetchConnectionSafetyChecks'
 import { ConnectionBadge } from '@zeal/domains/SafetyCheck/components/ConnectionBadge'
+import { ConnectionSafetyChecksFooter } from '@zeal/domains/SafetyCheck/components/ConnectionSafetyChecksFooter'
 import { getHighlighting } from '@zeal/domains/SafetyCheck/helpers/getTextHighlighting'
 import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
-
-import { SafetyChecks } from '../SafetyChecks'
 
 type Props = {
     safetyChecksLoadable: LoadableData<ConnectionSafetyChecksResponse, unknown>
@@ -54,7 +53,7 @@ export const Layout = ({
 }: Props) => {
     const { formatMessage } = useIntl()
     return (
-        <Screen padding="form" background="light">
+        <Screen padding="form" background="light" onNavigateBack={null}>
             <ActionBar
                 left={
                     <Text variant="title3" weight="medium" color="textPrimary">
@@ -77,7 +76,7 @@ export const Layout = ({
             <Column spacing={12} alignY="stretch">
                 <Content
                     footer={
-                        <SafetyChecks
+                        <ConnectionSafetyChecksFooter
                             safetyChecksLoadable={safetyChecksLoadable}
                             onMsg={onMsg}
                         />

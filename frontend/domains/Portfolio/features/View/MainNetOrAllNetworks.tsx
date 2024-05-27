@@ -3,9 +3,7 @@ import React, { useState } from 'react'
 import { Column } from '@zeal/uikit/Column'
 
 import { MsgOf } from '@zeal/toolkit/MsgOf'
-import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
-import { useIsFeatureEnabled } from '@zeal/domains/ABTest'
 import { Account, AccountsMap } from '@zeal/domains/Account'
 import { Address } from '@zeal/domains/Address'
 import { Widget as AppWidget } from '@zeal/domains/App/components/Widget'
@@ -19,7 +17,7 @@ import {
     SubmitedBridgesMap,
 } from '@zeal/domains/Currency/domains/Bridge'
 import { BridgeWidget } from '@zeal/domains/Currency/features/BridgeWidget'
-import { KeyStore, KeyStoreMap } from '@zeal/domains/KeyStore'
+import { KeyStoreMap } from '@zeal/domains/KeyStore'
 import {
     CurrentNetwork,
     NetworkMap,
@@ -32,8 +30,6 @@ import { Widget as TokenWidget } from '@zeal/domains/Token/components/Widget'
 import { Submited } from '@zeal/domains/TransactionRequest'
 import { List as TransactionRequestList } from '@zeal/domains/TransactionRequest/features/List'
 
-import { LastRefreshed } from './LastRefreshed'
-import { NextBestActionWidget } from './NextBestActionWidget'
 import { QuickActionsWidget } from './QuickActionsWidget'
 
 export type Msg =
@@ -45,7 +41,6 @@ export type Msg =
     | MsgOf<typeof TokenWidget>
     | MsgOf<typeof TransactionRequestList>
     | MsgOf<typeof WithdrawalMonitorWidget>
-    | MsgOf<typeof NextBestActionWidget>
     | Extract<
           MsgOf<typeof QuickActionsWidget>,
           {
@@ -57,11 +52,9 @@ export type Msg =
                   | 'on_bridge_clicked'
           }
       >
-    | { type: 'on_recovery_kit_setup'; address: Address }
     | { type: 'reload_button_click' }
 
 type Props = {
-    keystore: KeyStore
     account: Account
     portfolio: Portfolio
     accountsMap: AccountsMap
@@ -76,7 +69,6 @@ type Props = {
     bankTransferInfo: BankTransferInfo
     currencyHiddenMap: CurrencyHiddenMap
     currencyPinMap: CurrencyPinMap
-    userMadeActionOnNextBestActionIds: string[]
     installationId: string
     onMsg: (msg: Msg) => void
 }
@@ -89,7 +81,6 @@ export const MainNetOrAllNetworks = ({
     onMsg,
     accountsMap,
     keyStoreMap,
-    keystore,
     portfolio,
     fetchedAt,
     networkMap,
@@ -98,7 +89,6 @@ export const MainNetOrAllNetworks = ({
     bankTransferInfo,
     currencyHiddenMap,
     currencyPinMap,
-    userMadeActionOnNextBestActionIds,
     installationId,
 }: Props) => {
     const [cachedTransactionRequests] = useState<Submited[]>(
@@ -111,8 +101,6 @@ export const MainNetOrAllNetworks = ({
         SubmittedOfframpTransaction[]
     >(submittedOffRampTransactions)
 
-    const isNbaEnabled = useIsFeatureEnabled(installationId, 'nbas')
-
     return (
         <Column spacing={8}>
             <QuickActionsWidget
@@ -120,22 +108,7 @@ export const MainNetOrAllNetworks = ({
                 address={account.address}
                 installationId={installationId}
             />
-            {isNbaEnabled &&
-                ZealPlatform.OS === 'web' &&
-                bridges.length === 0 &&
-                cachedTransactionRequests.length === 0 &&
-                pendingOfframpTransactions.length === 0 && (
-                    <NextBestActionWidget
-                        installationId={installationId}
-                        account={account}
-                        userMadeActionOnNextBestActionIds={
-                            userMadeActionOnNextBestActionIds
-                        }
-                        onMsg={onMsg}
-                        keystore={keystore}
-                    />
-                )}
-            <Column spacing={16}>
+            <Column spacing={8}>
                 {bridges.length > 0 && (
                     <Column spacing={12}>
                         {bridges.map((bridge) => (
@@ -199,17 +172,13 @@ export const MainNetOrAllNetworks = ({
                     networkMap={networkMap}
                     apps={portfolio.apps}
                     currencies={portfolio.currencies}
+                    installationId={installationId}
                     onMsg={onMsg}
                 />
                 <NFTWidget
                     nftCollections={portfolio.nftCollections}
                     currencies={portfolio.currencies}
                     onMsg={onMsg}
-                />
-
-                <LastRefreshed
-                    fetchedAt={fetchedAt}
-                    onClick={() => onMsg({ type: 'reload_button_click' })}
                 />
             </Column>
         </Column>

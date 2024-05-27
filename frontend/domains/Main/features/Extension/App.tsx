@@ -19,13 +19,16 @@ import { addAccountsWithKeystores } from '@zeal/domains/Storage/helpers/addAccou
 import { changeAccountLabel } from '@zeal/domains/Storage/helpers/changeAccountLabel'
 import { lock, logout } from '@zeal/domains/Storage/helpers/logout'
 import { removeAccount } from '@zeal/domains/Storage/helpers/removeAccount'
+import { saveFeePreset } from '@zeal/domains/Storage/helpers/saveFeePreset'
+import { saveGasCurrencyPreset } from '@zeal/domains/Storage/helpers/saveGasCurrencyPreset'
 import { saveSessionPassword } from '@zeal/domains/Storage/helpers/saveSessionPassword'
 import { toLocalStorage } from '@zeal/domains/Storage/helpers/toLocalStorage'
+import { cancelSubmittedToSubmitted } from '@zeal/domains/TransactionRequest/helpers/cancelSubmittedToSubmitted'
 import { removeTransactionRequest } from '@zeal/domains/TransactionRequest/helpers/removeTransactionRequest'
 import { keystoreToUserEventType } from '@zeal/domains/UserEvents'
 import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
 
-import { PortfolioLoader } from './PortfolioLoader'
+import { AreaFiftyOne } from './AreaFiftyOne'
 
 type Props = {
     mode: Mode
@@ -40,26 +43,28 @@ type Props = {
 type Msg =
     | { type: 'on_get_started_clicked' }
     | Extract<
-          MsgOf<typeof PortfolioLoader>,
+          MsgOf<typeof AreaFiftyOne>,
           {
               type:
-                  | 'track_wallet_clicked'
-                  | 'hardware_wallet_clicked'
                   | 'add_wallet_clicked'
+                  | 'from_any_wallet_click'
+                  | 'hardware_wallet_clicked'
+                  | 'import_keys_button_clicked'
+                  | 'on_add_private_key_click'
+                  | 'on_bank_clicked'
+                  | 'on_bank_transfer_selected'
+                  | 'on_bridge_clicked'
+                  | 'on_kyc_try_again_clicked'
+                  | 'on_nba_cta_click'
+                  | 'on_open_fullscreen_view_click'
                   | 'on_recovery_kit_setup'
+                  | 'on_send_clicked'
                   | 'on_send_nft_click'
                   | 'on_swap_clicked'
-                  | 'on_bridge_clicked'
-                  | 'on_send_clicked'
-                  | 'safe_wallet_clicked'
-                  | 'on_bank_transfer_selected'
-                  | 'on_kyc_try_again_clicked'
-                  | 'on_add_private_key_click'
-                  | 'on_open_fullscreen_view_click'
-                  | 'from_any_wallet_click'
-                  | 'on_nba_cta_click'
                   | 'on_zwidget_expand_request'
-                  | 'on_bank_clicked'
+                  | 'safe_wallet_clicked'
+                  | 'track_wallet_clicked'
+                  | 'card_tab_choose_wallet_on_import_new_wallet_clicked'
           }
       >
 
@@ -148,9 +153,11 @@ export const App = ({
                 />
             )
         case 'app':
+            // ???? -> PortfolioLoader
             return (
-                <PortfolioLoader
+                <AreaFiftyOne
                     mode={mode}
+                    cardConfig={state.storage.cardConfig}
                     currencyHiddenMap={state.storage.currencyHiddenMap}
                     currencyPinMap={state.storage.currencyPinMap}
                     networkMap={networkMap}
@@ -579,20 +586,6 @@ export const App = ({
                                 })
                                 break
 
-                            case 'on_nba_close_click': {
-                                await toLocalStorage({
-                                    ...state.storage,
-                                    userMadeActionOnNextBestActionIds: [
-                                        ...new Set([
-                                            ...state.storage
-                                                .userMadeActionOnNextBestActionIds,
-                                            msg.slide.id,
-                                        ]),
-                                    ],
-                                })
-                                break
-                            }
-                            case 'on_nba_cta_click':
                             case 'on_add_private_key_click':
                             case 'track_wallet_clicked':
                             case 'hardware_wallet_clicked':
@@ -609,7 +602,86 @@ export const App = ({
                             case 'from_any_wallet_click':
                             case 'on_zwidget_expand_request':
                             case 'on_bank_clicked':
+                            case 'import_keys_button_clicked':
+                            case 'card_tab_choose_wallet_on_import_new_wallet_clicked':
                                 onMsg(msg)
+                                break
+
+                            case 'transaction_failure_accepted': {
+                                const storage = state.storage
+                                const address =
+                                    msg.transactionRequest.account.address
+
+                                await toLocalStorage({
+                                    ...storage,
+                                    transactionRequests: {
+                                        [address]: removeTransactionRequest(
+                                            storage.transactionRequests[
+                                                address
+                                            ],
+                                            msg.transactionRequest
+                                        ),
+                                    },
+                                })
+                                break
+                            }
+
+                            case 'transaction_cancel_failure_accepted': {
+                                const { transactionRequest } = msg
+                                const { account } = transactionRequest
+                                await toLocalStorage({
+                                    ...state.storage,
+                                    transactionRequests: {
+                                        [account.address]:
+                                            removeTransactionRequest(
+                                                state.storage
+                                                    .transactionRequests[
+                                                    account.address
+                                                ],
+                                                cancelSubmittedToSubmitted(
+                                                    msg.transactionRequest
+                                                )
+                                            ),
+                                    },
+                                })
+                                break
+                            }
+
+                            case 'on_safe_4337_transaction_completed_splash_animation_screen_competed':
+                                // We don't change storage for safe transaction completeion because we don't store transaction requests for safe transactions
+                                break
+
+                            case 'on_predefined_fee_preset_selected':
+                                await toLocalStorage(
+                                    saveFeePreset({
+                                        storage: state.storage,
+                                        feePreset: msg.preset,
+                                        networkHexId: msg.networkHexId,
+                                    })
+                                )
+                                break
+
+                            case 'on_4337_gas_currency_selected':
+                                await toLocalStorage(
+                                    saveGasCurrencyPreset({
+                                        storage: state.storage,
+                                        currencyId: msg.selectedGasCurrency.id,
+                                        networkHexId: msg.network.hexChainId,
+                                    })
+                                )
+                                break
+
+                            case 'on_card_owner_address_selected':
+                            case 'on_card_onboarded_account_state_received':
+                            case 'on_card_imported_success_animation_complete':
+                            case 'on_order_new_card_gnosis_pay_click':
+                                await toLocalStorage({
+                                    ...state.storage,
+                                    cardConfig: {
+                                        type: 'card_owner_address_is_selected',
+                                        owner: msg.address,
+                                    },
+                                })
                                 break
 
                             /* istanbul ignore next */

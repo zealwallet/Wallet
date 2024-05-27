@@ -76,7 +76,7 @@ test(`As a user I should be able to generate new account, so I can user Zeal eve
         await screen.findByText('Create, Connect or Import Wallet')
     )
 
-    await userEvent.click(await screen.findByText('Create wallet'))
+    await userEvent.click(await screen.findByText('Seed-phrase wallet'))
 
     expect(await screen.findByText('New wallet created 🎉')).toBeInTheDocument()
 

@@ -62,7 +62,11 @@ export const Layout = ({
 
         case 'maximised':
             return (
-                <Screen background="light" padding="form">
+                <Screen
+                    background="light"
+                    padding="form"
+                    onNavigateBack={() => onMsg({ type: 'on_minimize_click' })}
+                >
                     <ActionBar
                         title={
                             <FormattedMessage

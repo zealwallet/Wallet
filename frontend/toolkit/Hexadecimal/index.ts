@@ -1,3 +1,5 @@
+import { ImperativeError } from '@zeal/domains/Error'
+
 import { failure, Result, success } from '../Result'
 
 export type Hexadecimal = `0x${string}`
@@ -11,6 +13,7 @@ const normalize = (hex: string): string =>
     padToEven(remove0x(hex).toLowerCase())
 
 const HEXADECIMAL_REGEXP = /^(0x)?[0-9a-fA-F]+$/gi
+const HEXADECIMAL_PAIR_REGEXP = /[\da-f]{2}/gi
 
 export type StringValueNotHexadecimal = {
     type: 'string_value_is_not_hexadecimal'
@@ -40,6 +43,15 @@ export const fromBuffer = (buffer: ArrayBuffer): Hexadecimal => {
         .join('')
 
     return `0x${hexes}`
+}
+
+export const toBuffer = (hex: Hexadecimal): ArrayBuffer => {
+    const matches = hex.match(HEXADECIMAL_PAIR_REGEXP)
+
+    if (!matches) {
+        throw new ImperativeError('Invalid hex string', { hex })
+    }
+    return new Uint8Array(matches.map((h) => parseInt(h, 16)))
 }
 
 export const fromBigInt = (value: bigint): Hexadecimal =>

@@ -76,6 +76,7 @@ export const ChooseToken = ({
             background="light"
             padding="form"
             aria-labelledby="choose-tokens-label"
+            onNavigateBack={() => onMsg({ type: 'close' })}
         >
             <UIActionBar
                 top={
@@ -218,6 +219,7 @@ export const ChooseToken = ({
 
                                 return (
                                     <SectionList
+                                        keyboardShouldPersistTaps="handled"
                                         variant="grouped"
                                         itemSpacing={8}
                                         sectionSpacing={8}

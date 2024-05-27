@@ -20,6 +20,7 @@ import { Tag } from '@zeal/uikit/Tag'
 import { Text } from '@zeal/uikit/Text'
 
 import { noop, notReachable } from '@zeal/toolkit'
+import * as Hexadecimal from '@zeal/toolkit/Hexadecimal'
 import { useLoadableData } from '@zeal/toolkit/LoadableData/LoadableData'
 import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
@@ -45,7 +46,11 @@ export const ViewPrivateKey = ({ keyStore, sessionPassword, onMsg }: Props) => {
     })
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -57,7 +62,7 @@ export const ViewPrivateKey = ({ keyStore, sessionPassword, onMsg }: Props) => {
                 }
             />
 
-            <Column spacing={24}>
+            <Column spacing={24} alignX="center">
                 <Header
                     title={
                         <FormattedMessage
@@ -101,9 +106,12 @@ export const ViewPrivateKey = ({ keyStore, sessionPassword, onMsg }: Props) => {
                             )
 
                         case 'loaded': {
-                            const pk = loadable.data.pk.replace(/^0x/gim, '')
+                            const pk = Hexadecimal.remove0x(
+                                loadable.data.privateKey
+                            )
+
                             return (
-                                <>
+                                <Column spacing={24} fill>
                                     <BlurCurtain
                                         unblurElement={
                                             <Tag bg="surfaceDefault">
@@ -159,8 +167,10 @@ export const ViewPrivateKey = ({ keyStore, sessionPassword, onMsg }: Props) => {
                                         />
                                     </BlurCurtain>
 
-                                    <CopyKeyButton pk={pk} />
-                                </>
+                                    <Column spacing={0} alignX="center">
+                                        <CopyKeyButton pk={pk} />
+                                    </Column>
+                                </Column>
                             )
                         }
 

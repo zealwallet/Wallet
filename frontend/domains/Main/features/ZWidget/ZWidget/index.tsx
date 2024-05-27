@@ -1673,11 +1673,13 @@ export const ZWidget = ({
 
                             case 'on_cancel_confirm_transaction_clicked':
                             case 'on_sign_cancel_button_clicked':
-                            case 'transaction_cancel_success':
                             case 'close':
+                            case 'cancel_button_click':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'on_safe_deployemnt_cancelled':
-                            case 'on_wrong_network_accepted':
                             case 'on_close_transaction_status_not_found_modal':
+                            case 'on_pre_sign_safe_deployment_error_popup_cancel_clicked':
+                            case 'on_wrong_network_accepted':
                                 setInteractionRequest(null)
                                 send(
                                     failureResponse(
@@ -1704,25 +1706,9 @@ export const ZWidget = ({
                                 })
                                 // TODO: this is trx close, ref
                                 setInteractionRequest(null)
-                                // TODO :: fix composition to avoid !
-                                send(
-                                    failureResponse(
-                                        interactionRequest!.id,
-                                        userRejectedRequest()
-                                    )
-                                )
                                 break
                             }
 
-                            case 'cancel_button_click':
-                                setInteractionRequest(null)
-                                send(
-                                    failureResponse(
-                                        interactionRequest!.id,
-                                        userRejectedRequest()
-                                    )
-                                )
-                                break
                             case 'message_signed':
                                 setInteractionRequest(null)
                                 send({
@@ -1791,28 +1777,26 @@ export const ZWidget = ({
                             case 'on_completed_transaction_close_click':
                                 setInteractionRequest(null)
                                 break
-                            case 'cancel_submitted': {
-                                const from =
-                                    msg.transactionRequest.account.address
 
-                                const removed = storage.transactionRequests[
-                                    from
-                                ]
-                                    ? removeTransactionRequest(
-                                          storage.transactionRequests[from],
-                                          msg.transactionRequest
-                                      )
-                                    : []
+                            case 'cancel_submitted': {
+                                const address =
+                                    msg.transactionRequest.account.address
 
                                 await toLocalStorage({
                                     ...storage,
                                     transactionRequests: {
                                         ...storage.transactionRequests,
-                                        [from]: removed,
+                                        [address]: removeTransactionRequest(
+                                            storage.transactionRequests[
+                                                address
+                                            ],
+                                            msg.transactionRequest
+                                        ),
                                     },
                                 })
                                 break
                             }
+
                             case 'transaction_submited':
                                 const existingRequests = storage
                                     .transactionRequests[state.address]

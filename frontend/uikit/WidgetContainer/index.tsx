@@ -16,12 +16,14 @@ type Props = {
 const styles = StyleSheet.create({
     container: {
         borderRadius: 20,
+        marginBottom: 8,
     },
     widget: {
         justifyContent: 'center',
         alignItems: 'stretch',
         backgroundColor: colors.backgroundWidget,
-        padding: 16,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
         borderRadius: 20,
     },
     widget_hover: {

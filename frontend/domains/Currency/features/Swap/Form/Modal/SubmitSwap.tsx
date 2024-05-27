@@ -49,7 +49,7 @@ export type Msg =
                   | 'on_sign_cancel_button_clicked'
                   | 'transaction_submited'
                   | 'cancel_submitted'
-                  | 'transaction_cancel_success'
+                  | 'on_transaction_cancelled_successfully_close_clicked'
                   | 'transaction_cancel_failure_accepted'
                   | 'on_predefined_fee_preset_selected'
                   | 'on_transaction_completed_splash_animation_screen_competed'
@@ -134,7 +134,7 @@ export const SubmitSwap = ({
                             case 'on_wrong_network_accepted':
                             case 'transaction_failure_accepted':
                             case 'on_sign_cancel_button_clicked':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'transaction_cancel_failure_accepted':
                             case 'transaction_submited':
                             case 'cancel_submitted':
@@ -204,7 +204,7 @@ export const SubmitSwap = ({
                             case 'on_wrong_network_accepted':
                             case 'transaction_failure_accepted':
                             case 'on_sign_cancel_button_clicked':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'transaction_cancel_failure_accepted':
                             case 'transaction_submited':
                             case 'cancel_submitted':

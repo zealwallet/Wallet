@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { KeyboardAvoidingView } from 'react-native'
+import { TextInput } from 'react-native'
 
 import { Actions } from '@zeal/uikit/Actions'
 import { Button } from '@zeal/uikit/Button'
@@ -13,10 +13,13 @@ import { IconButton } from '@zeal/uikit/IconButton'
 import { Input } from '@zeal/uikit/Input'
 import { InputButton } from '@zeal/uikit/InputButton'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
+import { Spacer } from '@zeal/uikit/Spacer'
 import { Text } from '@zeal/uikit/Text'
 import { TextButton } from '@zeal/uikit/TextButton'
 
 import { notReachable } from '@zeal/toolkit'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 import { openExternalURL } from '@zeal/toolkit/Window'
 
 import { Account } from '@zeal/domains/Account'
@@ -64,6 +67,9 @@ export const CreateUserForm = ({
         countryCode: null,
     })
 
+    const lastNameInput = useRef<TextInput>(null)
+    const emailInput = useRef<TextInput>(null)
+
     const [modalState, setModalState] = useState<ModalState>({ type: 'closed' })
 
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
@@ -92,29 +98,28 @@ export const CreateUserForm = ({
     }
     return (
         <>
-            <Screen background="light" padding="form">
-                {/*FIXME @fred check how we can deal with nested absolute position modals and avoid KeyboardAvoidingView in domains*/}
-                <KeyboardAvoidingView
-                    style={{ flexGrow: 1 }}
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    behavior="position"
-                >
-                    <ActionBar
-                        account={account}
-                        keystore={keystore}
-                        network={network}
-                        left={
-                            <IconButton
-                                variant="on_light"
-                                onClick={() => onMsg({ type: 'close' })}
-                            >
-                                {({ color }) => (
-                                    <BackIcon size={24} color={color} />
-                                )}
-                            </IconButton>
-                        }
-                    />
+            <Screen
+                background="light"
+                padding="form"
+                onNavigateBack={() => onMsg({ type: 'close' })}
+            >
+                <ActionBar
+                    account={account}
+                    keystore={keystore}
+                    network={network}
+                    left={
+                        <IconButton
+                            variant="on_light"
+                            onClick={() => onMsg({ type: 'close' })}
+                        >
+                            {({ color }) => (
+                                <BackIcon size={24} color={color} />
+                            )}
+                        </IconButton>
+                    }
+                />
 
+                <Column spacing={8} fill>
                     <Column spacing={24} fill>
                         <Header
                             title={
@@ -131,209 +136,274 @@ export const CreateUserForm = ({
                             }
                         />
 
-                        <Column spacing={8} fill>
-                            <Column spacing={8}>
-                                <Text
-                                    variant="paragraph"
-                                    weight="regular"
-                                    color="textSecondary"
-                                >
-                                    <FormattedMessage
-                                        id="currency.bank_transfer.create_unblock_user.first_name"
-                                        defaultMessage="Beneficiary first name"
-                                    />
-                                </Text>
-
-                                <Input
-                                    keyboardType="default"
-                                    onSubmitEditing={onSubmit}
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            firstName: e.nativeEvent.text,
-                                        })
-                                    }
-                                    state={error.firstName ? 'error' : 'normal'}
-                                    placeholder="Vitalik"
-                                    variant="regular"
-                                    value={form.firstName}
-                                    message={
-                                        error.firstName && (
-                                            <FirstNameErrorMessage
-                                                error={error.firstName}
-                                            />
-                                        )
-                                    }
-                                />
-                            </Column>
-
-                            <Column spacing={8}>
-                                <Text
-                                    variant="paragraph"
-                                    weight="regular"
-                                    color="textSecondary"
-                                >
-                                    <FormattedMessage
-                                        id="currency.bank_transfer.create_unblock_user.last_name"
-                                        defaultMessage="Beneficiary last name"
-                                    />
-                                </Text>
-
-                                <Input
-                                    keyboardType="default"
-                                    onSubmitEditing={onSubmit}
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            lastName: e.nativeEvent.text,
-                                        })
-                                    }
-                                    state={error.lastName ? 'error' : 'normal'}
-                                    placeholder="Buterin"
-                                    variant="regular"
-                                    value={form.lastName}
-                                    message={
-                                        error.lastName && (
-                                            <LastNameErrorMessage
-                                                error={error.lastName}
-                                            />
-                                        )
-                                    }
-                                />
-                            </Column>
-
-                            <Column spacing={8}>
-                                <Text
-                                    variant="paragraph"
-                                    weight="regular"
-                                    color="textSecondary"
-                                >
-                                    <FormattedMessage
-                                        id="currency.bank_transfer.create_unblock_user.email"
-                                        defaultMessage="Email address"
-                                    />
-                                </Text>
-
-                                <Input
-                                    keyboardType="email-address"
-                                    onSubmitEditing={onSubmit}
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            email: e.nativeEvent.text,
-                                        })
-                                    }
-                                    state={error.email ? 'error' : 'normal'}
-                                    message={
-                                        error.email && (
-                                            <EmailErrorMessage
-                                                error={error.email}
-                                            />
-                                        )
-                                    }
-                                    placeholder="@email.com"
-                                    variant="regular"
-                                    value={form.email}
-                                />
-                            </Column>
-
-                            <Column spacing={8}>
-                                <Text
-                                    variant="paragraph"
-                                    weight="regular"
-                                    color="textSecondary"
-                                >
-                                    <FormattedMessage
-                                        id="currency.bank_transfer.create_unblock_withdraw_account.bank_country"
-                                        defaultMessage="Bank country"
-                                    />
-                                </Text>
-
-                                <InputButton
-                                    leftIcon={
-                                        form.countryCode ? (
-                                            <CurrencyIcon
-                                                countryCode={form.countryCode}
-                                                size={28}
-                                            />
-                                        ) : (
-                                            <QuestionCircle
-                                                size={28}
-                                                color="iconDefault"
-                                            />
-                                        )
-                                    }
-                                    rightIcon={
-                                        <ArrowDown
-                                            color="iconDisabled"
-                                            size={24}
+                        <ScrollContainer contentFill>
+                            <Column spacing={8} fill>
+                                <Column spacing={8}>
+                                    <Text
+                                        variant="paragraph"
+                                        weight="regular"
+                                        color="textSecondary"
+                                    >
+                                        <FormattedMessage
+                                            id="currency.bank_transfer.create_unblock_user.first_name"
+                                            defaultMessage="Beneficiary first name"
                                         />
-                                    }
-                                    onClick={() => {
-                                        setModalState({
-                                            type: 'select_country',
-                                        })
-                                    }}
+                                    </Text>
+
+                                    <Input
+                                        keyboardType="default"
+                                        autoComplete="name"
+                                        returnKeyType="next"
+                                        onSubmitEditing={() => {
+                                            switch (ZealPlatform.OS) {
+                                                case 'ios':
+                                                case 'android':
+                                                    lastNameInput.current?.focus()
+                                                    break
+                                                case 'web':
+                                                    onSubmit()
+                                                    break
+                                                /* istanbul ignore next */
+                                                default:
+                                                    return notReachable(
+                                                        ZealPlatform.OS
+                                                    )
+                                            }
+                                        }}
+                                        blurOnSubmit={false} // prevent keyboard flashing when pressing "next"
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                firstName: e.nativeEvent.text,
+                                            })
+                                        }
+                                        state={
+                                            error.firstName ? 'error' : 'normal'
+                                        }
+                                        placeholder="Vitalik"
+                                        variant="regular"
+                                        value={form.firstName}
+                                        message={
+                                            error.firstName && (
+                                                <FirstNameErrorMessage
+                                                    error={error.firstName}
+                                                />
+                                            )
+                                        }
+                                    />
+                                </Column>
+
+                                <Column spacing={8}>
+                                    <Text
+                                        variant="paragraph"
+                                        weight="regular"
+                                        color="textSecondary"
+                                    >
+                                        <FormattedMessage
+                                            id="currency.bank_transfer.create_unblock_user.last_name"
+                                            defaultMessage="Beneficiary last name"
+                                        />
+                                    </Text>
+
+                                    <Input
+                                        ref={lastNameInput}
+                                        keyboardType="default"
+                                        autoComplete="name"
+                                        returnKeyType="next"
+                                        blurOnSubmit={false} // prevent keyboard flashing when pressing "next"
+                                        onSubmitEditing={() => {
+                                            switch (ZealPlatform.OS) {
+                                                case 'ios':
+                                                case 'android':
+                                                    emailInput.current?.focus()
+                                                    break
+                                                case 'web':
+                                                    onSubmit()
+                                                    break
+                                                /* istanbul ignore next */
+                                                default:
+                                                    return notReachable(
+                                                        ZealPlatform.OS
+                                                    )
+                                            }
+                                        }}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                lastName: e.nativeEvent.text,
+                                            })
+                                        }
+                                        state={
+                                            error.lastName ? 'error' : 'normal'
+                                        }
+                                        placeholder="Buterin"
+                                        variant="regular"
+                                        value={form.lastName}
+                                        message={
+                                            error.lastName && (
+                                                <LastNameErrorMessage
+                                                    error={error.lastName}
+                                                />
+                                            )
+                                        }
+                                    />
+                                </Column>
+
+                                <Column spacing={8}>
+                                    <Text
+                                        variant="paragraph"
+                                        weight="regular"
+                                        color="textSecondary"
+                                    >
+                                        <FormattedMessage
+                                            id="currency.bank_transfer.create_unblock_user.email"
+                                            defaultMessage="Email address"
+                                        />
+                                    </Text>
+
+                                    <Input
+                                        ref={emailInput}
+                                        keyboardType="email-address"
+                                        autoComplete="email"
+                                        autoCapitalize="none"
+                                        returnKeyType="next"
+                                        onSubmitEditing={() => {
+                                            switch (ZealPlatform.OS) {
+                                                case 'ios':
+                                                case 'android':
+                                                    setModalState({
+                                                        type: 'select_country',
+                                                    })
+                                                    break
+                                                case 'web':
+                                                    onSubmit()
+                                                    break
+                                                /* istanbul ignore next */
+                                                default:
+                                                    return notReachable(
+                                                        ZealPlatform.OS
+                                                    )
+                                            }
+                                        }}
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                email: e.nativeEvent.text,
+                                            })
+                                        }
+                                        state={error.email ? 'error' : 'normal'}
+                                        message={
+                                            error.email && (
+                                                <EmailErrorMessage
+                                                    error={error.email}
+                                                />
+                                            )
+                                        }
+                                        placeholder="@email.com"
+                                        variant="regular"
+                                        value={form.email}
+                                    />
+                                </Column>
+
+                                <Column spacing={8}>
+                                    <Text
+                                        variant="paragraph"
+                                        weight="regular"
+                                        color="textSecondary"
+                                    >
+                                        <FormattedMessage
+                                            id="currency.bank_transfer.create_unblock_withdraw_account.bank_country"
+                                            defaultMessage="Bank country"
+                                        />
+                                    </Text>
+
+                                    <InputButton
+                                        leftIcon={
+                                            form.countryCode ? (
+                                                <CurrencyIcon
+                                                    countryCode={
+                                                        form.countryCode
+                                                    }
+                                                    size={28}
+                                                />
+                                            ) : (
+                                                <QuestionCircle
+                                                    size={28}
+                                                    color="iconDefault"
+                                                />
+                                            )
+                                        }
+                                        rightIcon={
+                                            <ArrowDown
+                                                color="iconDisabled"
+                                                size={24}
+                                            />
+                                        }
+                                        onClick={() => {
+                                            setModalState({
+                                                type: 'select_country',
+                                            })
+                                        }}
+                                    >
+                                        {form.countryCode
+                                            ? COUNTRIES_MAP[form.countryCode]
+                                                  .name
+                                            : 'Country'}
+                                    </InputButton>
+                                </Column>
+                                <Spacer />
+                                <Text
+                                    variant="footnote"
+                                    weight="regular"
+                                    color="textSecondary"
                                 >
-                                    {form.countryCode
-                                        ? COUNTRIES_MAP[form.countryCode].name
-                                        : 'Country'}
-                                </InputButton>
+                                    <FormattedMessage
+                                        id="currency.bank_transfer.create_unblock_user.note"
+                                        defaultMessage="By continuing you accept Unblock’s (our banking partner) <terms>Terms</terms> and <policy>Privacy Policy</policy>"
+                                        values={{
+                                            terms: (msg) => (
+                                                <TextButton
+                                                    onClick={() => {
+                                                        openExternalURL(
+                                                            'https://www.getunblock.com/policies/policies'
+                                                        )
+                                                    }}
+                                                >
+                                                    {msg}
+                                                </TextButton>
+                                            ),
+                                            policy: (msg) => (
+                                                <TextButton
+                                                    onClick={() => {
+                                                        openExternalURL(
+                                                            'https://www.getunblock.com/policies/privacy-policy'
+                                                        )
+                                                    }}
+                                                >
+                                                    {msg}
+                                                </TextButton>
+                                            ),
+                                        }}
+                                    />
+                                </Text>
                             </Column>
-                        </Column>
+                        </ScrollContainer>
                     </Column>
 
-                    <Column spacing={24}>
-                        <Text
-                            variant="footnote"
-                            weight="regular"
-                            color="textSecondary"
+                    <Actions>
+                        <Button
+                            size="regular"
+                            variant="primary"
+                            disabled={!!error.submit}
+                            onClick={onSubmit}
                         >
                             <FormattedMessage
-                                id="currency.bank_transfer.create_unblock_user.note"
-                                defaultMessage="By continuing you accept Unblock’s (our banking partner) <terms>Terms</terms> and <policy>Privacy Policy</policy>"
-                                values={{
-                                    terms: (msg) => (
-                                        <TextButton
-                                            onClick={() => {
-                                                openExternalURL(
-                                                    'https://www.getunblock.com/policies/policies'
-                                                )
-                                            }}
-                                        >
-                                            {msg}
-                                        </TextButton>
-                                    ),
-                                    policy: (msg) => (
-                                        <TextButton
-                                            onClick={() => {
-                                                openExternalURL(
-                                                    'https://www.getunblock.com/policies/privacy-policy'
-                                                )
-                                            }}
-                                        >
-                                            {msg}
-                                        </TextButton>
-                                    ),
-                                }}
+                                id="action.continue"
+                                defaultMessage="Continue"
                             />
-                        </Text>
-
-                        <Actions>
-                            <Button
-                                size="regular"
-                                variant="primary"
-                                disabled={!!error.submit}
-                                onClick={onSubmit}
-                            >
-                                <FormattedMessage
-                                    id="action.continue"
-                                    defaultMessage="Continue"
-                                />
-                            </Button>
-                        </Actions>
-                    </Column>
-                </KeyboardAvoidingView>
+                        </Button>
+                    </Actions>
+                </Column>
             </Screen>
 
             <Modal

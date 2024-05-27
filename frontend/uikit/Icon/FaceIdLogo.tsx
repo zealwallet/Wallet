@@ -1,5 +1,7 @@
 import React from 'react'
-import { ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const FaceIdLogo = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 16 16"
             width={size}
             height={size}
@@ -28,6 +29,6 @@ export const FaceIdLogo = ({ size, color }: Props) => {
                     <Rect width="16" height="16" rx="2" fill="white" />
                 </ClipPath>
             </Defs>
-        </Svg>
+        </SvgIcon>
     )
 }

@@ -16,6 +16,7 @@ import { AmountInput } from '@zeal/uikit/Input/AmountInput'
 import { NextStepSeparator } from '@zeal/uikit/NextStepSeparator'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Spacer } from '@zeal/uikit/Spacer'
 import { Tertiary } from '@zeal/uikit/Tertiary'
 import { Text } from '@zeal/uikit/Text'
@@ -123,7 +124,11 @@ export const Layout = ({ pollable, networkMap, onMsg }: Props) => {
     )
 
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <Column spacing={0} fill>
                 <ActionBar
                     top={
@@ -146,250 +151,268 @@ export const Layout = ({ pollable, networkMap, onMsg }: Props) => {
                     }
                 />
 
-                <Column spacing={12} fill>
-                    <Column spacing={4}>
-                        <AmountInput
-                            top={networkSelector}
-                            content={{
-                                topLeft: (
-                                    <IconButton
-                                        variant="on_light"
-                                        onClick={() => {
-                                            onMsg({
-                                                type: 'on_from_currency_click',
-                                            })
-                                        }}
-                                    >
-                                        {({ color }) => (
-                                            <Row spacing={4}>
-                                                <CurrencyAvatar
-                                                    key={fromCurrency.id}
-                                                    rightBadge={() => null}
-                                                    currency={fromCurrency}
-                                                    size={24}
-                                                />
-                                                <Text
-                                                    variant="title3"
-                                                    color="textPrimary"
-                                                    weight="medium"
-                                                >
-                                                    {fromCurrency.code}
-                                                </Text>
+                <Column spacing={12} fill alignY="stretch">
+                    <ScrollContainer contentFill>
+                        <Column spacing={4} fill>
+                            <AmountInput
+                                top={networkSelector}
+                                content={{
+                                    topLeft: (
+                                        <IconButton
+                                            variant="on_light"
+                                            onClick={() => {
+                                                onMsg({
+                                                    type: 'on_from_currency_click',
+                                                })
+                                            }}
+                                        >
+                                            {({ color }) => (
+                                                <Row spacing={4}>
+                                                    <CurrencyAvatar
+                                                        key={fromCurrency.id}
+                                                        rightBadge={() => null}
+                                                        currency={fromCurrency}
+                                                        size={24}
+                                                    />
+                                                    <Text
+                                                        variant="title3"
+                                                        color="textPrimary"
+                                                        weight="medium"
+                                                    >
+                                                        {fromCurrency.code}
+                                                    </Text>
 
-                                                <LightArrowDown2
-                                                    size={18}
-                                                    color={color}
-                                                />
-                                            </Row>
-                                        )}
-                                    </IconButton>
-                                ),
-                                topRight: ({ onBlur, onFocus }) => (
-                                    <AmountInput.Input
-                                        onBlur={onBlur}
-                                        onFocus={onFocus}
-                                        onChange={(value) =>
-                                            onMsg({
-                                                type: 'on_amount_change',
-                                                amount: value,
-                                            })
-                                        }
-                                        label={formatMessage({
-                                            id: 'currency.swap.amount_to_swap',
-                                            defaultMessage: 'Amount to swap',
-                                        })}
-                                        prefix=""
-                                        fraction={fromCurrency.fraction}
-                                        autoFocus
-                                        amount={pollable.params.amount || null}
-                                        onSubmitEditing={noop}
-                                    />
-                                ),
-                                bottomRight: fromAmountInDefaultCurrency && (
-                                    <Text
-                                        variant="footnote"
-                                        color="textSecondary"
-                                        weight="regular"
-                                    >
-                                        <FormattedTokenBalanceInDefaultCurrency
-                                            knownCurrencies={
-                                                pollable.data.knownCurrencies
+                                                    <LightArrowDown2
+                                                        size={18}
+                                                        color={color}
+                                                    />
+                                                </Row>
+                                            )}
+                                        </IconButton>
+                                    ),
+                                    topRight: ({ onBlur, onFocus }) => (
+                                        <AmountInput.Input
+                                            onBlur={onBlur}
+                                            onFocus={onFocus}
+                                            onChange={(value) =>
+                                                onMsg({
+                                                    type: 'on_amount_change',
+                                                    amount: value,
+                                                })
                                             }
-                                            money={fromAmountInDefaultCurrency}
+                                            label={formatMessage({
+                                                id: 'currency.swap.amount_to_swap',
+                                                defaultMessage:
+                                                    'Amount to swap',
+                                            })}
+                                            prefix=""
+                                            fraction={fromCurrency.fraction}
+                                            autoFocus
+                                            amount={
+                                                pollable.params.amount || null
+                                            }
+                                            onSubmitEditing={noop}
                                         />
-                                    </Text>
-                                ),
-                                bottomLeft: fromToken && (
-                                    <Tertiary
-                                        color={
-                                            errors.fromToken?.type ===
-                                            'not_enough_balance'
-                                                ? 'critical'
-                                                : 'on_light'
-                                        }
-                                        size="regular"
-                                        onClick={() => {
-                                            onMsg({
-                                                type: 'on_amount_change',
-                                                amount: Big(
-                                                    fromToken.balance.amount.toString(
-                                                        10
-                                                    )
-                                                )
-                                                    .div(
-                                                        Big(10).pow(
-                                                            fromCurrency.fraction
-                                                        )
-                                                    )
-                                                    .toFixed(
-                                                        fromCurrency.fraction
-                                                    ),
-                                            })
-                                        }}
-                                    >
-                                        {({
-                                            color,
-                                            textVariant,
-                                            textWeight,
-                                        }) => (
+                                    ),
+                                    bottomRight:
+                                        fromAmountInDefaultCurrency && (
                                             <Text
-                                                color={color}
-                                                variant={textVariant}
-                                                weight={textWeight}
+                                                variant="footnote"
+                                                color="textSecondary"
+                                                weight="regular"
                                             >
-                                                <FormattedMessage
-                                                    id="currency.swap.max_label"
-                                                    defaultMessage="Balance {amount}"
-                                                    values={{
-                                                        amount: (
-                                                            <FormattedTokenBalances
-                                                                money={
-                                                                    fromToken.balance
-                                                                }
-                                                                knownCurrencies={
-                                                                    pollable
-                                                                        .data
-                                                                        .knownCurrencies
-                                                                }
-                                                            />
-                                                        ),
-                                                    }}
+                                                <FormattedTokenBalanceInDefaultCurrency
+                                                    knownCurrencies={
+                                                        pollable.data
+                                                            .knownCurrencies
+                                                    }
+                                                    money={
+                                                        fromAmountInDefaultCurrency
+                                                    }
                                                 />
                                             </Text>
-                                        )}
-                                    </Tertiary>
-                                ),
-                            }}
-                            state={errors.fromToken ? 'error' : 'normal'}
-                        />
+                                        ),
+                                    bottomLeft: fromToken && (
+                                        <Tertiary
+                                            color={
+                                                errors.fromToken?.type ===
+                                                'not_enough_balance'
+                                                    ? 'critical'
+                                                    : 'on_light'
+                                            }
+                                            size="regular"
+                                            onClick={() => {
+                                                onMsg({
+                                                    type: 'on_amount_change',
+                                                    amount: Big(
+                                                        fromToken.balance.amount.toString(
+                                                            10
+                                                        )
+                                                    )
+                                                        .div(
+                                                            Big(10).pow(
+                                                                fromCurrency.fraction
+                                                            )
+                                                        )
+                                                        .toFixed(
+                                                            fromCurrency.fraction
+                                                        ),
+                                                })
+                                            }}
+                                        >
+                                            {({
+                                                color,
+                                                textVariant,
+                                                textWeight,
+                                            }) => (
+                                                <Text
+                                                    color={color}
+                                                    variant={textVariant}
+                                                    weight={textWeight}
+                                                >
+                                                    <FormattedMessage
+                                                        id="currency.swap.max_label"
+                                                        defaultMessage="Balance {amount}"
+                                                        values={{
+                                                            amount: (
+                                                                <FormattedTokenBalances
+                                                                    money={
+                                                                        fromToken.balance
+                                                                    }
+                                                                    knownCurrencies={
+                                                                        pollable
+                                                                            .data
+                                                                            .knownCurrencies
+                                                                    }
+                                                                />
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Text>
+                                            )}
+                                        </Tertiary>
+                                    ),
+                                }}
+                                state={errors.fromToken ? 'error' : 'normal'}
+                            />
 
-                        <NextStepSeparator />
+                            <NextStepSeparator />
 
-                        <AmountInput
-                            top={networkSelector}
-                            content={{
-                                topRight: ({ onBlur, onFocus }) => (
-                                    <AmountInput.Input
-                                        onBlur={onBlur}
-                                        onFocus={onFocus}
-                                        label={formatMessage({
-                                            id: 'currency.swap.destination_amount',
-                                            defaultMessage:
-                                                'Destination amount',
-                                        })}
-                                        prefix=""
-                                        readOnly
-                                        onChange={noop}
-                                        amount={toAmount}
-                                        fraction={toCurrency?.fraction ?? 0}
-                                        onSubmitEditing={noop}
-                                    />
-                                ),
-                                topLeft: (
-                                    <IconButton
-                                        variant="on_light"
-                                        onClick={() => {
-                                            onMsg({
-                                                type: 'on_to_currency_click',
-                                            })
-                                        }}
-                                    >
-                                        {({ color }) => (
-                                            <Row spacing={4}>
-                                                {toCurrency ? (
-                                                    <>
-                                                        <CurrencyAvatar
-                                                            key={toCurrency.id}
-                                                            currency={
-                                                                toCurrency
-                                                            }
-                                                            size={24}
-                                                            rightBadge={() =>
-                                                                null
-                                                            }
-                                                        />
-                                                        <Text
-                                                            variant="title3"
-                                                            color="textPrimary"
-                                                            weight="medium"
-                                                        >
-                                                            {toCurrency.code}
-                                                        </Text>
-                                                        <LightArrowDown2
-                                                            size={18}
-                                                            color={color}
-                                                        />
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Avatar size={24}>
-                                                            <QuestionCircle
+                            <AmountInput
+                                top={networkSelector}
+                                content={{
+                                    topRight: ({ onBlur, onFocus }) => (
+                                        <AmountInput.Input
+                                            onBlur={onBlur}
+                                            onFocus={onFocus}
+                                            label={formatMessage({
+                                                id: 'currency.swap.destination_amount',
+                                                defaultMessage:
+                                                    'Destination amount',
+                                            })}
+                                            prefix=""
+                                            readOnly
+                                            onChange={noop}
+                                            amount={toAmount}
+                                            fraction={toCurrency?.fraction ?? 0}
+                                            onSubmitEditing={noop}
+                                        />
+                                    ),
+                                    topLeft: (
+                                        <IconButton
+                                            variant="on_light"
+                                            onClick={() => {
+                                                onMsg({
+                                                    type: 'on_to_currency_click',
+                                                })
+                                            }}
+                                        >
+                                            {({ color }) => (
+                                                <Row spacing={4}>
+                                                    {toCurrency ? (
+                                                        <>
+                                                            <CurrencyAvatar
+                                                                key={
+                                                                    toCurrency.id
+                                                                }
+                                                                currency={
+                                                                    toCurrency
+                                                                }
                                                                 size={24}
+                                                                rightBadge={() =>
+                                                                    null
+                                                                }
+                                                            />
+                                                            <Text
+                                                                variant="title3"
+                                                                color="textPrimary"
+                                                                weight="medium"
+                                                            >
+                                                                {
+                                                                    toCurrency.code
+                                                                }
+                                                            </Text>
+                                                            <LightArrowDown2
+                                                                size={18}
                                                                 color={color}
                                                             />
-                                                        </Avatar>
-                                                        <Text
-                                                            variant="title3"
-                                                            color="textPrimary"
-                                                            weight="medium"
-                                                        >
-                                                            <FormattedMessage
-                                                                id="currency.swap.select_to_token"
-                                                                defaultMessage="Select token"
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Avatar size={24}>
+                                                                <QuestionCircle
+                                                                    size={24}
+                                                                    color={
+                                                                        color
+                                                                    }
+                                                                />
+                                                            </Avatar>
+                                                            <Text
+                                                                variant="title3"
+                                                                color="textPrimary"
+                                                                weight="medium"
+                                                            >
+                                                                <FormattedMessage
+                                                                    id="currency.swap.select_to_token"
+                                                                    defaultMessage="Select token"
+                                                                />
+                                                            </Text>
+                                                            <LightArrowDown2
+                                                                size={18}
+                                                                color={color}
                                                             />
-                                                        </Text>
-                                                        <LightArrowDown2
-                                                            size={18}
-                                                            color={color}
-                                                        />
-                                                    </>
-                                                )}
-                                            </Row>
-                                        )}
-                                    </IconButton>
-                                ),
-                                bottomRight: route?.priceInDefaultCurrency && (
-                                    <Text
-                                        variant="footnote"
-                                        color="textSecondary"
-                                        weight="regular"
-                                    >
-                                        <FormattedTokenBalanceInDefaultCurrency
-                                            knownCurrencies={
-                                                pollable.data.knownCurrencies
-                                            }
-                                            money={route.priceInDefaultCurrency}
-                                        />
-                                    </Text>
-                                ),
-                            }}
-                            state="normal"
-                        />
-                    </Column>
+                                                        </>
+                                                    )}
+                                                </Row>
+                                            )}
+                                        </IconButton>
+                                    ),
+                                    bottomRight:
+                                        route?.priceInDefaultCurrency && (
+                                            <Text
+                                                variant="footnote"
+                                                color="textSecondary"
+                                                weight="regular"
+                                            >
+                                                <FormattedTokenBalanceInDefaultCurrency
+                                                    knownCurrencies={
+                                                        pollable.data
+                                                            .knownCurrencies
+                                                    }
+                                                    money={
+                                                        route.priceInDefaultCurrency
+                                                    }
+                                                />
+                                            </Text>
+                                        ),
+                                }}
+                                state="normal"
+                            />
+                            <Spacer />
 
-                    <Spacer />
-
-                    <Route pollable={pollable} onMsg={onMsg} />
+                            <Route pollable={pollable} onMsg={onMsg} />
+                        </Column>
+                    </ScrollContainer>
 
                     <Actions>
                         <Button

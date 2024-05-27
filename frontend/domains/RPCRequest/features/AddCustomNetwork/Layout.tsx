@@ -41,7 +41,7 @@ export const Layout = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen background="light" padding="form">
+        <Screen background="light" padding="form" onNavigateBack={null}>
             <ActionBar
                 keystore={keyStore}
                 network={network}

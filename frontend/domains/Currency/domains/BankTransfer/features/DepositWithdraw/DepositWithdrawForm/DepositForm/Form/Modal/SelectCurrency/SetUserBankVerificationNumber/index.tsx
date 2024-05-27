@@ -86,6 +86,7 @@ export const SetUserBankVerificationNumber = ({
         case 'loading':
             return (
                 <LoadingLayout
+                    onClose={() => onMsg({ type: 'close' })}
                     actionBar={
                         <ActionBar
                             account={account}
@@ -131,6 +132,7 @@ export const SetUserBankVerificationNumber = ({
             return (
                 <>
                     <LoadingLayout
+                        onClose={() => onMsg({ type: 'close' })}
                         actionBar={
                             <ActionBar
                                 account={account}

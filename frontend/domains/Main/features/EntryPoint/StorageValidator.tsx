@@ -4,7 +4,7 @@ import { openExternalURL } from '@zeal/toolkit/Window'
 
 import { Add as AddAccount } from '@zeal/domains/Account/features/Add'
 import { AddFromHardwareWallet } from '@zeal/domains/Account/features/AddFromHardwareWallet'
-import { CreateNewSafe4337 } from '@zeal/domains/Account/features/CreateNewSafe4337'
+import { CreateNewSafe4337WithStories } from '@zeal/domains/Account/features/CreateNewSafe4337WithStories'
 import { TrackWallet } from '@zeal/domains/Account/features/TrackWallet'
 import { BANK_TRANSFER_NETWORK } from '@zeal/domains/Currency/domains/BankTransfer/constants'
 import { DepositWithdraw } from '@zeal/domains/Currency/domains/BankTransfer/features/DepositWithdraw'
@@ -951,7 +951,7 @@ export const StorageValidator = ({
 
                 case 'create_safe':
                     return (
-                        <CreateNewSafe4337
+                        <CreateNewSafe4337WithStories
                             installationId={installationId}
                             networkRPCMap={state.storage.networkRPCMap}
                             accountsMap={state.storage.accounts}

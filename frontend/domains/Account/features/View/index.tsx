@@ -12,6 +12,7 @@ import { Address } from '@zeal/domains/Address'
 import { CurrencyHiddenMap, CurrencyPinMap } from '@zeal/domains/Currency'
 import { SubmittedOfframpTransaction } from '@zeal/domains/Currency/domains/BankTransfer'
 import { SubmitedBridgesMap } from '@zeal/domains/Currency/domains/Bridge'
+import { WalletConnectInstanceLoadable } from '@zeal/domains/DApp/domains/WalletConnect/api/fetchWalletConnectInstance'
 import { KeyStoreMap } from '@zeal/domains/KeyStore'
 import { Mode } from '@zeal/domains/Main'
 import {
@@ -51,10 +52,8 @@ type Props = {
 
     sessionPassword: string
     customCurrencyMap: CustomCurrencyMap
-
+    walletConnectInstanceLoadable: WalletConnectInstanceLoadable
     mode: Mode
-
-    userMadeActionOnNextBestActionIds: string[]
 
     onMsg: (msg: Msg) => void
 }
@@ -96,6 +95,16 @@ export type Msg =
                   | 'on_bank_clicked'
                   | 'on_swap_clicked'
                   | 'on_bridge_clicked'
+                  | 'on_network_item_click'
+                  | 'on_select_rpc_click'
+                  | 'on_rpc_change_confirmed'
+                  | 'on_token_hide_click'
+                  | 'on_token_un_pin_click'
+                  | 'on_token_un_hide_click'
+                  | 'on_token_pin_click'
+                  | 'on_bank_transfer_selected'
+                  | 'on_refresh_pulled'
+                  | 'discover_more_apps_click'
           }
       >
     | Extract<
@@ -135,10 +144,10 @@ export const View = ({
     currencyHiddenMap,
     currencyPinMap,
     installationId,
-    userMadeActionOnNextBestActionIds,
     sessionPassword,
     customCurrencyMap,
     mode,
+    walletConnectInstanceLoadable,
     onMsg,
 }: Props) => {
     const [modalState, setModalState] = useState<ModalState>({ type: 'closed' })
@@ -146,12 +155,11 @@ export const View = ({
     return (
         <>
             <Layout
+                walletConnectInstanceLoadable={walletConnectInstanceLoadable}
                 mode={mode}
-                userMadeActionOnNextBestActionIds={
-                    userMadeActionOnNextBestActionIds
-                }
                 installationId={installationId}
                 currencyHiddenMap={currencyHiddenMap}
+                customCurrencyMap={customCurrencyMap}
                 currencyPinMap={currencyPinMap}
                 networkMap={networkMap}
                 networkRPCMap={networkRPCMap}
@@ -163,19 +171,18 @@ export const View = ({
                 selectedNetwork={selectedNetwork}
                 account={account}
                 portfolioLoadable={portfolioLoadable}
+                portfolioMap={portfolioMap}
                 bankTransferInfo={bankTransferInfo}
                 onMsg={(msg) => {
                     switch (msg.type) {
                         case 'account_filter_click':
                             setModalState({ type: 'account_filter' })
                             break
-                        case 'network_filter_click':
                         case 'on_network_filter_button_clicked':
                             setModalState({ type: 'network_filter' })
                             break
                         case 'reload_button_click':
                         case 'on_profile_change_confirm_click':
-                        case 'on_recovery_kit_setup':
                         case 'on_custom_currency_update_request':
                         case 'on_custom_currency_delete_request':
                         case 'on_token_click':
@@ -185,6 +192,7 @@ export const View = ({
                         case 'on_transaction_request_widget_click':
                         case 'bank_transfer_click':
                         case 'on_refresh_button_clicked':
+                        case 'on_refresh_pulled':
                         case 'on_dismiss_kyc_button_clicked':
                         case 'on_kyc_try_again_clicked':
                         case 'on_do_bank_transfer_clicked':
@@ -194,14 +202,21 @@ export const View = ({
                         case 'on_withdrawal_monitor_fiat_transaction_success':
                         case 'from_any_wallet_click':
                         case 'transaction_request_replaced':
-                        case 'on_nba_close_click':
-                        case 'on_nba_cta_click':
                         case 'on_open_fullscreen_view_click':
                         case 'on_zwidget_expand_request':
                         case 'on_send_clicked':
                         case 'on_bank_clicked':
                         case 'on_swap_clicked':
                         case 'on_bridge_clicked':
+                        case 'on_network_item_click':
+                        case 'on_select_rpc_click':
+                        case 'on_rpc_change_confirmed':
+                        case 'on_bank_transfer_selected':
+                        case 'on_token_pin_click':
+                        case 'on_token_un_hide_click':
+                        case 'on_token_un_pin_click':
+                        case 'on_token_hide_click':
+                        case 'discover_more_apps_click':
                             onMsg(msg)
                             break
 

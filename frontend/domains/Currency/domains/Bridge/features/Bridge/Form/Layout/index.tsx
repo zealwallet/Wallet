@@ -17,6 +17,7 @@ import { AmountInput } from '@zeal/uikit/Input/AmountInput'
 import { NextStepSeparator } from '@zeal/uikit/NextStepSeparator'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Skeleton } from '@zeal/uikit/Skeleton'
 import { Spacer } from '@zeal/uikit/Spacer'
 import { Tertiary } from '@zeal/uikit/Tertiary'
@@ -162,7 +163,11 @@ export const Layout = ({
         refuelCurrency.id !== toCurrency.id
 
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <UIActionBar
                 top={
                     <Row spacing={8}>
@@ -206,140 +211,289 @@ export const Layout = ({
 
             <Column spacing={16} fill>
                 <Column spacing={12} fill>
-                    <Column spacing={8}>
-                        <Column spacing={4}>
-                            <AmountInput
-                                state={errors.fromToken ? 'error' : 'normal'}
-                                top={
-                                    <NetworkFancyButton
-                                        fill
-                                        rounded={false}
-                                        network={fromNetwork}
-                                        onClick={() =>
-                                            onMsg({
-                                                type: 'on_from_network_click',
-                                            })
-                                        }
-                                    />
-                                }
-                                content={{
-                                    topLeft: (
-                                        <IconButton
-                                            variant="on_light"
-                                            onClick={() => {
+                    <ScrollContainer contentFill>
+                        <Column spacing={8} fill>
+                            <Column spacing={4}>
+                                <AmountInput
+                                    label={formatMessage({
+                                        id: 'currency.bridge.from',
+                                        defaultMessage: 'From',
+                                    })}
+                                    state={
+                                        errors.fromToken ? 'error' : 'normal'
+                                    }
+                                    top={
+                                        <NetworkFancyButton
+                                            fill
+                                            rounded={false}
+                                            network={fromNetwork}
+                                            onClick={() =>
                                                 onMsg({
-                                                    type: 'on_from_currency_click',
-                                                })
-                                            }}
-                                        >
-                                            {({ color: _color }) => (
-                                                <Row spacing={4}>
-                                                    <CurrencyAvatar
-                                                        key={fromCurrency.id}
-                                                        currency={fromCurrency}
-                                                        size={24}
-                                                        rightBadge={() => null}
-                                                    />
-                                                    <Text
-                                                        variant="title3"
-                                                        color="textPrimary"
-                                                        weight="medium"
-                                                    >
-                                                        {fromCurrency.code}
-                                                    </Text>
-                                                    <LightArrowDown2
-                                                        size={18}
-                                                        color="iconDefault"
-                                                    />
-                                                </Row>
-                                            )}
-                                        </IconButton>
-                                    ),
-                                    topRight: ({ onBlur, onFocus }) => (
-                                        <AmountInput.Input
-                                            onBlur={onBlur}
-                                            onFocus={onFocus}
-                                            label={formatMessage({
-                                                id: 'currency.bridge.header',
-                                                defaultMessage:
-                                                    'Amount to bridge',
-                                            })}
-                                            amount={
-                                                pollable.params.fromAmount ||
-                                                null
-                                            }
-                                            fraction={fromCurrency.fraction}
-                                            onChange={(value) =>
-                                                onMsg({
-                                                    type: 'on_amount_change',
-                                                    amount: value,
+                                                    type: 'on_from_network_click',
                                                 })
                                             }
-                                            autoFocus
-                                            prefix=""
-                                            onSubmitEditing={noop}
                                         />
-                                    ),
-                                    bottomLeft: fromToken && (
-                                        <Tertiary
-                                            color={
-                                                errors.fromToken?.type ===
-                                                'not_enough_balance'
-                                                    ? 'critical'
-                                                    : 'on_light'
-                                            }
-                                            size="regular"
-                                            onClick={() => {
-                                                onMsg({
-                                                    type: 'on_amount_change',
-                                                    amount: Big(
-                                                        fromToken.balance.amount.toString(
-                                                            10
-                                                        )
-                                                    )
-                                                        .div(
-                                                            Big(10).pow(
-                                                                fromCurrency.fraction
+                                    }
+                                    content={{
+                                        topLeft: (
+                                            <IconButton
+                                                variant="on_light"
+                                                onClick={() => {
+                                                    onMsg({
+                                                        type: 'on_from_currency_click',
+                                                    })
+                                                }}
+                                            >
+                                                {({ color: _color }) => (
+                                                    <Row spacing={4}>
+                                                        <CurrencyAvatar
+                                                            key={
+                                                                fromCurrency.id
+                                                            }
+                                                            currency={
+                                                                fromCurrency
+                                                            }
+                                                            size={24}
+                                                            rightBadge={() =>
+                                                                null
+                                                            }
+                                                        />
+                                                        <Text
+                                                            variant="title3"
+                                                            color="textPrimary"
+                                                            weight="medium"
+                                                        >
+                                                            {fromCurrency.code}
+                                                        </Text>
+                                                        <LightArrowDown2
+                                                            size={18}
+                                                            color="iconDefault"
+                                                        />
+                                                    </Row>
+                                                )}
+                                            </IconButton>
+                                        ),
+                                        topRight: ({ onBlur, onFocus }) => (
+                                            <AmountInput.Input
+                                                onBlur={onBlur}
+                                                onFocus={onFocus}
+                                                label={formatMessage({
+                                                    id: 'currency.bridge.header',
+                                                    defaultMessage:
+                                                        'Amount to bridge',
+                                                })}
+                                                amount={
+                                                    pollable.params
+                                                        .fromAmount || null
+                                                }
+                                                fraction={fromCurrency.fraction}
+                                                onChange={(value) =>
+                                                    onMsg({
+                                                        type: 'on_amount_change',
+                                                        amount: value,
+                                                    })
+                                                }
+                                                autoFocus
+                                                prefix=""
+                                                onSubmitEditing={noop}
+                                            />
+                                        ),
+                                        bottomLeft: fromToken && (
+                                            <Tertiary
+                                                color={
+                                                    errors.fromToken?.type ===
+                                                    'not_enough_balance'
+                                                        ? 'critical'
+                                                        : 'on_light'
+                                                }
+                                                size="regular"
+                                                onClick={() => {
+                                                    onMsg({
+                                                        type: 'on_amount_change',
+                                                        amount: Big(
+                                                            fromToken.balance.amount.toString(
+                                                                10
                                                             )
                                                         )
-                                                        .toFixed(
-                                                            fromCurrency.fraction
-                                                        ),
-                                                })
-                                            }}
-                                        >
-                                            {({
-                                                color,
-                                                textVariant,
-                                                textWeight,
-                                            }) => (
-                                                <Text
-                                                    color={color}
-                                                    variant={textVariant}
-                                                    weight={textWeight}
-                                                >
-                                                    <FormattedMessage
-                                                        id="currency.swap.max_label"
-                                                        defaultMessage="Balance {amount}"
-                                                        values={{
-                                                            amount: (
-                                                                <FormattedTokenBalances
-                                                                    money={
-                                                                        fromToken.balance
-                                                                    }
-                                                                    knownCurrencies={
-                                                                        knownCurrencies
-                                                                    }
-                                                                />
+                                                            .div(
+                                                                Big(10).pow(
+                                                                    fromCurrency.fraction
+                                                                )
+                                                            )
+                                                            .toFixed(
+                                                                fromCurrency.fraction
                                                             ),
-                                                        }}
+                                                    })
+                                                }}
+                                            >
+                                                {({
+                                                    color,
+                                                    textVariant,
+                                                    textWeight,
+                                                }) => (
+                                                    <Text
+                                                        color={color}
+                                                        variant={textVariant}
+                                                        weight={textWeight}
+                                                    >
+                                                        <FormattedMessage
+                                                            id="currency.swap.max_label"
+                                                            defaultMessage="Balance {amount}"
+                                                            values={{
+                                                                amount: (
+                                                                    <FormattedTokenBalances
+                                                                        money={
+                                                                            fromToken.balance
+                                                                        }
+                                                                        knownCurrencies={
+                                                                            knownCurrencies
+                                                                        }
+                                                                    />
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </Text>
+                                                )}
+                                            </Tertiary>
+                                        ),
+                                        bottomRight:
+                                            fromAmountInDefaultCurrency && (
+                                                <Text
+                                                    variant="footnote"
+                                                    color="textSecondary"
+                                                    weight="regular"
+                                                >
+                                                    <FormattedTokenBalanceInDefaultCurrency
+                                                        knownCurrencies={
+                                                            knownCurrencies
+                                                        }
+                                                        money={
+                                                            fromAmountInDefaultCurrency
+                                                        }
                                                     />
                                                 </Text>
-                                            )}
-                                        </Tertiary>
-                                    ),
-                                    bottomRight:
-                                        fromAmountInDefaultCurrency && (
+                                            ),
+                                    }}
+                                    bottom={
+                                        pollable.params.refuel && (
+                                            <RefuelFrom
+                                                pollable={pollable}
+                                                onRemoveRefuelClick={() =>
+                                                    onMsg({
+                                                        type: 'on_refuel_remove_click',
+                                                    })
+                                                }
+                                            />
+                                        )
+                                    }
+                                />
+
+                                <NextStepSeparator />
+
+                                <AmountInput
+                                    label={formatMessage({
+                                        id: 'currency.bridge.to',
+                                        defaultMessage: 'To',
+                                    })}
+                                    state="normal"
+                                    top={
+                                        <NetworkFancyButton
+                                            fill
+                                            rounded={false}
+                                            network={toNetwork}
+                                            onClick={() =>
+                                                onMsg({
+                                                    type: 'on_to_network_click',
+                                                })
+                                            }
+                                        />
+                                    }
+                                    content={{
+                                        topLeft: (
+                                            <IconButton
+                                                variant="on_light"
+                                                onClick={() => {
+                                                    onMsg({
+                                                        type: 'on_to_currency_click',
+                                                    })
+                                                }}
+                                            >
+                                                {({ color }) => (
+                                                    <>
+                                                        <CurrencyAvatar
+                                                            key={toCurrency.id}
+                                                            currency={
+                                                                toCurrency
+                                                            }
+                                                            size={24}
+                                                            rightBadge={() =>
+                                                                null
+                                                            }
+                                                        />
+                                                        <Text
+                                                            variant="title3"
+                                                            color="textPrimary"
+                                                            weight="medium"
+                                                        >
+                                                            {toCurrency.code}
+                                                        </Text>
+
+                                                        <LightArrowDown2
+                                                            size={18}
+                                                            color={color}
+                                                        />
+                                                    </>
+                                                )}
+                                            </IconButton>
+                                        ),
+                                        topRight: ({ onBlur, onFocus }) =>
+                                            (() => {
+                                                switch (pollable.type) {
+                                                    case 'loading':
+                                                    case 'reloading':
+                                                        return (
+                                                            <AmountInput.InputSkeleton />
+                                                        )
+                                                    case 'loaded':
+                                                    case 'subsequent_failed':
+                                                    case 'error':
+                                                        return (
+                                                            <AmountInput.Input
+                                                                onBlur={onBlur}
+                                                                onFocus={
+                                                                    onFocus
+                                                                }
+                                                                label={formatMessage(
+                                                                    {
+                                                                        id: 'currency.swap.destination_amount',
+                                                                        defaultMessage:
+                                                                            'Destination amount',
+                                                                    }
+                                                                )}
+                                                                amount={
+                                                                    toAmount
+                                                                }
+                                                                fraction={
+                                                                    toCurrency.fraction ??
+                                                                    0
+                                                                }
+                                                                onChange={noop}
+                                                                prefix=""
+                                                                readOnly
+                                                                onSubmitEditing={
+                                                                    noop
+                                                                }
+                                                            />
+                                                        )
+                                                    /* istanbul ignore next */
+                                                    default:
+                                                        return notReachable(
+                                                            pollable
+                                                        )
+                                                }
+                                            })(),
+                                        bottomRight: bridgeRequest?.route
+                                            .toPriceInDefaultCurrency && (
                                             <Text
                                                 variant="footnote"
                                                 color="textSecondary"
@@ -350,194 +504,72 @@ export const Layout = ({
                                                         knownCurrencies
                                                     }
                                                     money={
-                                                        fromAmountInDefaultCurrency
+                                                        bridgeRequest?.route
+                                                            .toPriceInDefaultCurrency
                                                     }
                                                 />
                                             </Text>
                                         ),
-                                }}
-                                bottom={
-                                    pollable.params.refuel && (
-                                        <RefuelFrom
-                                            pollable={pollable}
-                                            onRemoveRefuelClick={() =>
-                                                onMsg({
-                                                    type: 'on_refuel_remove_click',
-                                                })
-                                            }
-                                        />
-                                    )
-                                }
-                            />
+                                    }}
+                                    bottom={
+                                        pollable.params.refuel && (
+                                            <RefuelTo
+                                                pollable={pollable}
+                                                onRemoveRefuelClick={() =>
+                                                    onMsg({
+                                                        type: 'on_refuel_remove_click',
+                                                    })
+                                                }
+                                            />
+                                        )
+                                    }
+                                />
+                            </Column>
 
-                            <NextStepSeparator />
-
-                            <AmountInput
-                                state="normal"
-                                top={
-                                    <NetworkFancyButton
-                                        fill
-                                        rounded={false}
-                                        network={toNetwork}
+                            {isRefuelAvailable && (
+                                <Row spacing={8} alignX="end">
+                                    <FancyButton
+                                        right={null}
+                                        color="secondary"
+                                        rounded
+                                        left={({
+                                            color,
+                                            textVariant,
+                                            textWeight,
+                                        }) => (
+                                            <Row spacing={4}>
+                                                <SolidInterfacePlus
+                                                    size={16}
+                                                    color={color}
+                                                />
+                                                <Text
+                                                    color={color}
+                                                    variant={textVariant}
+                                                    weight={textWeight}
+                                                >
+                                                    <FormattedMessage
+                                                        id="currency.bridge.topup"
+                                                        defaultMessage="Top up {symbol}"
+                                                        values={{
+                                                            symbol: refuelCurrency.symbol,
+                                                        }}
+                                                    />
+                                                </Text>
+                                            </Row>
+                                        )}
                                         onClick={() =>
                                             onMsg({
-                                                type: 'on_to_network_click',
+                                                type: 'on_refuel_add_click',
                                             })
                                         }
                                     />
-                                }
-                                content={{
-                                    topLeft: (
-                                        <IconButton
-                                            variant="on_light"
-                                            onClick={() => {
-                                                onMsg({
-                                                    type: 'on_to_currency_click',
-                                                })
-                                            }}
-                                        >
-                                            {({ color }) => (
-                                                <>
-                                                    <CurrencyAvatar
-                                                        key={toCurrency.id}
-                                                        currency={toCurrency}
-                                                        size={24}
-                                                        rightBadge={() => null}
-                                                    />
-                                                    <Text
-                                                        variant="title3"
-                                                        color="textPrimary"
-                                                        weight="medium"
-                                                    >
-                                                        {toCurrency.code}
-                                                    </Text>
+                                </Row>
+                            )}
 
-                                                    <LightArrowDown2
-                                                        size={18}
-                                                        color={color}
-                                                    />
-                                                </>
-                                            )}
-                                        </IconButton>
-                                    ),
-                                    topRight: ({ onBlur, onFocus }) =>
-                                        (() => {
-                                            switch (pollable.type) {
-                                                case 'loading':
-                                                case 'reloading':
-                                                    return (
-                                                        <AmountInput.InputSkeleton />
-                                                    )
-                                                case 'loaded':
-                                                case 'subsequent_failed':
-                                                case 'error':
-                                                    return (
-                                                        <AmountInput.Input
-                                                            onBlur={onBlur}
-                                                            onFocus={onFocus}
-                                                            label={formatMessage(
-                                                                {
-                                                                    id: 'currency.swap.destination_amount',
-                                                                    defaultMessage:
-                                                                        'Destination amount',
-                                                                }
-                                                            )}
-                                                            amount={toAmount}
-                                                            fraction={
-                                                                toCurrency.fraction ??
-                                                                0
-                                                            }
-                                                            onChange={noop}
-                                                            prefix=""
-                                                            readOnly
-                                                            onSubmitEditing={
-                                                                noop
-                                                            }
-                                                        />
-                                                    )
-                                                /* istanbul ignore next */
-                                                default:
-                                                    return notReachable(
-                                                        pollable
-                                                    )
-                                            }
-                                        })(),
-                                    bottomRight: bridgeRequest?.route
-                                        .toPriceInDefaultCurrency && (
-                                        <Text
-                                            variant="footnote"
-                                            color="textSecondary"
-                                            weight="regular"
-                                        >
-                                            <FormattedTokenBalanceInDefaultCurrency
-                                                knownCurrencies={
-                                                    knownCurrencies
-                                                }
-                                                money={
-                                                    bridgeRequest?.route
-                                                        .toPriceInDefaultCurrency
-                                                }
-                                            />
-                                        </Text>
-                                    ),
-                                }}
-                                bottom={
-                                    pollable.params.refuel && (
-                                        <RefuelTo
-                                            pollable={pollable}
-                                            onRemoveRefuelClick={() =>
-                                                onMsg({
-                                                    type: 'on_refuel_remove_click',
-                                                })
-                                            }
-                                        />
-                                    )
-                                }
-                            />
+                            <Spacer />
+                            <Route pollable={pollable} onMsg={onMsg} />
                         </Column>
-
-                        {isRefuelAvailable && (
-                            <Row spacing={8} alignX="end">
-                                <FancyButton
-                                    right={null}
-                                    color="secondary"
-                                    rounded
-                                    left={({
-                                        color,
-                                        textVariant,
-                                        textWeight,
-                                    }) => (
-                                        <Row spacing={4}>
-                                            <SolidInterfacePlus
-                                                size={16}
-                                                color={color}
-                                            />
-                                            <Text
-                                                color={color}
-                                                variant={textVariant}
-                                                weight={textWeight}
-                                            >
-                                                <FormattedMessage
-                                                    id="currency.bridge.topup"
-                                                    defaultMessage="Top up {symbol}"
-                                                    values={{
-                                                        symbol: refuelCurrency.symbol,
-                                                    }}
-                                                />
-                                            </Text>
-                                        </Row>
-                                    )}
-                                    onClick={() =>
-                                        onMsg({
-                                            type: 'on_refuel_add_click',
-                                        })
-                                    }
-                                />
-                            </Row>
-                        )}
-                    </Column>
-                    <Spacer />
-                    <Route pollable={pollable} onMsg={onMsg} />
+                    </ScrollContainer>
                     <Actions>
                         <Button
                             variant="primary"

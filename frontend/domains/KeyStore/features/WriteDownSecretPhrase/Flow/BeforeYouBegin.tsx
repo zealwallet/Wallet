@@ -74,6 +74,9 @@ export const BeforeYouBegin = ({ onMsg }: Props) => {
             padding="form"
             background="light"
             aria-labelledby="before-you-begin-label"
+            onNavigateBack={() =>
+                onMsg({ type: 'on_before_you_begin_back_clicked' })
+            }
         >
             <ActionBar
                 left={

@@ -60,6 +60,8 @@ const fetch = async ({
                 case 'unblock_onramp_transfer_on_hold_compliance':
                 case 'unblock_onramp_transfer_on_hold_kyc':
                 case 'unblock_onramp_failed':
+                case 'unblock_offramp_pending':
+                case 'unblock_onramp_pending':
                     return false
 
                 /* istanbul ignore next */

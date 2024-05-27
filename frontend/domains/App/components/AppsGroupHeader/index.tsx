@@ -5,6 +5,9 @@ import { GroupHeader } from '@zeal/uikit/Group'
 import { ForwardIcon } from '@zeal/uikit/Icon/ForwardIcon'
 import { Text } from '@zeal/uikit/Text'
 
+import { notReachable } from '@zeal/toolkit'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
+
 import { App } from '@zeal/domains/App'
 import { KnownCurrencies } from '@zeal/domains/Currency'
 import { FormattedTokenBalanceInDefaultCurrency } from '@zeal/domains/Money/components/FormattedTokenBalanceInDefaultCurrency'
@@ -44,7 +47,34 @@ export const AppsGroupHeader = ({ apps, onClick, knownCurrencies }: Props) => {
             )}
             right={
                 !apps.length
-                    ? null
+                    ? ({ color, textVariant, textWeight }) => {
+                          switch (ZealPlatform.OS) {
+                              case 'ios':
+                              case 'android':
+                                  return (
+                                      <>
+                                          <Text
+                                              color={color}
+                                              variant={textVariant}
+                                              weight={textWeight}
+                                          >
+                                              <FormattedMessage
+                                                  id="app.appsGroupHeader.discoverMore"
+                                                  defaultMessage="Discover more"
+                                              />
+                                          </Text>
+                                          <ForwardIcon
+                                              size={16}
+                                              color={color}
+                                          />
+                                      </>
+                                  )
+                              case 'web':
+                                  return null
+                              default:
+                                  return notReachable(ZealPlatform.OS)
+                          }
+                      }
                     : ({ color, textVariant, textWeight }) => (
                           <>
                               <Text
@@ -54,12 +84,6 @@ export const AppsGroupHeader = ({ apps, onClick, knownCurrencies }: Props) => {
                               >
                                   <Chain>
                                       <Text>{apps.length}</Text>
-                                      <Text>
-                                          <FormattedMessage
-                                              id="app.appsGroupHeader.seeAll"
-                                              defaultMessage="See all"
-                                          />
-                                      </Text>
                                   </Chain>
                               </Text>
                               <ForwardIcon size={16} color={color} />

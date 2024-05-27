@@ -1,10 +1,11 @@
+import { useRef } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { TextInput } from 'react-native'
 
 import { Actions } from '@zeal/uikit/Actions'
 import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
 import { Header } from '@zeal/uikit/Header'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
 import { ArrowDown } from '@zeal/uikit/Icon/ArrowDown'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { QuestionCircle } from '@zeal/uikit/Icon/QuestionCircle'
@@ -12,10 +13,11 @@ import { IconButton } from '@zeal/uikit/IconButton'
 import { Input } from '@zeal/uikit/Input'
 import { InputButton } from '@zeal/uikit/InputButton'
 import { Screen } from '@zeal/uikit/Screen'
-import { Spacer } from '@zeal/uikit/Spacer'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Text } from '@zeal/uikit/Text'
 
 import { notReachable } from '@zeal/toolkit'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 import { nonEmptyString, nonNull, Result, shape } from '@zeal/toolkit/Result'
 
 import { Account } from '@zeal/domains/Account'
@@ -54,7 +56,6 @@ type Msg =
     | { type: 'on_form_submitted'; completedForm: ResidenceDetails }
     | { type: 'on_select_country_click' }
     | { type: 'on_form_change'; form: InitialResidenceDetails }
-    | { type: 'on_back_button_clicked' }
     | {
           type: 'close'
       }
@@ -89,6 +90,9 @@ export const Layout = ({
 }: Props) => {
     const errors = validateOnSubmit(form).getFailureReason() || {}
 
+    const postalCodeInput = useRef<TextInput>(null)
+    const cityInput = useRef<TextInput>(null)
+
     const { formatMessage } = useIntl()
 
     const onSubmit = () => {
@@ -112,7 +116,11 @@ export const Layout = ({
     }
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 network={network}
                 account={account}
@@ -123,190 +131,221 @@ export const Layout = ({
                 left={
                     <IconButton
                         variant="on_light"
-                        onClick={() =>
-                            onMsg({ type: 'on_back_button_clicked' })
-                        }
+                        onClick={() => onMsg({ type: 'close' })}
                     >
                         {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
-                right={
-                    <IconButton
-                        variant="on_light"
-                        onClick={() => onMsg({ type: 'close' })}
-                    >
-                        {({ color }) => <CloseCross size={24} color={color} />}
-                    </IconButton>
-                }
             />
 
-            <Column spacing={24}>
-                <Header
-                    title={
-                        <FormattedMessage
-                            id="bank_transfer.residence_details.title"
-                            defaultMessage="Your residence"
-                        />
-                    }
-                />
-
-                <Column spacing={8}>
-                    <Column spacing={8}>
-                        <Text
-                            variant="paragraph"
-                            weight="regular"
-                            color="textSecondary"
-                        >
+            <Column spacing={8} fill alignY="stretch">
+                <Column spacing={24} fill>
+                    <Header
+                        title={
                             <FormattedMessage
                                 id="bank_transfer.residence_details.title"
-                                defaultMessage="Country of residence"
+                                defaultMessage="Your residence"
                             />
-                        </Text>
-
-                        <InputButton
-                            leftIcon={
-                                form.country ? (
-                                    <CountryIcon
-                                        countryCode={form.country}
-                                        size={28}
-                                    />
-                                ) : (
-                                    <QuestionCircle
-                                        size={28}
-                                        color="iconDefault"
-                                    />
-                                )
-                            }
-                            rightIcon={
-                                <ArrowDown color="iconDisabled" size={24} />
-                            }
-                            onClick={() => {
-                                onMsg({
-                                    type: 'on_select_country_click',
-                                })
-                            }}
-                        >
-                            {form.country ? (
-                                COUNTRIES_MAP[form.country].name
-                            ) : (
-                                <FormattedMessage
-                                    id="bank_transfer.residence_details.country_placeholder"
-                                    defaultMessage="Country"
-                                />
-                            )}
-                        </InputButton>
-                    </Column>
-                    <Column spacing={8}>
-                        <Text
-                            variant="paragraph"
-                            weight="regular"
-                            color="textSecondary"
-                        >
-                            <FormattedMessage
-                                id="bank_transfer.residence_details.address"
-                                defaultMessage="Your address"
-                            />
-                        </Text>
-
-                        <Input
-                            keyboardType="default"
-                            onSubmitEditing={onSubmit}
-                            onChange={(e) =>
-                                onMsg({
-                                    type: 'on_form_change',
-                                    form: {
-                                        ...form,
-                                        address: e.nativeEvent.text,
-                                    },
-                                })
-                            }
-                            state="normal"
-                            placeholder={formatMessage({
-                                id: 'bank_transfer.residence_details.street',
-                                defaultMessage: 'Street',
-                            })}
-                            variant="regular"
-                            value={form.address ?? ''}
-                        />
-                    </Column>
-                    <Column spacing={8}>
-                        <Text
-                            variant="paragraph"
-                            weight="regular"
-                            color="textSecondary"
-                        >
-                            <FormattedMessage
-                                id="bank_transfer.residence_details.postcode"
-                                defaultMessage="Postcode"
-                            />
-                        </Text>
-
-                        <Input
-                            keyboardType="number-pad"
-                            onSubmitEditing={onSubmit}
-                            onChange={(e) =>
-                                onMsg({
-                                    type: 'on_form_change',
-                                    form: {
-                                        ...form,
-                                        postCode: e.nativeEvent.text,
-                                    },
-                                })
-                            }
-                            state="normal"
-                            placeholder="..."
-                            variant="regular"
-                            value={form.postCode ?? ''}
-                        />
-                    </Column>
-                    <Column spacing={8}>
-                        <Text
-                            variant="paragraph"
-                            weight="regular"
-                            color="textSecondary"
-                        >
-                            <FormattedMessage
-                                id="bank_transfer.residence_details.city"
-                                defaultMessage="City"
-                            />
-                        </Text>
-
-                        <Input
-                            keyboardType="default"
-                            onSubmitEditing={onSubmit}
-                            onChange={(e) =>
-                                onMsg({
-                                    type: 'on_form_change',
-                                    form: {
-                                        ...form,
-                                        city: e.nativeEvent.text,
-                                    },
-                                })
-                            }
-                            state="normal"
-                            placeholder="London"
-                            variant="regular"
-                            value={form.city ?? ''}
-                        />
-                    </Column>
-                </Column>
-            </Column>
-
-            <Spacer />
-
-            <Actions>
-                <Button
-                    variant="primary"
-                    size="regular"
-                    disabled={!!errors.submit}
-                    onClick={onSubmit}
-                >
-                    <FormattedMessage
-                        id="actions.continue"
-                        defaultMessage="Continue"
+                        }
                     />
-                </Button>
-            </Actions>
+                    <ScrollContainer>
+                        <Column spacing={8}>
+                            <Column spacing={8}>
+                                <Text
+                                    variant="paragraph"
+                                    weight="regular"
+                                    color="textSecondary"
+                                >
+                                    <FormattedMessage
+                                        id="bank_transfer.residence_details.title"
+                                        defaultMessage="Country of residence"
+                                    />
+                                </Text>
+
+                                <InputButton
+                                    leftIcon={
+                                        form.country ? (
+                                            <CountryIcon
+                                                countryCode={form.country}
+                                                size={28}
+                                            />
+                                        ) : (
+                                            <QuestionCircle
+                                                size={28}
+                                                color="iconDefault"
+                                            />
+                                        )
+                                    }
+                                    rightIcon={
+                                        <ArrowDown
+                                            color="iconDisabled"
+                                            size={24}
+                                        />
+                                    }
+                                    onClick={() => {
+                                        onMsg({
+                                            type: 'on_select_country_click',
+                                        })
+                                    }}
+                                >
+                                    {form.country ? (
+                                        COUNTRIES_MAP[form.country].name
+                                    ) : (
+                                        <FormattedMessage
+                                            id="bank_transfer.residence_details.country_placeholder"
+                                            defaultMessage="Country"
+                                        />
+                                    )}
+                                </InputButton>
+                            </Column>
+                            <Column spacing={8}>
+                                <Text
+                                    variant="paragraph"
+                                    weight="regular"
+                                    color="textSecondary"
+                                >
+                                    <FormattedMessage
+                                        id="bank_transfer.residence_details.address"
+                                        defaultMessage="Your address"
+                                    />
+                                </Text>
+
+                                <Input
+                                    keyboardType="default"
+                                    returnKeyType="next"
+                                    autoComplete="street-address"
+                                    blurOnSubmit={false} // prevent keyboard flashing when pressing "next"
+                                    onSubmitEditing={() => {
+                                        switch (ZealPlatform.OS) {
+                                            case 'ios':
+                                            case 'android':
+                                                postalCodeInput.current?.focus()
+                                                break
+                                            case 'web':
+                                                onSubmit()
+                                                break
+                                            /* istanbul ignore next */
+                                            default:
+                                                return notReachable(
+                                                    ZealPlatform.OS
+                                                )
+                                        }
+                                    }}
+                                    onChange={(e) =>
+                                        onMsg({
+                                            type: 'on_form_change',
+                                            form: {
+                                                ...form,
+                                                address: e.nativeEvent.text,
+                                            },
+                                        })
+                                    }
+                                    state="normal"
+                                    placeholder={formatMessage({
+                                        id: 'bank_transfer.residence_details.street',
+                                        defaultMessage: 'Street',
+                                    })}
+                                    variant="regular"
+                                    value={form.address ?? ''}
+                                />
+                            </Column>
+                            <Column spacing={8}>
+                                <Text
+                                    variant="paragraph"
+                                    weight="regular"
+                                    color="textSecondary"
+                                >
+                                    <FormattedMessage
+                                        id="bank_transfer.residence_details.postcode"
+                                        defaultMessage="Postcode"
+                                    />
+                                </Text>
+
+                                <Input
+                                    ref={postalCodeInput}
+                                    keyboardType="default"
+                                    returnKeyType="next"
+                                    autoComplete="postal-code"
+                                    blurOnSubmit={false} // prevent keyboard flashing when pressing "next"
+                                    onSubmitEditing={() => {
+                                        switch (ZealPlatform.OS) {
+                                            case 'ios':
+                                            case 'android':
+                                                cityInput.current?.focus()
+                                                break
+                                            case 'web':
+                                                onSubmit()
+                                                break
+                                            /* istanbul ignore next */
+                                            default:
+                                                return notReachable(
+                                                    ZealPlatform.OS
+                                                )
+                                        }
+                                    }}
+                                    onChange={(e) =>
+                                        onMsg({
+                                            type: 'on_form_change',
+                                            form: {
+                                                ...form,
+                                                postCode: e.nativeEvent.text,
+                                            },
+                                        })
+                                    }
+                                    state="normal"
+                                    placeholder="..."
+                                    variant="regular"
+                                    value={form.postCode ?? ''}
+                                />
+                            </Column>
+                            <Column spacing={8}>
+                                <Text
+                                    variant="paragraph"
+                                    weight="regular"
+                                    color="textSecondary"
+                                >
+                                    <FormattedMessage
+                                        id="bank_transfer.residence_details.city"
+                                        defaultMessage="City"
+                                    />
+                                </Text>
+
+                                <Input
+                                    ref={cityInput}
+                                    keyboardType="default"
+                                    onSubmitEditing={onSubmit}
+                                    onChange={(e) =>
+                                        onMsg({
+                                            type: 'on_form_change',
+                                            form: {
+                                                ...form,
+                                                city: e.nativeEvent.text,
+                                            },
+                                        })
+                                    }
+                                    state="normal"
+                                    placeholder="London"
+                                    variant="regular"
+                                    value={form.city ?? ''}
+                                />
+                            </Column>
+                        </Column>
+                    </ScrollContainer>
+                </Column>
+                <Actions>
+                    <Button
+                        variant="primary"
+                        size="regular"
+                        disabled={!!errors.submit}
+                        onClick={onSubmit}
+                    >
+                        <FormattedMessage
+                            id="actions.continue"
+                            defaultMessage="Continue"
+                        />
+                    </Button>
+                </Actions>
+            </Column>
         </Screen>
     )
 }

@@ -35,7 +35,7 @@ export const ConnectToMetaMask = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen background="light" padding="form">
+        <Screen background="light" padding="form" onNavigateBack={null}>
             <ActionBar
                 right={
                     <IconButton

@@ -11,7 +11,7 @@ import { SelectTypeOfAccountToAdd } from '@zeal/domains/Account/components/Selec
 import { Add } from '@zeal/domains/Account/features/Add'
 import { AddFromHardwareWallet } from '@zeal/domains/Account/features/AddFromHardwareWallet'
 import { CreateNewAccount } from '@zeal/domains/Account/features/CreateNewAccount'
-import { CreateNewSafe4337 } from '@zeal/domains/Account/features/CreateNewSafe4337'
+import { CreateNewSafe4337WithStories } from '@zeal/domains/Account/features/CreateNewSafe4337WithStories'
 import { generateAccountLabel } from '@zeal/domains/Account/helpers/generateAccountsLabel'
 import { CurrencyHiddenMap } from '@zeal/domains/Currency'
 import { KeyStoreMap } from '@zeal/domains/KeyStore'
@@ -80,7 +80,7 @@ export const Modal = ({
         case 'safe_4337_wallet':
             return (
                 <UIModal>
-                    <CreateNewSafe4337
+                    <CreateNewSafe4337WithStories
                         installationId={installationId}
                         accountsMap={accountsMap}
                         networkRPCMap={networkRPCMap}

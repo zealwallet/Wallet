@@ -17,3 +17,5 @@ export const DEFAULT_SAFE_BIP_PATH = `m/44'/60'/0'/0/0`
 export const ZEAL_BACKUP_FILE_EXTENSION_WITH_DOT = '.zealbackup'
 
 export const ZEAL_BACKUP_FOLDER_NAME = 'Zeal Backups'
+
+export const ZEAL_PASSKEY_DOMAIN = 'passkey.zealwallet.com'

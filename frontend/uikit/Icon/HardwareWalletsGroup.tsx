@@ -1,14 +1,10 @@
 import React from 'react'
-import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 export const HardwareWalletsGroup = () => (
-    <Svg
-        style={{ flexShrink: 0 }}
-        viewBox="0 0 56 32"
-        fill="none"
-        width={56}
-        height={32}
-    >
+    <SvgIcon viewBox="0 0 56 32" fill="none" width={56} height={32}>
         <G clipPath="url(#clip0_1374_54617)">
             <Rect
                 width="28"
@@ -59,5 +55,5 @@ export const HardwareWalletsGroup = () => (
                 <Rect x="2" y="2" width="28" height="28" rx="8" fill="white" />
             </ClipPath>
         </Defs>
-    </Svg>
+    </SvgIcon>
 )

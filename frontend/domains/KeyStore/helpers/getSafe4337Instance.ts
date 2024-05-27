@@ -2,7 +2,7 @@ import { decodeFunctionResult, encodeFunctionData } from 'viem'
 
 import * as Hexadecimal from '@zeal/toolkit/Hexadecimal'
 import { generateRandomNumber } from '@zeal/toolkit/Number'
-import { combine, string } from '@zeal/toolkit/Result'
+import { string } from '@zeal/toolkit/Result'
 
 import { Address } from '@zeal/domains/Address'
 import { SAFE_4337_MODULE_ENTRYPOINT_ADDRESS } from '@zeal/domains/Address/constants'
@@ -14,6 +14,7 @@ import { fetchRPCResponse } from '@zeal/domains/RPCRequest/api/fetchRPCResponse'
 import { getSafeDeploymentInitCode } from './getSafeDeploymentInitCode'
 
 import { fetchPredictedSafeAddress } from '../api/fetchPredictedSafeAddress'
+import { fetchSafeOwners } from '../api/fetchSafeOwners'
 
 const SAFE_ABI = [
     {
@@ -97,7 +98,7 @@ export const getSafe4337Instance = async ({
                 networkRPCMap,
                 safeAddress,
             }),
-            fetchOwners({
+            fetchSafeOwners({
                 network,
                 networkRPCMap,
                 safeAddress,
@@ -170,51 +171,5 @@ const fetchEntrypointAddress = async ({
         .then((data) =>
             fromString(data).getSuccessResultOrThrow(
                 'failed to parse entrypoint address'
-            )
-        )
-
-const fetchOwners = async ({
-    safeAddress,
-    network,
-    networkRPCMap,
-}: {
-    safeAddress: Address
-    network: Network
-    networkRPCMap: NetworkRPCMap
-}): Promise<Address[]> =>
-    fetchRPCResponse({
-        network,
-        networkRPCMap,
-        request: {
-            id: generateRandomNumber(),
-            jsonrpc: '2.0',
-            method: 'eth_call',
-            params: [
-                {
-                    to: safeAddress,
-                    data: encodeFunctionData({
-                        abi: SAFE_ABI,
-                        functionName: 'getOwners',
-                    }),
-                },
-                'latest',
-            ],
-        },
-    })
-        .then((data) =>
-            string(data)
-                .andThen(Hexadecimal.parseFromString)
-                .getSuccessResultOrThrow('failed to parse fetchOwners response')
-        )
-        .then((data) =>
-            decodeFunctionResult({
-                abi: SAFE_ABI,
-                data,
-                functionName: 'getOwners',
-            })
-        )
-        .then((data) =>
-            combine(data.map(fromString)).getSuccessResultOrThrow(
-                'failed to parse owners'
             )
         )

@@ -38,7 +38,7 @@ export const HowToConnectWithZeal = ({ installationId, onMsg }: Props) => {
                             defaultMessage="Zeal works everywhere Metamask works. Simply connect as you would with Metamask"
                         />
                     ),
-                    artworkSrc: require('./wallet_stories/connection_story_1.webp'),
+                    artworkSrc: 'connectionStory1',
                 },
                 {
                     title: (
@@ -53,7 +53,7 @@ export const HowToConnectWithZeal = ({ installationId, onMsg }: Props) => {
                             defaultMessage="You’ll see lot of options. Zeal might be one of them. If Zeal doesn’t appear..."
                         />
                     ),
-                    artworkSrc: require('./wallet_stories/connection_story_2.webp'),
+                    artworkSrc: 'connectionStory2',
                 },
                 {
                     title: (
@@ -68,7 +68,7 @@ export const HowToConnectWithZeal = ({ installationId, onMsg }: Props) => {
                             defaultMessage="We’ll prompt a connection with Zeal. Browser or Injected should work as well. Try it!"
                         />
                     ),
-                    artworkSrc: require('./wallet_stories/connection_story_3.webp'),
+                    artworkSrc: 'connectionStory3',
                 },
             ]}
             mainCtaTitle={

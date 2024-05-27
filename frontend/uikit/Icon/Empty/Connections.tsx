@@ -1,5 +1,7 @@
 import React from 'react'
-import { Circle, ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg'
+import { Circle, ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const Connections = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 24 24"
             width={size}
             height={size}
@@ -29,6 +30,6 @@ export const Connections = ({ size, color }: Props) => {
                     <Rect width="24" height="24" fill="white" />
                 </ClipPath>
             </Defs>
-        </Svg>
+        </SvgIcon>
     )
 }

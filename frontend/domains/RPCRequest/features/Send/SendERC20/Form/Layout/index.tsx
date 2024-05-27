@@ -17,6 +17,7 @@ import { ListItem } from '@zeal/uikit/ListItem'
 import { NextStepSeparator } from '@zeal/uikit/NextStepSeparator'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Text } from '@zeal/uikit/Text'
 
 import { notReachable } from '@zeal/toolkit'
@@ -156,7 +157,11 @@ export const Layout = ({
     }
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <UIActionBar
                 top={
                     <Row spacing={8}>
@@ -199,7 +204,7 @@ export const Layout = ({
             />
 
             <Column spacing={16} shrink alignY="stretch">
-                <Column spacing={16}>
+                <ScrollContainer>
                     <Column spacing={4}>
                         <AmountInput
                             content={{
@@ -416,7 +421,7 @@ export const Layout = ({
                             )}
                         </Group>
                     </Column>
-                </Column>
+                </ScrollContainer>
 
                 <Actions>
                     <Button

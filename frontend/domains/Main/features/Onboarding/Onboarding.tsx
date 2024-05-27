@@ -1,9 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
+import { ImperativeError } from '@zeal/domains/Error'
+import { captureError } from '@zeal/domains/Error/helpers/captureError'
 import { Onboarding as OnboardingEntrypoint } from '@zeal/domains/Main'
+import {
+    ANDROID_ASSET_LINKS_FILE_URL,
+    APPLE_APP_SITE_ASSOCIATION_FILE_URL,
+} from '@zeal/domains/Main/constants'
 import { NetworkMap } from '@zeal/domains/Network'
 import { Storage } from '@zeal/domains/Storage'
 
@@ -52,7 +59,44 @@ export const Onboarding = ({
     networkMap,
     onMsg,
 }: Props) => {
-    const [state, setState] = useState<State>({ type: 'app_splash_screen' })
+    const [state, setState] = useState<State>(
+        (() => {
+            switch (ZealPlatform.OS) {
+                case 'ios':
+                case 'android':
+                    return { type: 'story' }
+
+                case 'web':
+                    return { type: 'app_splash_screen' }
+                default:
+                    return notReachable(ZealPlatform.OS)
+            }
+        })()
+    )
+
+    useEffect(() => {
+        switch (ZealPlatform.OS) {
+            case 'ios':
+            case 'android':
+                // Pre-fetch these files to ensure they are cached before the user creates their first passkey
+                Promise.all([
+                    fetch(APPLE_APP_SITE_ASSOCIATION_FILE_URL),
+                    fetch(ANDROID_ASSET_LINKS_FILE_URL),
+                ]).catch(() =>
+                    captureError(
+                        new ImperativeError(
+                            'Failed to prefetch app association files'
+                        )
+                    )
+                )
+                break
+            case 'web':
+                break
+            /* istanbul ignore next */
+            default:
+                return notReachable(ZealPlatform.OS)
+        }
+    }, [])
 
     switch (state.type) {
         case 'app_splash_screen':

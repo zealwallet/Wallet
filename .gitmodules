@@ -16,3 +16,6 @@
 [submodule "smart-contracts/lib/safe-modules"]
 	path = smart-contracts/lib/safe-modules
 	url = https://github.com/safe-global/safe-modules
+[submodule "smart-contracts/lib/safe-singleton-deployer-sol"]
+	path = smart-contracts/lib/safe-singleton-deployer-sol
+	url = https://github.com/wilsoncusack/safe-singleton-deployer-sol

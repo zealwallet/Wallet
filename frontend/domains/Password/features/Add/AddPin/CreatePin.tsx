@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
-import { Column } from '@zeal/uikit/Column'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { KeyPad } from '@zeal/uikit/Keypad'
@@ -45,7 +44,11 @@ export const CreatePin = ({ onMsg }: Props) => {
     }, [liveMsg, pin])
 
     return (
-        <Screen padding="pin" background="light">
+        <Screen
+            padding="pin"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -61,38 +64,54 @@ export const CreatePin = ({ onMsg }: Props) => {
                 }
             />
 
-            <Column spacing={32} alignX="center" alignY="center" fill>
-                <Text variant="title3" color="textPrimary" weight="medium">
-                    <FormattedMessage
-                        id="password.create_pin"
-                        defaultMessage="Create PIN"
-                    />
-                </Text>
-
-                <Steps
-                    length={PIN_LENGTH}
-                    progress={pin.length}
-                    state="primary"
-                />
-            </Column>
-
-            <KeyPad
-                leftAction={null}
-                disabled={false}
-                rightAction={
-                    <KeyPad.BackSpaceButton
-                        aria-label={formatMessage({
-                            id: 'password.removeLastDigit',
-                            defaultMessage: 'Remove last digit',
-                        })}
-                        disabled={false}
-                        onPress={() => setPin((prev) => prev.slice(0, -1))}
+            <KeyPad.Layout
+                keyPad={
+                    <KeyPad
+                        leftAction={null}
+                        disabled={pin.length === PIN_LENGTH}
+                        rightAction={
+                            <KeyPad.BackSpaceButton
+                                aria-label={formatMessage({
+                                    id: 'password.removeLastDigit',
+                                    defaultMessage: 'Remove last digit',
+                                })}
+                                disabled={false}
+                                onPress={() =>
+                                    setPin((prev) => prev.slice(0, -1))
+                                }
+                            />
+                        }
+                        onPress={(digit) =>
+                            setPin((prev) =>
+                                `${prev}${digit}`.substring(0, PIN_LENGTH)
+                            )
+                        }
                     />
                 }
-                onPress={(digit) =>
-                    setPin((prev) => `${prev}${digit}`.substring(0, PIN_LENGTH))
-                }
-            />
+            >
+                <KeyPad.Content>
+                    <Text variant="title3" color="textPrimary" weight="medium">
+                        <FormattedMessage
+                            id="password.create_pin"
+                            defaultMessage="Create PIN"
+                        />
+                    </Text>
+
+                    <Steps
+                        length={PIN_LENGTH}
+                        progress={pin.length}
+                        state="primary"
+                    />
+
+                    <Text
+                        variant="callout"
+                        color="textStatusWarning"
+                        weight="regular"
+                    >
+                        &nbsp;
+                    </Text>
+                </KeyPad.Content>
+            </KeyPad.Layout>
         </Screen>
     )
 }

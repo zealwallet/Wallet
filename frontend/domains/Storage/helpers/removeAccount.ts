@@ -33,7 +33,7 @@ export const removeAccount = (
         case 'currencyPinMap':
         case 'submittedOffRampTransactions':
         case 'gasCurrencyPresetMap':
-        case 'userMadeActionOnNextBestActionIds':
+        case 'cardConfig':
             // !!! :: every time you add some indexes to storage make sure you do clean up when account is deleted
             break
         /* istanbul ignore next */
@@ -55,6 +55,21 @@ export const removeAccount = (
 
             default:
                 return notReachable(storage.bankTransferInfo)
+        }
+    })()
+
+    const cardConfig = (() => {
+        switch (storage.cardConfig.type) {
+            case 'card_owner_address_is_not_selected':
+                return storage.cardConfig
+
+            case 'card_owner_address_is_selected':
+                return storage.cardConfig.owner === account.address
+                    ? { type: 'card_owner_address_is_not_selected' as const }
+                    : storage.cardConfig
+
+            default:
+                return notReachable(storage.cardConfig)
         }
     })()
 
@@ -114,6 +129,7 @@ export const removeAccount = (
               submitedBridges,
               transactionRequests,
               bankTransferInfo,
+              cardConfig,
           }
         : null
 }

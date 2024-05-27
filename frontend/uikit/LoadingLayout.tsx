@@ -7,10 +7,11 @@ import { Spinner } from '@zeal/uikit/Spinner'
 
 type Props = {
     actionBar: React.ReactNode
+    onClose: (() => void) | null
 }
 
-export const LoadingLayout = ({ actionBar }: Props) => (
-    <Screen background="light" padding="form">
+export const LoadingLayout = ({ actionBar, onClose }: Props) => (
+    <Screen background="light" padding="form" onNavigateBack={onClose}>
         {actionBar}
 
         <Spacer />

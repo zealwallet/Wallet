@@ -63,12 +63,6 @@ export const GroupHeader = ({
                               >
                                   <Chain>
                                       <Text>{count}</Text>
-                                      <Text>
-                                          <FormattedMessage
-                                              id="ntft.groupHeader.seeAll"
-                                              defaultMessage="See all"
-                                          />
-                                      </Text>
                                   </Chain>
                               </Text>
 

@@ -213,7 +213,7 @@ test('As a user when connected to dApp through MM I should see option to switch 
     expect(postMessage).toReceiveMsg({
         type: 'select_zeal_provider',
         chainId: '0x1',
-        address: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
+        address: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
     })
 })
 
@@ -277,7 +277,7 @@ As a user I should be able to change connected account from extension, so I can 
 
     await userEvent.click(await screen.findByRole('button', { name: 'Expand' }))
     await screen.findByText('Connected')
-    await screen.findByText('0x83f1...c2B7')
+    await screen.findByText('0x83f1...c2b7')
     await screen.findByText('Ethereum') // old network
 
     act(() => {
@@ -287,7 +287,7 @@ As a user I should be able to change connected account from extension, so I can 
     })
 
     await screen.findByText('Connected')
-    await screen.findByText('0x83f1...c2B7')
+    await screen.findByText('0x83f1...c2b7')
 
     act(() => {
         chrome.storage.local.set({
@@ -311,7 +311,7 @@ As a user I should be able to change connected account from extension, so I can 
         })
     })
 
-    expect(await screen.findByText('0x26D0...8932')).toBeInTheDocument()
+    expect(await screen.findByText('0x26d0...8932')).toBeInTheDocument()
 })
 
 test('Switch to MM in another tab should switch all tabs to MM state', async () => {
@@ -343,7 +343,7 @@ test('Switch to MM in another tab should switch all tabs to MM state', async () 
 
     // this is due to current probably buggy implementation;
     // in storage ATM we connected to 0x26.. account but becouse we first render in disconnect state here we get selected state from disconnect (we store it in memory for tab independence)
-    expect(await screen.findByText('0x83f1...c2B7')).toBeInTheDocument()
+    expect(await screen.findByText('0x83f1...c2b7')).toBeInTheDocument()
 })
 
 test("As a user I should be connected to dApp after reload, so I don't have to connect every time I reload the page", async () => {
@@ -356,7 +356,7 @@ test("As a user I should be connected to dApp after reload, so I don't have to c
     await renderZWidget({ dAppHost })
 
     await userEvent.click(await screen.findByLabelText('Expand'))
-    expect(await screen.findByText('0x26D0...8932')).toBeInTheDocument()
+    expect(await screen.findByText('0x26d0...8932')).toBeInTheDocument()
 })
 
 test('As a user if I was previously connected to MM and now MM is not available, I should see widget in disconnected state, so I can connect through zeal if needed', async () => {

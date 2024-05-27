@@ -59,7 +59,7 @@ const parseTrezor = (input: unknown): Result<unknown, Trezor> => {
         return shape({
             id: oneOf('id', [string(obj.id), success(uuid())]),
             type: match(obj.type, 'trezor' as const),
-            address: string(obj.address),
+            address: parseAddress(obj.address),
             path: string(obj.path),
         })
     })
@@ -70,7 +70,7 @@ const parseLedger = (input: unknown): Result<unknown, LEDGER> => {
         return shape({
             id: oneOf('id', [string(obj.id), success(uuid())]),
             type: match(obj.type, 'ledger' as const),
-            address: string(obj.address),
+            address: parseAddress(obj.address),
             path: string(obj.path),
         })
     })
@@ -104,7 +104,7 @@ const parsePrivateKey = (input: unknown): Result<unknown, PrivateKey> => {
         shape({
             id: oneOf('id', [string(obj.id), success(uuid())]),
             type: match(obj.type, 'private_key_store' as const),
-            address: string(obj.address),
+            address: parseAddress(obj.address),
             encryptedPrivateKey: string(obj.encryptedPrivateKey),
         })
     )
@@ -129,7 +129,7 @@ const parsePasskey = (
                     ),
                 })
             ),
-            signerAddress: string(obj.signerAddress),
+            signerAddress: parseAddress(obj.signerAddress),
         })
     )
 
@@ -138,7 +138,7 @@ const parseSafe4337 = (input: unknown): Result<unknown, Safe4337> => {
         shape({
             id: oneOf('id', [string(obj.id), success(uuid())]),
             type: match(obj.type, 'safe_4337' as const),
-            address: string(obj.address),
+            address: parseAddress(obj.address),
             localSignerKeyStore: parsePrivateKey(obj.localSignerKeyStore),
 
             safeDeplymentConfig: object(obj.safeDeplymentConfig).andThen(

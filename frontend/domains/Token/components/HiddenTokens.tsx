@@ -1,16 +1,16 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { ScrollView } from 'react-native'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Clickable } from '@zeal/uikit/Clickable'
 import { Column } from '@zeal/uikit/Column'
 import { EmptyStateWidget } from '@zeal/uikit/EmptyStateWidget'
 import { Group } from '@zeal/uikit/Group'
-import { ArrowLeft2 } from '@zeal/uikit/Icon/ArrowLeft2'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { BoldDelete } from '@zeal/uikit/Icon/BoldDelete'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Text } from '@zeal/uikit/Text'
 
 import { CurrencyHiddenMap, CurrencyPinMap } from '@zeal/domains/Currency'
@@ -41,12 +41,16 @@ export const HiddenTokens = ({
     const tokens = portfolio.tokens.filter((token) => !filterNonHidden(token))
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <Clickable onClick={() => onMsg({ type: 'close' })}>
                         <Row spacing={4} shrink>
-                            <ArrowLeft2 size={24} color="iconDefault" />
+                            <BackIcon size={24} color="iconDefault" />
 
                             <Text
                                 variant="title3"
@@ -64,7 +68,7 @@ export const HiddenTokens = ({
             />
             <Column spacing={12} shrink>
                 {!!tokens.length ? (
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollContainer>
                         <Group variant="default">
                             {tokens.map((token) => {
                                 return (
@@ -86,7 +90,7 @@ export const HiddenTokens = ({
                                 )
                             })}
                         </Group>
-                    </ScrollView>
+                    </ScrollContainer>
                 ) : (
                     <EmptyStateWidget
                         size="regular"

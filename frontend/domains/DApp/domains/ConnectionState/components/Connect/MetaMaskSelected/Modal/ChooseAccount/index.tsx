@@ -11,12 +11,10 @@ import { KeyStoreMap } from '@zeal/domains/KeyStore'
 import { Network, NetworkMap, NetworkRPCMap } from '@zeal/domains/Network'
 import { PortfolioMap } from '@zeal/domains/Portfolio'
 import { ConnectionSafetyChecksResponse } from '@zeal/domains/SafetyCheck/api/fetchConnectionSafetyChecks'
-import { calculateConnectionSafetyChecksResult } from '@zeal/domains/SafetyCheck/helpers/calculateConnectionSafetyChecksResult'
+import { calculateConnectionSafetyChecksUserConfirmation } from '@zeal/domains/SafetyCheck/helpers/calculateConnectionSafetyChecksUserConfirmation'
 import { CustomCurrencyMap } from '@zeal/domains/Storage'
 
 import { Modal, State as ModalState } from './Modal'
-
-import { shouldWeConfirmSafetyCheck } from '../../../helpers'
 
 type Props = {
     accounts: AccountsMap
@@ -100,54 +98,13 @@ export const ChooseAccount = ({
                             break
                         case 'account_item_clicked':
                             {
-                                switch (safetyChecksLoadable.type) {
-                                    case 'loaded':
-                                        {
-                                            const checkResult =
-                                                calculateConnectionSafetyChecksResult(
-                                                    safetyChecksLoadable.data
-                                                        .checks
-                                                )
-                                            switch (checkResult.type) {
-                                                case 'Failure':
-                                                    const shouldConfirm =
-                                                        shouldWeConfirmSafetyCheck(
-                                                            checkResult.reason
-                                                                .failedChecks
-                                                        )
-                                                    shouldConfirm
-                                                        ? setModal({
-                                                              type: 'confirm_safety_checks_modal',
-                                                              account:
-                                                                  msg.account,
-                                                              safetyChecks:
-                                                                  checkResult
-                                                                      .reason
-                                                                      .failedChecks,
-                                                          })
-                                                        : onMsg({
-                                                              type: 'on_zeal_account_connection_request',
-                                                              account:
-                                                                  msg.account,
-                                                              network:
-                                                                  requestedNetwork,
-                                                          })
-                                                    break
-                                                case 'Success':
-                                                    onMsg({
-                                                        type: 'on_zeal_account_connection_request',
-                                                        account: msg.account,
-                                                        network:
-                                                            requestedNetwork,
-                                                    })
-                                                    break
-                                                default:
-                                                    notReachable(checkResult)
-                                            }
-                                        }
-                                        break
-                                    case 'loading':
-                                    case 'error':
+                                const safetyCheckConfirmationResult =
+                                    calculateConnectionSafetyChecksUserConfirmation(
+                                        { safetyChecksLoadable }
+                                    )
+
+                                switch (safetyCheckConfirmationResult.type) {
+                                    case 'Failure':
                                         onMsg({
                                             type: 'on_zeal_account_connection_request',
                                             account: msg.account,
@@ -155,8 +112,19 @@ export const ChooseAccount = ({
                                         })
                                         break
 
+                                    case 'Success':
+                                        setModal({
+                                            type: 'confirm_safety_checks_modal',
+                                            account: msg.account,
+                                            safetyChecks:
+                                                safetyCheckConfirmationResult.data,
+                                        })
+                                        break
+
                                     default:
-                                        notReachable(safetyChecksLoadable)
+                                        return notReachable(
+                                            safetyCheckConfirmationResult
+                                        )
                                 }
                             }
                             break
@@ -178,7 +146,6 @@ export const ChooseAccount = ({
                             onMsg(msg)
                             break
 
-                        case 'close':
                         case 'confirmation_modal_close_clicked':
                             setModal({ type: 'closed' })
                             break

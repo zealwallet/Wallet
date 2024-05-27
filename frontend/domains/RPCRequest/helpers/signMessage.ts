@@ -1,9 +1,6 @@
-import { toBuffer } from '@ethereumjs/util'
-import Eth from '@ledgerhq/hw-app-eth' // TODO: @resetko - ledgerhq libs fail to import on mobile
+import Eth from '@ledgerhq/hw-app-eth'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import * as sigUtil from '@metamask/eth-sig-util'
-import { signTypedData } from '@metamask/eth-sig-util'
-import Web3 from 'web3'
 
 import { notReachable } from '@zeal/toolkit'
 import {
@@ -15,8 +12,8 @@ import {
     string,
     success,
 } from '@zeal/toolkit/Result'
+import * as Web3 from '@zeal/toolkit/Web3'
 
-import { signMessageToSafeSignTypedDataV4 } from '@zeal/domains/Account/helpers/signMessageToSafeSignTypedDataV4'
 import { ImperativeError } from '@zeal/domains/Error'
 import { SigningKeyStore } from '@zeal/domains/KeyStore'
 import { getPrivateKey } from '@zeal/domains/KeyStore/helpers/getPrivateKey'
@@ -133,31 +130,56 @@ export const signMessage = async ({
 }: Params): Promise<string> => {
     switch (keyStore.type) {
         case 'safe_4337': {
-            const { pk } = await getPrivateKey({
+            const pk = await getPrivateKey({
                 keyStore: keyStore.localSignerKeyStore,
                 sessionPassword,
             })
 
             switch (request.method) {
                 case 'personal_sign':
-                case 'eth_signTypedData':
+                    const message = request.params[0]
+
+                    const safeMessage =
+                        Web3.sign.personalSignMessageToSafeSignTypedDataV4({
+                            hexChainId: network.hexChainId,
+                            verifyingContract: keyStore.address,
+                            message: message,
+                        })
+
+                    return Web3.sign.signTypedData(
+                        pk,
+                        JSON.stringify(safeMessage)
+                    )
+
+                case 'eth_signTypedData': {
+                    const message = JSON.parse(request.params[0])
+                    const safeMessage =
+                        Web3.sign.signTypedDataMessageToSafeSignTypedDataV4({
+                            hexChainId: network.hexChainId,
+                            verifyingContract: keyStore.address,
+                            message: message,
+                        })
+
+                    return Web3.sign.signTypedData(
+                        pk,
+                        JSON.stringify(safeMessage)
+                    )
+                }
+
                 case 'eth_signTypedData_v3':
-                    // TODO @resetko-zeal
-                    throw new Error('Not implemented')
-
                 case 'eth_signTypedData_v4': {
-                    const safeMessage = await signMessageToSafeSignTypedDataV4({
-                        keyStore,
-                        request,
-                        network,
-                    })
+                    const message = JSON.parse(request.params[1])
+                    const safeMessage =
+                        Web3.sign.signTypedDataMessageToSafeSignTypedDataV4({
+                            hexChainId: network.hexChainId,
+                            verifyingContract: keyStore.address,
+                            message: message,
+                        })
 
-                    const data = JSON.parse(safeMessage.params[1])
-                    return signTypedData({
-                        privateKey: toBuffer(pk),
-                        data,
-                        version: sigUtil.SignTypedDataVersion.V4,
-                    })
+                    return Web3.sign.signTypedData(
+                        pk,
+                        JSON.stringify(safeMessage)
+                    )
                 }
 
                 /* istanbul ignore next */
@@ -168,38 +190,19 @@ export const signMessage = async ({
 
         case 'secret_phrase_key':
         case 'private_key_store':
-            const { pk } = await getPrivateKey({ keyStore, sessionPassword })
-            const web3 = new Web3()
+            const pk = await getPrivateKey({ keyStore, sessionPassword })
+
             switch (request.method) {
                 case 'personal_sign':
-                    return web3.eth.accounts.sign(request.params[0], pk)
-                        .signature
-                case 'eth_signTypedData': {
-                    const data = JSON.parse(request.params[1])
-                    return signTypedData({
-                        privateKey: toBuffer(pk),
-                        data,
-                        version: sigUtil.SignTypedDataVersion.V1,
-                    })
-                }
+                    return Web3.sign.signMessage(pk, request.params[0])
 
-                case 'eth_signTypedData_v3': {
-                    const data = JSON.parse(request.params[1])
-                    return signTypedData({
-                        privateKey: toBuffer(pk),
-                        data,
-                        version: sigUtil.SignTypedDataVersion.V3,
-                    })
-                }
+                case 'eth_signTypedData':
+                    return Web3.sign.signTypedDataV1(pk, request.params[1])
 
-                case 'eth_signTypedData_v4': {
-                    const data = JSON.parse(request.params[1])
-                    return signTypedData({
-                        privateKey: toBuffer(pk),
-                        data,
-                        version: sigUtil.SignTypedDataVersion.V4,
-                    })
-                }
+                case 'eth_signTypedData_v3':
+                case 'eth_signTypedData_v4':
+                    return Web3.sign.signTypedData(pk, request.params[1])
+
                 /* istanbul ignore next */
                 default:
                     return notReachable(request)

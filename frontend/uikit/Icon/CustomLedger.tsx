@@ -1,5 +1,7 @@
 import React from 'react'
-import { Circle, Path, Svg } from 'react-native-svg'
+import { Circle, Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -9,8 +11,7 @@ type Props = {
 }
 
 export const CustomLedger = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         viewBox="0 0 12 12"
         fill="none"
         width={size}
@@ -22,5 +23,5 @@ export const CustomLedger = ({ size, color }: Props) => (
             d="M4.28613 2.57129V8.99986H8.48886V8.15508H5.21811V2.57129H4.28613Z"
             fill="white"
         />
-    </Svg>
+    </SvgIcon>
 )

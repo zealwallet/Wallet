@@ -346,6 +346,18 @@ export const arrayBuffer = <E = { type: 'value_is_not_an_array_buffer'; value: u
     )
 }
 
+export const uint8Array = <E = { type: 'value_is_not_a_uint_8_array'; value: unknown }>(
+    value: unknown,
+    error?: E,
+): Result<E, Uint8Array> => {
+    if (value instanceof Uint8Array && value.byteLength) {
+        return success(value)
+    }
+    return failure(
+        error ?? ({ type: 'value_is_not_a_uint_8_array' as const, value } as E),
+    )
+}
+
 
 export type StringLengthError = {
     type: 'string_length_invalid'

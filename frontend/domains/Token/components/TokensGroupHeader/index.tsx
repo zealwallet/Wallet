@@ -61,12 +61,6 @@ export const TokensGroupHeader = ({
                               >
                                   <Chain>
                                       <Text>{tokens.length}</Text>
-                                      <Text>
-                                          <FormattedMessage
-                                              id="token.TokensGroupHeader.seeAll"
-                                              defaultMessage="See all"
-                                          />
-                                      </Text>
                                   </Chain>
                               </Text>
 

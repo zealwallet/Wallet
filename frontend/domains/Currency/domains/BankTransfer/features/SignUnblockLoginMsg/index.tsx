@@ -2,11 +2,16 @@ import { useEffect, useState } from 'react'
 
 import Web3 from 'web3'
 
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
+import { IconButton } from '@zeal/uikit/IconButton'
+import { LoadingLayout } from '@zeal/uikit/LoadingLayout'
+
 import { notReachable, useLiveRef } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
 import { generateRandomNumber } from '@zeal/toolkit/Number'
 
 import { Account, AccountsMap } from '@zeal/domains/Account'
+import { ActionBar } from '@zeal/domains/Account/components/ActionBar'
 import { GasCurrencyPresetMap } from '@zeal/domains/Currency'
 import { UnblockLoginSignature } from '@zeal/domains/Currency/domains/BankTransfer'
 import { ImperativeError } from '@zeal/domains/Error'
@@ -181,7 +186,28 @@ export const SignUnblockLoginMsg = ({
 
     switch (state.type) {
         case 'no_user_interaction_required_to_sign_msg':
-            return null
+            return (
+                <LoadingLayout
+                    onClose={() => onMsg({ type: 'close' })}
+                    actionBar={
+                        <ActionBar
+                            account={account}
+                            keystore={keystore}
+                            network={network}
+                            left={
+                                <IconButton
+                                    variant="on_light"
+                                    onClick={() => onMsg({ type: 'close' })}
+                                >
+                                    {({ color }) => (
+                                        <BackIcon size={24} color={color} />
+                                    )}
+                                </IconButton>
+                            }
+                        />
+                    }
+                />
+            )
         case 'user_interaction_is_needed':
             return (
                 <Sign
@@ -210,8 +236,10 @@ export const SignUnblockLoginMsg = ({
                             case 'cancel_button_click':
                             case 'on_wrong_network_accepted':
                             case 'on_minimize_click':
-                            case 'close':
+                            case 'on_pre_sign_safe_deployment_error_popup_cancel_clicked':
                             case 'on_safe_deployemnt_cancelled':
+                            case 'on_cancel_confirm_transaction_clicked':
+                            case 'on_safe_transaction_failure_accepted':
                                 onMsg({ type: 'close' })
                                 break
                             case 'message_signed':

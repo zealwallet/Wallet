@@ -5,7 +5,11 @@ import { MsgOf } from '@zeal/toolkit/MsgOf'
 import { values } from '@zeal/toolkit/Object'
 
 import { CountryISOCode } from '@zeal/domains/Country'
-import { CountrySelector } from '@zeal/domains/Country/components/CountrySelector'
+import {
+    CountrySelector,
+    PRIORITY_COUNTRIES,
+    Title,
+} from '@zeal/domains/Country/components/CountrySelector'
 import { FiatCurrency } from '@zeal/domains/Currency'
 import { BankTransferCurrencies } from '@zeal/domains/Currency/domains/BankTransfer/api/fetchBankTransferCurrencies'
 import { UNBLOCK_SUPPORTED_COUNTRIES } from '@zeal/domains/Currency/domains/BankTransfer/constants'
@@ -42,6 +46,8 @@ export const Modal = ({
             return (
                 <UIModal>
                     <CountrySelector
+                        title={<Title />}
+                        priorityCountries={PRIORITY_COUNTRIES}
                         selectedCountry={currentCountryCode}
                         countries={UNBLOCK_SUPPORTED_COUNTRIES}
                         onMsg={(msg) => {

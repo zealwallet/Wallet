@@ -2,10 +2,12 @@ import { useEffect } from 'react'
 
 import { notReachable, useLiveRef } from '@zeal/toolkit'
 import { useLoadableData } from '@zeal/toolkit/LoadableData/LoadableData'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
 import { AppErrorPopup } from '@zeal/domains/Error/components/AppErrorPopup'
 import { parseAppError } from '@zeal/domains/Error/parsers/parseAppError'
 import { Safe4337 } from '@zeal/domains/KeyStore'
+import { SignWithPasskeyPopup } from '@zeal/domains/KeyStore/domains/Passkey/components/SignWithPasskeyPopup'
 import {
     UserOperationHash,
     UserOperationWithoutSignature,
@@ -86,7 +88,7 @@ export const Sign = ({
     switch (loadable.type) {
         case 'loading':
         case 'loaded':
-            return <LoadingLayout onMsg={onMsg} />
+            return <Layout onMsg={onMsg} />
         case 'error':
             const error = parseAppError(loadable.error)
 
@@ -124,5 +126,23 @@ export const Sign = ({
         /* istanbul ignore next */
         default:
             return notReachable(loadable)
+    }
+}
+
+const Layout = ({ onMsg }: { onMsg: Props['onMsg'] }) => {
+    switch (ZealPlatform.OS) {
+        case 'ios':
+        case 'android':
+            return <LoadingLayout onMsg={onMsg} />
+        case 'web':
+            return (
+                <>
+                    <LoadingLayout onMsg={onMsg} />
+                    <SignWithPasskeyPopup onMsg={onMsg} />
+                </>
+            )
+        /* istanbul ignore next */
+        default:
+            return notReachable(ZealPlatform.OS)
     }
 }

@@ -52,6 +52,20 @@ export const SpeedUp = ({
                             onMsg={onMsg}
                         />
                     )
+                case 'Blast':
+                    return (
+                        <SpeedUpsIsNotSupportedPopup
+                            network={network}
+                            onMsg={onMsg}
+                        />
+                    )
+                case 'OPBNB':
+                    return (
+                        <SpeedUpsIsNotSupportedPopup
+                            network={network}
+                            onMsg={onMsg}
+                        />
+                    )
                 case 'PolygonMumbai':
                 case 'BscTestnet':
                 case 'AvalancheFuji':
@@ -62,6 +76,7 @@ export const SpeedUp = ({
                 case 'BSC':
                 case 'Polygon':
                 case 'PolygonZkevm':
+                case 'Linea':
                 case 'Fantom':
                 case 'Gnosis':
                 case 'Celo':

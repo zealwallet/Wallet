@@ -17,10 +17,11 @@ import { ethBlockNumberAfterTransaction } from '@zeal/domains/RPCRequest/api/fix
 import { ethGetTransactionByHashWithBlockNumber } from '@zeal/domains/RPCRequest/api/fixtures/ethGetTransactionByHash'
 import { ethGetTransactionReceipt } from '@zeal/domains/RPCRequest/api/fixtures/ethGetTransactionReceipt'
 import {
+    emptyPortfolioMap,
     onlyPKAccount,
-    onlyPKAccountEmptyPortfolio,
+    portfolioMap,
 } from '@zeal/domains/Storage/api/fixtures/localStorage'
-import { LS_KEY } from '@zeal/domains/Storage/constants'
+import { LS_KEY, PORTFOLIO_MAP_KEY } from '@zeal/domains/Storage/constants'
 
 import { cleanEnv, mockEnv, TestEnvironment } from 'src/tests/env'
 import { runLottieListeners } from 'src/tests/mocks/lottie'
@@ -47,12 +48,12 @@ test(`As a user I should be able to open swap flow even is my portfolio is empty
     As a user I should be able to set slippage from available options or provide custom, so I make sure my swap parameters are under control
     As a user I should be able to select destination token, so I can choose which token I want to swap to`, async () => {
     env.chromeMocks.storages.session = {}
-    env.chromeMocks.storages.local[LS_KEY] = JSON.stringify(
-        onlyPKAccountEmptyPortfolio
-    )
+    env.chromeMocks.storages.local[LS_KEY] = JSON.stringify(onlyPKAccount)
+    env.chromeMocks.storages.local[PORTFOLIO_MAP_KEY] =
+        JSON.stringify(emptyPortfolioMap)
 
     renderPage(
-        '/page_entrypoint.html?type=swap&fromAddress=0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932'
+        '/page_entrypoint.html?type=swap&fromAddress=0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932'
     )
 
     await userEvent.type(
@@ -60,7 +61,7 @@ test(`As a user I should be able to open swap flow even is my portfolio is empty
         `${testPassword}{enter}`
     )
 
-    expect(await screen.findByText('0x26D0...8932')).toBeInTheDocument()
+    expect(await screen.findByText('0x26d0...8932')).toBeInTheDocument()
     expect(await screen.findByText('Private Key 1')).toBeInTheDocument()
     expect(await screen.findByText('Swap')).toBeInTheDocument()
 
@@ -131,34 +132,34 @@ test(`As a user I should be able to open swap flow even is my portfolio is empty
     expect(env.api['@socket/quote']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: expect.objectContaining({
-                userAddress: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
+                userAddress: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
                 defaultSwapSlippage: '0.50',
                 fromAmount: '10000000',
                 fromChainId: '0x1',
                 toChainId: '0x1',
-                fromTokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-                toTokenAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+                fromTokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+                toTokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
             }),
         })
     )
     expect(env.api['@socket/approval/check-allowance']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: expect.objectContaining({
-                allowanceTarget: '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
+                allowanceTarget: '0x3a23f943181408eac424116af7b7790c94cb97a5',
                 chainID: '1',
-                owner: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
-                tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+                owner: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
+                tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
             }),
         })
     )
     expect(env.api['@socket/approval/build-tx']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: {
-                allowanceTarget: '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
+                allowanceTarget: '0x3a23f943181408eac424116af7b7790c94cb97a5',
                 amount: '10000000',
                 chainID: '1',
-                owner: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
-                tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+                owner: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
+                tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
             },
         })
     )
@@ -251,6 +252,9 @@ test(`As a user I should be able to open swap with source token specified, so I 
     As a user I should be able to submit swap, so my swap will be sent to RPC`, async () => {
     env.chromeMocks.storages.session = {}
     env.chromeMocks.storages.local[LS_KEY] = JSON.stringify(onlyPKAccount)
+    env.chromeMocks.storages.local[PORTFOLIO_MAP_KEY] =
+        JSON.stringify(portfolioMap)
+
     env.api['/wallet/rpc/'].eth_getTransactionByHash = jest.fn(() => [
         200,
         ethGetTransactionByHashWithBlockNumber,
@@ -281,7 +285,7 @@ test(`As a user I should be able to open swap with source token specified, so I 
     ])
 
     renderPage(
-        '/page_entrypoint.html?type=swap&fromAddress=0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932&fromCurrencyId=Polygon%7C0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
+        '/page_entrypoint.html?type=swap&fromAddress=0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932&fromCurrencyId=Polygon%7C0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
     )
 
     await userEvent.type(
@@ -289,7 +293,7 @@ test(`As a user I should be able to open swap with source token specified, so I 
         `${testPassword}{enter}`
     )
 
-    expect(await screen.findByText('0x26D0...8932')).toBeInTheDocument()
+    expect(await screen.findByText('0x26d0...8932')).toBeInTheDocument()
     expect(await screen.findByText('Private Key 1')).toBeInTheDocument()
     expect(await screen.findByText('Swap')).toBeInTheDocument()
 
@@ -385,31 +389,31 @@ test(`As a user I should be able to open swap with source token specified, so I 
                 defaultSwapSlippage: '0.50',
                 fromAmount: '157223311',
                 fromChainId: '0x89',
-                fromTokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+                fromTokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
                 toChainId: '0x89',
-                toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-                userAddress: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
+                toTokenAddress: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+                userAddress: '0x26d0d88ffe184b1ba244d08fb2a0c695e65c8932',
             }),
         })
     )
     expect(env.api['@socket/approval/check-allowance']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: expect.objectContaining({
-                allowanceTarget: '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
+                allowanceTarget: '0x3a23f943181408eac424116af7b7790c94cb97a5',
                 chainID: '137',
-                owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                tokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+                owner: '0x61640a8d48bca205ba91b16b0b7745e7abc61084',
+                tokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             }),
         })
     )
     expect(env.api['@socket/approval/build-tx']).toHaveBeenCalledWith(
         expect.objectContaining({
             params: {
-                allowanceTarget: '0x3a23F943181408EAC424116Af7b7790c94Cb97a5',
+                allowanceTarget: '0x3a23f943181408eac424116af7b7790c94cb97a5',
                 amount: '157223311',
                 chainID: '137',
-                owner: '0x61640A8D48Bca205BA91b16B0B7745e7aBc61084',
-                tokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+                owner: '0x61640a8d48bca205ba91b16b0b7745e7abc61084',
+                tokenAddress: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
             },
         })
     )

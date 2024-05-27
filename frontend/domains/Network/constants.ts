@@ -74,6 +74,19 @@ const PREDEFINED_NETWORKS_MAP: {
         name: 'PolygonZkevm',
         trxType: 'legacy',
     },
+    Linea: {
+        type: 'predefined',
+        blockExplorerUrl: 'https://lineascan.build/',
+        gasTokenAddress: parseStaticAddress(
+            '0x0000000000000000000000000000000000000000'
+        ),
+        hexChainId: '0xe708' as NetworkHexId,
+        isSimulationSupported: true,
+        isZealRPCSupported: true,
+        isSafeSupported: false,
+        name: 'Linea',
+        trxType: 'legacy',
+    },
     Arbitrum: {
         type: 'predefined',
         blockExplorerUrl: 'https://arbiscan.io/',
@@ -174,7 +187,7 @@ const PREDEFINED_NETWORKS_MAP: {
         hexChainId: '0x64' as NetworkHexId,
         isSimulationSupported: true,
         isZealRPCSupported: true,
-        isSafeSupported: false,
+        isSafeSupported: true,
         name: 'Gnosis',
         trxType: 'eip1559',
     },
@@ -202,6 +215,32 @@ const PREDEFINED_NETWORKS_MAP: {
         isZealRPCSupported: true,
         isSafeSupported: true,
         name: 'Base',
+        trxType: 'legacy',
+    },
+    Blast: {
+        type: 'predefined',
+        blockExplorerUrl: 'https://blastscan.io/',
+        gasTokenAddress: parseStaticAddress(
+            '0x0000000000000000000000000000000000000000'
+        ),
+        hexChainId: '0x13e31' as NetworkHexId,
+        isSimulationSupported: true,
+        isZealRPCSupported: true,
+        isSafeSupported: true,
+        name: 'Blast',
+        trxType: 'legacy',
+    },
+    OPBNB: {
+        type: 'predefined',
+        blockExplorerUrl: 'https://opbnbscan.com/',
+        gasTokenAddress: parseStaticAddress(
+            '0x0000000000000000000000000000000000000000'
+        ),
+        hexChainId: '0xcc' as NetworkHexId,
+        isSimulationSupported: false,
+        isZealRPCSupported: true,
+        isSafeSupported: false,
+        name: 'OPBNB',
         trxType: 'legacy',
     },
     Cronos: {
@@ -407,8 +446,10 @@ const TEST_NETWORKS_MAP: {
     },
 }
 
+export const ARBITRUM = PREDEFINED_NETWORKS_MAP['Arbitrum']
+export const BASE = PREDEFINED_NETWORKS_MAP['Base']
 export const POLYGON = PREDEFINED_NETWORKS_MAP['Polygon']
-export const ETHEREUM = PREDEFINED_NETWORKS_MAP['Ethereum']
+export const GNOSIS = PREDEFINED_NETWORKS_MAP['Gnosis']
 
 export const PREDEFINED_NETWORKS: PredefinedNetwork[] = values(
     PREDEFINED_NETWORKS_MAP
@@ -419,7 +460,7 @@ export const TEST_NETWORKS: TestNetwork[] = values(TEST_NETWORKS_MAP)
 export const PREDEFINED_AND_TEST_NETWORKS: (PredefinedNetwork | TestNetwork)[] =
     [...PREDEFINED_NETWORKS, ...TEST_NETWORKS]
 
-export const SMART_WALLET_REFERENCE_NETWORK = PREDEFINED_NETWORKS_MAP['Polygon']
+export const SMART_WALLET_REFERENCE_NETWORK = PREDEFINED_NETWORKS_MAP['Gnosis']
 
 export const findNetworkByNumber = (
     networkId: number

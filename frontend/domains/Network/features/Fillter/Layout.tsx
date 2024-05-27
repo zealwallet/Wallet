@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { ScrollView } from 'react-native'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Avatar } from '@zeal/uikit/Avatar'
 import { Column } from '@zeal/uikit/Column'
 import { Group } from '@zeal/uikit/Group'
-import { ArrowLeft2 } from '@zeal/uikit/Icon/ArrowLeft2'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { Plus } from '@zeal/uikit/Icon/Plus'
 import { SolidInterfacePlus } from '@zeal/uikit/Icon/SolidInterfacePlus'
 import { ThreeDotVertical } from '@zeal/uikit/Icon/ThreeDotVertical'
@@ -14,6 +13,7 @@ import { IconButton } from '@zeal/uikit/IconButton'
 import { ListItem } from '@zeal/uikit/ListItem'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { TabHeader } from '@zeal/uikit/TabHeader'
 import { Tertiary } from '@zeal/uikit/Tertiary'
 import { Text } from '@zeal/uikit/Text'
@@ -157,7 +157,11 @@ export const Layout = ({
     const tabs = keys(grouped).filter((tab) => grouped[tab].length > 0)
 
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <Row spacing={4}>
@@ -166,7 +170,7 @@ export const Layout = ({
                             onClick={() => onMsg({ type: 'close' })}
                         >
                             {({ color }) => (
-                                <ArrowLeft2 size={24} color={color} />
+                                <BackIcon size={24} color={color} />
                             )}
                         </IconButton>
 
@@ -259,7 +263,7 @@ export const Layout = ({
                 }
             />
 
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollContainer>
                 <Column spacing={16}>
                     <Group variant="default">
                         {currentTabItems.map((listItem) => {
@@ -401,7 +405,7 @@ export const Layout = ({
                         }
                     })()}
                 </Column>
-            </ScrollView>
+            </ScrollContainer>
         </Screen>
     )
 }

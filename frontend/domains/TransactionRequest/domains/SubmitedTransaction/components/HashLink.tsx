@@ -48,6 +48,7 @@ export const HashLink = ({ submitedTransaction, network, variant }: Props) => {
                                 </Text>
                             ) : (
                                 <IconButton
+                                    size="small"
                                     variant="on_light"
                                     onClick={() => openExternalURL(link)}
                                 >
@@ -80,6 +81,7 @@ export const HashLink = ({ submitedTransaction, network, variant }: Props) => {
                         <IconButton
                             variant="on_light"
                             onClick={() => openExternalURL(link)}
+                            size="small"
                         >
                             {({ color }) => (
                                 <ExternalLink size={14} color={color} />

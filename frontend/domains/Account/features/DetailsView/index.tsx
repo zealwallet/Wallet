@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
@@ -8,7 +7,6 @@ import { Account, AccountsMap } from '@zeal/domains/Account'
 import { CurrencyHiddenMap } from '@zeal/domains/Currency'
 import { KeyStoreMap } from '@zeal/domains/KeyStore'
 import { getKeyStore } from '@zeal/domains/KeyStore/helpers/getKeyStore'
-import { NetworkRPCMap } from '@zeal/domains/Network'
 import { Portfolio } from '@zeal/domains/Portfolio'
 import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
 
@@ -19,7 +17,6 @@ type Props = {
     installationId: string
     account: Account
     keystoreMap: KeyStoreMap
-    networkRPCMap: NetworkRPCMap
 
     encryptedPassword: string
     portfolio: Portfolio | null
@@ -59,7 +56,6 @@ export const DetailsView = ({
     accounts,
     keystoreMap,
     currencyHiddenMap,
-    networkRPCMap,
     installationId,
     onMsg,
 }: Props) => {
@@ -129,7 +125,6 @@ export const DetailsView = ({
 
             <Modal
                 installationId={installationId}
-                keystoreMap={keystoreMap}
                 accounts={accounts}
                 encryptedPassword={encryptedPassword}
                 account={account}
@@ -143,8 +138,8 @@ export const DetailsView = ({
 
                         case 'on_account_label_change_submit':
                         case 'confirm_account_delete_click':
-                            onMsg(msg)
                             setState({ type: 'closed' })
+                            onMsg(msg)
                             break
 
                         /* istanbul ignore next */

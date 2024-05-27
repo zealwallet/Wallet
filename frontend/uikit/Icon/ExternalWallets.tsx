@@ -1,14 +1,10 @@
 import * as React from 'react'
-import Svg, { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 export const ExternalWallets = () => (
-    <Svg
-        style={{ flexShrink: 0 }}
-        viewBox="0 0 104 32"
-        width={104}
-        height={32}
-        fill="none"
-    >
+    <SvgIcon viewBox="0 0 104 32" width={104} height={32} fill="none">
         <G clipPath="url(#clip0_759_24622)">
             <Rect
                 width="28"
@@ -295,5 +291,5 @@ export const ExternalWallets = () => (
                 />
             </ClipPath>
         </Defs>
-    </Svg>
+    </SvgIcon>
 )

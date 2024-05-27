@@ -3,9 +3,8 @@ import { FormattedMessage } from 'react-intl'
 
 import { Column } from '@zeal/uikit/Column'
 import { Content } from '@zeal/uikit/Content'
-import { Section } from '@zeal/uikit/Group'
-import { GroupHeader } from '@zeal/uikit/Group'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
+import { GroupHeader, Section } from '@zeal/uikit/Group'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { ListItem } from '@zeal/uikit/ListItem'
 import { Progress } from '@zeal/uikit/Progress'
@@ -93,7 +92,11 @@ export const LookForUnfinishedOnRamp = ({
     }, [pollable, liveMsg])
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 network={null}
                 account={account}
@@ -101,12 +104,12 @@ export const LookForUnfinishedOnRamp = ({
                     keyStoreMap,
                     address: account.address,
                 })}
-                right={
+                left={
                     <IconButton
                         variant="on_light"
                         onClick={() => onMsg({ type: 'close' })}
                     >
-                        {({ color }) => <CloseCross size={24} color={color} />}
+                        {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
             />

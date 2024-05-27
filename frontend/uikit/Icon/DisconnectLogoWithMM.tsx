@@ -1,5 +1,7 @@
 import React from 'react'
-import { ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
@@ -7,12 +9,7 @@ type Props = {
 
 export const DisconnectLogoWithMM = ({ size }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
-            height={size}
-            viewBox="0 0 48 48"
-            width={size}
-        >
+        <SvgIcon height={size} viewBox="0 0 48 48" width={size}>
             <Rect width="48" height="48" rx="5" fill="white" />
             <Path
                 d="M11 37H37V25.3H16.2C13.3281 25.3 11 27.6281 11 30.5V37Z"
@@ -208,6 +205,6 @@ export const DisconnectLogoWithMM = ({ size }: Props) => {
                     />
                 </ClipPath>
             </Defs>
-        </Svg>
+        </SvgIcon>
     )
 }

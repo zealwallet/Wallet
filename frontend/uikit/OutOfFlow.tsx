@@ -14,6 +14,14 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
     },
+    align_iconButtonRight: {
+        position: 'absolute',
+        top: -8,
+        right: -8,
+        height: 32,
+        justifyContent: 'center',
+        overflow: 'hidden',
+    },
 })
 
 type Props = {

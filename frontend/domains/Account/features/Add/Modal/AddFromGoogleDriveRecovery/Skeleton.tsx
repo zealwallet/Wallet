@@ -23,7 +23,11 @@ export const Skeleton = ({ onMsg }: Props) => {
     const skeletons = new Array(5).fill(true)
     return (
         <>
-            <Screen background="light" padding="form">
+            <Screen
+                background="light"
+                padding="form"
+                onNavigateBack={() => onMsg({ type: 'close' })}
+            >
                 <ActionBar
                     left={
                         <IconButton

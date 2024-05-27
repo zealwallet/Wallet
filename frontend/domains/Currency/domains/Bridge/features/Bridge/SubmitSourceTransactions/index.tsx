@@ -53,7 +53,7 @@ export type Msg =
                   | 'transaction_submited'
                   | 'on_safe_transaction_failure_accepted'
                   | 'cancel_submitted'
-                  | 'transaction_cancel_success'
+                  | 'on_transaction_cancelled_successfully_close_clicked'
                   | 'transaction_cancel_failure_accepted'
                   | 'on_predefined_fee_preset_selected'
                   | 'on_gas_currency_selected'
@@ -187,7 +187,7 @@ export const SubmitSourceTransactions = ({
                             case 'transaction_failure_accepted':
                             case 'on_safe_transaction_failure_accepted':
                             case 'on_sign_cancel_button_clicked':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'transaction_cancel_failure_accepted':
                             case 'transaction_submited':
                             case 'cancel_submitted':
@@ -320,7 +320,7 @@ export const SubmitSourceTransactions = ({
                             case 'on_wrong_network_accepted':
                             case 'transaction_failure_accepted':
                             case 'on_sign_cancel_button_clicked':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'transaction_cancel_failure_accepted':
                             case 'transaction_submited':
                             case 'cancel_submitted':

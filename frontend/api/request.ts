@@ -1,8 +1,11 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 
-import { notReachable } from '@zeal/toolkit'
 import { isProduction } from '@zeal/toolkit/Environment/isProduction'
+import { joinURL } from '@zeal/toolkit/URL/joinURL'
 
+import { HttpError } from '@zeal/domains/Error'
+
+import { Auth, getAuthHeaders } from './Auth'
 import { convertToHttpErrorToPreserverStack } from './interceptors'
 import { components, paths } from './portfolio'
 
@@ -44,10 +47,12 @@ export type APIPaths = Omit<
     ]: paths['/wallet/rate/default/{network}/{tokenAddress}/']
 }
 
+const BASE_URL = isProduction()
+    ? 'https://rdwdvjp8j5.execute-api.eu-west-1.amazonaws.com/'
+    : 'https://iw8i6d52oi.execute-api.eu-west-2.amazonaws.com/'
+
 export const request = axios.create({
-    baseURL: isProduction()
-        ? 'https://rdwdvjp8j5.execute-api.eu-west-1.amazonaws.com/'
-        : 'https://iw8i6d52oi.execute-api.eu-west-2.amazonaws.com/',
+    baseURL: BASE_URL,
 })
 
 request.interceptors.response.use(
@@ -95,40 +100,6 @@ type KeysMatching<T, V> = {
     [K in keyof T]-?: T[K] extends V ? K : never
 }[keyof T]
 
-type Auth =
-    | {
-          type: 'message_and_signature'
-          message: string
-          signature: string
-      }
-    | { type: 'unblock_user_id'; userId: string }
-    | { type: 'session_id'; sessionId: string }
-
-const getAuthHeaders = (auth: Auth): AxiosRequestConfig['headers'] => {
-    switch (auth.type) {
-        case 'message_and_signature':
-            return {
-                Authorization: `Signature ${
-                    auth.signature
-                }; Message ${encodeURIComponent(auth.message)}`,
-            }
-
-        case 'session_id':
-            return {
-                'unblock-session-id': auth.sessionId,
-            }
-
-        case 'unblock_user_id':
-            return {
-                'user-uuid': auth.userId,
-            }
-
-        /* istanbul ignore next */
-        default:
-            return notReachable(auth)
-    }
-}
-
 export const post = <Key extends KeysMatching<APIPaths, { post: unknown }>>(
     path: Key,
     params: OpArgType<APIPaths[Key]['post']> & {
@@ -171,17 +142,34 @@ export const get = <Key extends KeysMatching<APIPaths, { get: unknown }>>(
     path: Key,
     params: OpArgType<APIPaths[Key]['get']> & { auth?: Auth },
     signal?: AbortSignal
-): Promise<OpReturnType<APIPaths[Key]['get']>> =>
-    request
-        .get(path, {
-            params: params.query,
-            signal,
-            withCredentials: false,
-            headers: {
-                ...(params.auth ? getAuthHeaders(params.auth) : {}),
-            },
-        })
-        .then((r) => r.data)
+): Promise<OpReturnType<APIPaths[Key]['get']>> => {
+    const url = joinURL(BASE_URL, path)
+    const query = params.query
+        ? `?${new URLSearchParams(params.query as Record<string, string>)}`
+        : ''
+    const urlWithQuery = `${url}${query}`
+
+    return fetch(urlWithQuery, {
+        credentials: 'omit',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip',
+            'Cache-Control': 'max-age=0', // cache not working on ios without cache control header
+            ...(params.auth ? getAuthHeaders(params.auth) : {}),
+        },
+        signal,
+    }).then(async (response) => {
+        if (response.ok) {
+            return response.json()
+        }
+        const status = response.status
+        const trace = response.headers.get('trace-id') || null
+        const data = await response.json().catch(() => null)
+
+        throw new HttpError(url, 'GET', status, trace, data, params)
+    })
+}
 
 export const put = <Key extends KeysMatching<APIPaths, { put: unknown }>>(
     path: Key,

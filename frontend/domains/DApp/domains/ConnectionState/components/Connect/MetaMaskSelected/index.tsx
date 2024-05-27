@@ -15,12 +15,11 @@ import { KeyStoreMap } from '@zeal/domains/KeyStore'
 import { Network, NetworkMap, NetworkRPCMap } from '@zeal/domains/Network'
 import { PortfolioMap } from '@zeal/domains/Portfolio'
 import { ConnectionSafetyChecksResponse } from '@zeal/domains/SafetyCheck/api/fetchConnectionSafetyChecks'
+import { calculateConnectionSafetyChecksUserConfirmation } from '@zeal/domains/SafetyCheck/helpers/calculateConnectionSafetyChecksUserConfirmation'
 import { CustomCurrencyMap } from '@zeal/domains/Storage'
 
 import { Layout } from './Layout'
 import { Modal, State as ModalState } from './Modal'
-
-import { shouldWeConfirmSafetyCheck } from '../helpers'
 
 type Props = {
     alternativeProvider: 'metamask'
@@ -98,27 +97,30 @@ export const MetaMaskSelected = ({
                             setModalState({ type: 'choose_account' })
                             break
                         case 'on_continue_with_meta_mask':
-                            switch (safetyChecksLoadable.type) {
-                                case 'loading':
-                                case 'error':
-                                    onMsg(msg)
-                                    break
-                                case 'loaded':
-                                    shouldWeConfirmSafetyCheck(
-                                        safetyChecksLoadable.data.checks
+                            {
+                                const safetyCheckConfirmationResult =
+                                    calculateConnectionSafetyChecksUserConfirmation(
+                                        { safetyChecksLoadable }
                                     )
-                                        ? setModalState({
-                                              type: 'confirm_connection_safety_checks',
-                                              safetyChecks:
-                                                  safetyChecksLoadable.data
-                                                      .checks,
-                                          })
-                                        : onMsg(msg)
 
-                                    break
-                                /* istanbul ignore next */
-                                default:
-                                    return notReachable(safetyChecksLoadable)
+                                switch (safetyCheckConfirmationResult.type) {
+                                    case 'Failure':
+                                        onMsg(msg)
+                                        break
+
+                                    case 'Success':
+                                        setModalState({
+                                            type: 'confirm_connection_safety_checks',
+                                            safetyChecks:
+                                                safetyCheckConfirmationResult.data,
+                                        })
+                                        break
+
+                                    default:
+                                        return notReachable(
+                                            safetyCheckConfirmationResult
+                                        )
+                                }
                             }
                             break
                         /* istanbul ignore next */

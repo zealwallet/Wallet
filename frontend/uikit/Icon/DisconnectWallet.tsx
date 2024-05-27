@@ -1,5 +1,7 @@
 import React from 'react'
-import { G, Path, Svg } from 'react-native-svg'
+import { G, Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const DisconnectWallet = ({ color, size }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 24 24"
             fill="none"
             color={color && colors[color]}
@@ -28,6 +29,6 @@ export const DisconnectWallet = ({ color, size }: Props) => {
                     strokeLinejoin="round"
                 />
             </G>
-        </Svg>
+        </SvgIcon>
     )
 }

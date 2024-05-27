@@ -15568,7 +15568,6 @@ urdex.finance
 p2vswap.io
 app.fringe.fi
 www.noteon.io
-www.jetbrains.comidea
 metf.finance
 pyrabank.combittorrent
 www.battlefly.game

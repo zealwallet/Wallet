@@ -89,7 +89,7 @@ export const Layout = ({ onMsg, simulatedTransaction, dAppInfo }: Props) => {
             return (
                 <Content.Header
                     title={
-                        <Row spacing={4}>
+                        <Row spacing={16}>
                             <Text
                                 variant="title3"
                                 weight="semi_bold"
@@ -102,6 +102,7 @@ export const Layout = ({ onMsg, simulatedTransaction, dAppInfo }: Props) => {
                             </Text>
                             <IconButton
                                 variant="on_light"
+                                size="small"
                                 aria-label={formatMessage({
                                     id: 'approval.approval_info',
                                     defaultMessage: 'What are Approvals?',

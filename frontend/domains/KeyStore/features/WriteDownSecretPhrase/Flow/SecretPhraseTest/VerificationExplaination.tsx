@@ -28,7 +28,13 @@ export const VerificationExplaination = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() =>
+                onMsg({ type: 'on_verification_explaination_close' })
+            }
+        >
             <ActionBar
                 left={
                     <IconButton

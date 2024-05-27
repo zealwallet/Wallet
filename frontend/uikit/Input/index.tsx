@@ -1,9 +1,10 @@
-import React, { ComponentProps, useEffect, useState } from 'react'
+import React, { ComponentProps, useState } from 'react'
 import {
     NativeSyntheticEvent,
     StyleSheet,
     TextInput,
     TextInputChangeEventData,
+    TextInputProps,
     TextInputSubmitEditingEventData,
     View,
 } from 'react-native'
@@ -13,7 +14,7 @@ import { Row } from '@zeal/uikit/Row'
 import { Spacer } from '@zeal/uikit/Spacer'
 import { styles as textStyles, Text } from '@zeal/uikit/Text'
 
-import { notReachable, useLiveRef } from '@zeal/toolkit'
+import { notReachable } from '@zeal/toolkit'
 import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 
 const styles = StyleSheet.create({
@@ -96,6 +97,10 @@ const styles = StyleSheet.create({
     Variant_large: {
         padding: 12,
     },
+
+    inputWithIcon: {
+        paddingVertical: 4,
+    },
 })
 
 type Variant = 'regular' | 'large' | 'small'
@@ -134,6 +139,10 @@ type Props = {
         | 'email-address'
         | 'phone-pad'
         | 'url'
+    returnKeyType?: TextInputProps['returnKeyType']
+    blurOnSubmit?: TextInputProps['blurOnSubmit']
+    autoComplete?: TextInputProps['autoComplete']
+    autoCapitalize?: TextInputProps['autoCapitalize']
 }
 
 type State = 'normal' | 'error'
@@ -183,143 +192,126 @@ const variantToTypographyStyle = (variant: Variant) => {
     }
 }
 
-export const Input = ({
-    type = 'text',
-    value,
-    autoFocus,
-    placeholder,
-    onChange,
-    onBlur,
-    onFocus,
-    message,
-    sideMessage,
-    onSubmitEditing,
-    state,
-    variant,
-    rightIcon,
-    leftIcon,
-    'aria-labelledby': ariaLabelledBy,
-    'aria-label': ariaLabel,
-    disabled,
-    spellCheck,
-    keyboardType,
-}: Props) => {
-    const [isFocused, setFocused] = useState(false)
-    const [height, setHeight] = useState(0)
-    const [isMultiline, setIsMultiline] = useState<boolean>(false)
+export const Input = React.forwardRef<TextInput, Props>(
+    (
+        {
+            type = 'text',
+            value,
+            autoFocus,
+            placeholder,
+            onChange,
+            onBlur,
+            onFocus,
+            message,
+            sideMessage,
+            onSubmitEditing,
+            state,
+            variant,
+            rightIcon,
+            leftIcon,
+            'aria-labelledby': ariaLabelledBy,
+            'aria-label': ariaLabel,
+            disabled,
+            spellCheck,
+            keyboardType,
+            returnKeyType,
+            blurOnSubmit,
+            autoComplete,
+            autoCapitalize,
+        }: Props,
+        ref
+    ) => {
+        const [isFocused, setFocused] = useState(false)
 
-    const liveheight = useLiveRef(height)
+        const inputWrapperStyles = [
+            styles.inputWrapper,
+            styles[
+                `State_${
+                    isFocused && state !== 'error' && !disabled
+                        ? 'focus'
+                        : state
+                }`
+            ],
+            styles[`Variant_${variant}`],
+            !!(leftIcon || rightIcon) && styles.inputWithIcon,
+        ]
 
-    useEffect(() => {
-        // needed to fix input height, on IOS it is re-mounted as new native component and value is lost if you change from multiline to a password
-        switch (type) {
-            case 'multiline':
-                setIsMultiline(true)
-                break
-            case 'text':
-            case 'password':
-                const saveOldHieght = liveheight.current
-                setIsMultiline(false)
-                setHeight(0)
-                return () => {
-                    // try to restore old height when switching a type as password & text is always one liner
-                    // and you need to trigger height update to tiger onContentSizeChange
-                    setHeight(saveOldHieght)
-                }
+        const inputStyles = [
+            styles.input,
+            variantToTypographyStyle(variant),
+            disabled && styles.inputDisabled,
+        ]
 
-            /* istanbul ignore next */
-            default:
-                notReachable(type)
-        }
-    }, [liveheight, type])
-
-    const inputWrapperStyles = [
-        styles.inputWrapper,
-        styles[
-            `State_${
-                isFocused && state !== 'error' && !disabled ? 'focus' : state
-            }`
-        ],
-        styles[`Variant_${variant}`],
-    ]
-
-    const inputStyles = [
-        styles.input,
-        variantToTypographyStyle(variant),
-        disabled && styles.inputDisabled,
-        { height: Math.max(24, height) },
-        // https://reactnative.dev/docs/textinput#multiline
-        // https://github.com/facebook/react-native/issues/33562
-        isMultiline && {
-            paddingTop: 3,
-        },
-    ]
-
-    return (
-        <View style={styles.container}>
-            <View style={inputWrapperStyles}>
-                {leftIcon}
-                <TextInput
-                    // needed to fix input height, on IOS it is re-mounted as new native component and value is lost if you change from multiline to a password
-                    keyboardType={keyboardType}
-                    key={type}
-                    style={inputStyles}
-                    aria-label={ariaLabel}
-                    aria-labelledby={ariaLabelledBy}
-                    aria-invalid={getAriaInvalid(state)}
-                    secureTextEntry={type === 'password'}
-                    multiline={isMultiline}
-                    onContentSizeChange={(event) => {
-                        setHeight(event.nativeEvent.contentSize.height)
-                    }}
-                    textAlignVertical={isMultiline ? 'top' : 'center'}
-                    value={value}
-                    autoFocus={autoFocus}
-                    onSubmitEditing={onSubmitEditing}
-                    onChange={onChange}
-                    placeholder={placeholder}
-                    placeholderTextColor={colors.textSecondary}
-                    onFocus={() => {
-                        setFocused(true)
-                        onFocus && onFocus()
-                    }}
-                    onBlur={() => {
-                        setFocused(false)
-                        onBlur && onBlur()
-                    }}
-                    editable={!disabled}
-                    aria-disabled={disabled}
-                    spellCheck={spellCheck}
-                />
-                {rightIcon}
-            </View>
-            {(message || sideMessage) && (
-                <Row spacing={8}>
-                    {message && (
-                        <Text
-                            ellipsis
-                            color={messageColor(state)}
-                            variant="caption1"
-                            weight="regular"
-                        >
-                            {message}
-                        </Text>
-                    )}
-                    {sideMessage && (
-                        <>
-                            <Spacer />
+        return (
+            <View style={styles.container}>
+                <View style={inputWrapperStyles}>
+                    {leftIcon}
+                    <TextInput
+                        // needed to fix input height, on IOS it is re-mounted as new native component and value is lost if you change from multiline to a password
+                        keyboardType={keyboardType}
+                        key={type}
+                        style={inputStyles}
+                        aria-label={ariaLabel}
+                        aria-labelledby={ariaLabelledBy}
+                        aria-invalid={getAriaInvalid(state)}
+                        secureTextEntry={type === 'password'}
+                        multiline={type === 'multiline'}
+                        textAlignVertical={
+                            type === 'multiline' ? 'top' : 'center'
+                        }
+                        value={value}
+                        autoFocus={autoFocus}
+                        onSubmitEditing={onSubmitEditing}
+                        returnKeyType={returnKeyType}
+                        blurOnSubmit={blurOnSubmit}
+                        autoComplete={autoComplete}
+                        autoCapitalize={autoCapitalize}
+                        onChange={onChange}
+                        placeholder={placeholder}
+                        placeholderTextColor={colors.textSecondary}
+                        onFocus={() => {
+                            setFocused(true)
+                            onFocus && onFocus()
+                        }}
+                        onBlur={() => {
+                            setFocused(false)
+                            onBlur && onBlur()
+                        }}
+                        editable={!disabled}
+                        aria-disabled={disabled}
+                        spellCheck={spellCheck}
+                        ref={ref}
+                    />
+                    {rightIcon}
+                </View>
+                {(message || sideMessage) && (
+                    <Row spacing={8}>
+                        {message && (
                             <Text
                                 ellipsis
-                                color="textSecondary"
+                                color={messageColor(state)}
                                 variant="caption1"
                                 weight="regular"
                             >
-                                {sideMessage}
+                                {message}
                             </Text>
-                        </>
-                    )}
-                </Row>
-            )}
-        </View>
-    )
-}
+                        )}
+                        {sideMessage && (
+                            <>
+                                <Spacer />
+                                <Text
+                                    ellipsis
+                                    color="textSecondary"
+                                    variant="caption1"
+                                    weight="regular"
+                                >
+                                    {sideMessage}
+                                </Text>
+                            </>
+                        )}
+                    </Row>
+                )}
+            </View>
+        )
+    }
+)

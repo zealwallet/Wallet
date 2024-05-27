@@ -7,6 +7,7 @@ import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
 
 import { ConfirmPin } from './ConfirmPin'
 import { CreatePin } from './CreatePin'
+import { EncryptPin } from './EncryptPin'
 import { SavePinToSecureStorage } from './SavePinToSecureStorage'
 
 type Props = {
@@ -25,6 +26,7 @@ type Msg =
 type State =
     | { type: 'create_pin' }
     | { type: 'confirm_pin'; createdPin: Pin }
+    | { type: 'encrypt_pin'; pin: Pin }
     | {
           type: 'save_pin_to_secure_storage'
           pin: Pin
@@ -68,6 +70,7 @@ export const AddPin = ({ installationId, onMsg }: Props) => {
         case 'confirm_pin':
             return (
                 <ConfirmPin
+                    installationId={installationId}
                     createdPin={state.createdPin}
                     onMsg={(msg) => {
                         switch (msg.type) {
@@ -75,12 +78,7 @@ export const AddPin = ({ installationId, onMsg }: Props) => {
                                 setState({ type: 'create_pin' })
                                 break
                             case 'pin_confirmed':
-                                setState({
-                                    type: 'save_pin_to_secure_storage',
-                                    pin: msg.pin,
-                                    sessionPassword: msg.sessionPassword,
-                                    encryptedPassword: msg.encryptedPassword,
-                                })
+                                setState({ type: 'encrypt_pin', pin: msg.pin })
                                 break
                             /* istanbul ignore next */
                             default:
@@ -89,6 +87,33 @@ export const AddPin = ({ installationId, onMsg }: Props) => {
                     }}
                 />
             )
+
+        case 'encrypt_pin':
+            return (
+                <EncryptPin
+                    pin={state.pin}
+                    onMsg={(msg) => {
+                        switch (msg.type) {
+                            case 'close':
+                                setState({ type: 'create_pin' })
+                                break
+                            case 'password_added':
+                                setState({
+                                    type: 'save_pin_to_secure_storage',
+                                    pin: msg.pin,
+                                    sessionPassword: msg.sessionPassword,
+                                    encryptedPassword: msg.encryptedPassword,
+                                })
+                                break
+
+                            /* istanbul ignore next */
+                            default:
+                                notReachable(msg)
+                        }
+                    }}
+                />
+            )
+
         case 'save_pin_to_secure_storage':
             return (
                 <SavePinToSecureStorage

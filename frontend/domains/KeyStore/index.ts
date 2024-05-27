@@ -1,6 +1,5 @@
-import * as Hexadecimal from '@zeal/toolkit/Hexadecimal'
-
 import { Address } from '@zeal/domains/Address'
+import { Passkey } from '@zeal/domains/KeyStore/domains/Passkey'
 
 export type KeyStore = EOA | Safe4337 | TrackOnly
 
@@ -44,16 +43,6 @@ export type SecretPhrase = {
         modifiedTime: number
         id: string
     } | null
-}
-
-type Passkey = {
-    encryptedCredentialId: string
-    recoveryId: Hexadecimal.Hexadecimal
-    publicKey: {
-        xCoordinate: Hexadecimal.Hexadecimal
-        yCoordinate: Hexadecimal.Hexadecimal
-    }
-    signerAddress: Address
 }
 
 export type Safe4337 = {

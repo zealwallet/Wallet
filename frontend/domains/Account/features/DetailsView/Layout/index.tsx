@@ -48,7 +48,11 @@ export const Layout = ({
     const sum = portfolio && sumPortfolio(portfolio, currencyHiddenMap)
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton

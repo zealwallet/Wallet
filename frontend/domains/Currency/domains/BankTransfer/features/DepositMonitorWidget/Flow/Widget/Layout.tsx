@@ -91,6 +91,7 @@ const getProgress = (event: OnRampTransactionEvent): RangeInt<0, 100> => {
         case 'unblock_onramp_transfer_received':
         case 'unblock_onramp_transfer_in_review':
         case 'unblock_onramp_failed':
+        case 'unblock_onramp_pending':
             return 20
         case 'unblock_onramp_transfer_approved':
             return 50
@@ -115,6 +116,7 @@ const getProgressColour = (
         case 'unblock_onramp_failed':
         case 'unblock_onramp_crypto_transfer_issued':
         case 'unblock_onramp_transfer_approved':
+        case 'unblock_onramp_pending':
             return 'neutral'
         case 'unblock_onramp_transfer_on_hold_compliance':
         case 'unblock_onramp_transfer_on_hold_kyc':
@@ -195,6 +197,7 @@ const Subtitle = ({
         case 'unblock_onramp_transfer_on_hold_compliance':
         case 'unblock_onramp_transfer_on_hold_kyc':
         case 'unblock_onramp_failed':
+        case 'unblock_onramp_pending':
             return <>{fiatCurrency.code}</>
         case 'unblock_onramp_crypto_transfer_issued':
         case 'unblock_onramp_process_completed':
@@ -224,6 +227,7 @@ const Status = ({ event, bankTransferCurrencies, networkMap }: Props) => {
         case 'unblock_onramp_transfer_in_review':
         case 'unblock_onramp_failed':
         case 'unblock_onramp_transfer_approved':
+        case 'unblock_onramp_pending':
             return (
                 <Text
                     variant="footnote"

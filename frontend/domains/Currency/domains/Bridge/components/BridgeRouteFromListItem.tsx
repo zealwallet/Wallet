@@ -50,7 +50,7 @@ export const BridgeRouteFromListItem = ({
         <>
             <ListItem
                 aria-current={false}
-                size="regular"
+                size="large"
                 primaryText={fromCurrency.code}
                 avatar={({ size }) => (
                     <Avatar

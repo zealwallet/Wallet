@@ -23,7 +23,7 @@ type Props = {
 
 export const Skeleton = ({ onClose, account, keystoreMap }: Props) => {
     return (
-        <Screen background="light" padding="form">
+        <Screen background="light" padding="form" onNavigateBack={onClose}>
             <ActionBar
                 account={account}
                 keystore={getKeyStore({

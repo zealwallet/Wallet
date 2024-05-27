@@ -43,7 +43,7 @@ export const HowToConnectToMetaMaskStory = ({
 
     return (
         <>
-            <Screen padding="main" background="light">
+            <Screen padding="main" background="light" onNavigateBack={null}>
                 <StoryWithActionsInTheEnd
                     stories={[
                         {
@@ -99,7 +99,7 @@ export const HowToConnectToMetaMaskStory = ({
                                     </Row>
                                 </Column>
                             ),
-                            artworkSrc: require('./story/how_to_connect_to_metamask.png'),
+                            artworkSrc: 'howToConnectToMetamask',
                         },
                     ]}
                     mainCtaTitle={

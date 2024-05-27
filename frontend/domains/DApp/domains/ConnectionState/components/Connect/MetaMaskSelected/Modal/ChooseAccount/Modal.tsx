@@ -54,7 +54,6 @@ export const Modal = ({
                     safetyChecks={state.safetyChecks}
                     onMsg={(msg) => {
                         switch (msg.type) {
-                            case 'close':
                             case 'confirmation_modal_close_clicked':
                                 onMsg(msg)
                                 break

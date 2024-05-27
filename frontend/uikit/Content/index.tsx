@@ -50,6 +50,7 @@ export const Content = ({ header, children, footer }: Props) => {
                 <ScrollView
                     contentContainerStyle={contentStyles.scrollableContent}
                     showsVerticalScrollIndicator={false}
+                    alwaysBounceVertical={false}
                 >
                     {children}
                 </ScrollView>

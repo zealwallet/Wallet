@@ -1,60 +1,39 @@
 import React from 'react'
-import {
-    KeyboardAvoidingView,
-    Modal as NativeModal,
-    StyleSheet,
-} from 'react-native'
+import { Keyboard, StyleSheet } from 'react-native'
+import Animated, { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
-import { notReachable } from '@zeal/toolkit'
-import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
-
-const styles = StyleSheet.create({
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-})
+import { Portal } from '@gorhom/portal'
 
 type Props = {
     children: React.ReactNode
     'aria-labelledby'?: string
     'aria-describedby'?: string
+    isAnimated?: boolean
 }
+
+const styles = StyleSheet.create({
+    overlay: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 9999, //Required for iOS to display out anims correctly
+    },
+})
 
 export const Modal = ({
     children,
     'aria-labelledby': ariaLabelledby,
     'aria-describedby': ariaDescribedby,
+    isAnimated = true, //FIXME @hayder improve if applied everywhere
 }: Props) => (
-    <NativeModal
-        aria-labelledby={ariaLabelledby}
-        aria-describedby={ariaDescribedby}
-        animationType="none"
-        statusBarTranslucent
-        transparent
-        visible
-    >
-        <KeyboardAvoidingView
-            behavior={(() => {
-                switch (ZealPlatform.OS) {
-                    case 'ios':
-                        return 'padding' // FIXME @fred check if height also works for ios in custom RPC usr form jitter
-                    case 'android':
-                        return 'height'
-                    case 'web':
-                        return undefined
-                    default:
-                        return notReachable(ZealPlatform.OS)
-                }
-            })()}
-            style={styles.overlay}
+    <Portal handleOnMount={() => Keyboard.dismiss()}>
+        <Animated.View
+            entering={isAnimated ? FadeInUp : undefined}
+            exiting={isAnimated ? FadeOutUp : undefined}
+            style={[StyleSheet.absoluteFill, styles.overlay]}
+            aria-labelledby={ariaLabelledby}
+            aria-describedby={ariaDescribedby}
         >
             {children}
-        </KeyboardAvoidingView>
-    </NativeModal>
+        </Animated.View>
+    </Portal>
 )

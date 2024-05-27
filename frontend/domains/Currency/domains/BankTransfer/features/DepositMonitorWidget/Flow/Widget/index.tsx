@@ -59,6 +59,7 @@ export const Widget = ({
                             case 'unblock_onramp_transfer_on_hold_compliance':
                             case 'unblock_onramp_transfer_on_hold_kyc':
                             case 'unblock_onramp_failed':
+                            case 'unblock_onramp_pending':
                                 return false
                             case 'unblock_onramp_process_completed':
                                 return true
@@ -92,6 +93,7 @@ export const Widget = ({
                     case 'unblock_onramp_transfer_on_hold_compliance':
                     case 'unblock_onramp_transfer_on_hold_kyc':
                     case 'unblock_onramp_failed':
+                    case 'unblock_onramp_pending':
                         // We wait for success event
                         break
                     case 'unblock_onramp_process_completed':

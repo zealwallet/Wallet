@@ -80,6 +80,7 @@ export const LoadNetworkInfo = ({
         case 'loading':
             return (
                 <LoadingLayout
+                    onClose={() => onMsg({ type: 'on_minimize_click' })}
                     actionBar={
                         <ActionBar
                             keystore={keyStore}
@@ -111,6 +112,7 @@ export const LoadNetworkInfo = ({
             return (
                 <>
                     <LoadingLayout
+                        onClose={() => onMsg({ type: 'on_minimize_click' })}
                         actionBar={
                             <ActionBar
                                 keystore={keyStore}

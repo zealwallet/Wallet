@@ -14,6 +14,7 @@ type Props = {
     height?: NumberProp
     color?: ColorValue
     fill?: string
+    'aria-label'?: string
 }
 
 export const SvgIcon = ({
@@ -23,6 +24,7 @@ export const SvgIcon = ({
     height,
     color,
     fill,
+    'aria-label': ariaLabel,
 }: Props) => {
     const textStylesContext = useTextStyleInheritContext()
     const selectedColour = color || colors[textStylesContext.color]
@@ -34,6 +36,7 @@ export const SvgIcon = ({
             height={height}
             color={selectedColour}
             fill={fill}
+            aria-label={ariaLabel}
         >
             {children}
         </Svg>

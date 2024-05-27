@@ -109,6 +109,7 @@ export const SetUserPreferences = ({
         case 'loading':
             return (
                 <LoadingLayout
+                    onClose={() => onMsg({ type: 'close' })}
                     actionBar={
                         <ActionBar
                             account={account}
@@ -134,6 +135,7 @@ export const SetUserPreferences = ({
             return (
                 <>
                     <LoadingLayout
+                        onClose={() => onMsg({ type: 'close' })}
                         actionBar={
                             <ActionBar
                                 account={account}

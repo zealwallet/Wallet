@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl'
 import { ActionBar as UIActionBar } from '@zeal/uikit/ActionBar'
 import { Clickable } from '@zeal/uikit/Clickable'
 import { Column } from '@zeal/uikit/Column'
-import { ArrowLeft2 } from '@zeal/uikit/Icon/ArrowLeft2'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { CloseCross } from '@zeal/uikit/Icon/CloseCross'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { Row } from '@zeal/uikit/Row'
@@ -39,6 +39,7 @@ export const ActionBar = ({
         <Column spacing={0}>
             <UIActionBar
                 left={<ActionBarAccountIndicator account={account} />}
+                size="small"
                 right={(() => {
                     switch (actionSource) {
                         case 'extension':
@@ -85,7 +86,7 @@ export const ActionBar = ({
                                                   }
                                               >
                                                   <Row spacing={4} shrink>
-                                                      <ArrowLeft2
+                                                      <BackIcon
                                                           size={24}
                                                           color="iconDefault"
                                                       />

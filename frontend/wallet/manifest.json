@@ -1,12 +1,15 @@
 {
   "short_name": "Zeal",
   "name": "Zeal Wallet",
-  "description": "The Ethereum DeFi wallet with free bank transfers",
-  "version": "0.5.1",
+  "description": "Manage DeFi and see all tokens across all EVM chains",
+  "version": "0.5.13",
   "manifest_version": 3,
   "minimum_chrome_version": "107",
-  "permissions": ["storage", "identity"],
-  "host_permissions": ["https://www.googleapis.com/*"],
+  "permissions": ["storage", "identity", "unlimitedStorage"],
+  "host_permissions": [
+    "https://www.googleapis.com/*",
+    "https://passkey.zealwallet.com/*"
+  ],
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk2gDsPQyIlEwIESeaxYTvVhT0ZbH0Wnw6E6mvKIShY7RsFDGJ7GhkkHswUdQuAMCfZTkyL3FEQbPjCachu2wv9mkcGP+vAT8C3+qvtUIkdh0+qdJcvIw7ZpwKgHMCUkcHpO4OCEWACDEiUiNDw2yVDQOYeysWecQXOjlnnL0GJ+iEmzO+ruH/rtgTwTcOfdFINV+8XOgXesbIGLQFJeTP/S4HJoKmTK10HyKxiXFApZdeOrp0GW+Eo3f3QNmdJfKAZuksHIMU8OxElEm081riSmWRF4r9/IjYOYJizJSc4yU9sJQxXMrU1vm96LWqc7PjDhYlR7jC4BLv5aoQaIA6QIDAQAB",
   "oauth2": {
     "client_id": "1002320678938-qet9emn7ebpf16jteud36btbuldr920m.apps.googleusercontent.com",

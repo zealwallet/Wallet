@@ -34,10 +34,6 @@ const common = {
         new EnvironmentPlugin({
             ZEAL_ENV,
             ZEAL_APP_VERSION,
-            GIT_COMMIT_HASH: require('child_process')
-                .execSync('git rev-parse --short HEAD')
-                .toString()
-                .trim(),
         }),
         // TODO: required by react-native-reanimated
         new DefinePlugin({
@@ -118,6 +114,8 @@ const common = {
         alias: {
             src: path.join(FRONTEND_ROOT, 'top-up-dapp/src'),
             'react-native$': 'react-native-web',
+            '@zeal/assets': path.join(FRONTEND_ROOT, 'mobile/assets'),
+            'expo-image': false,
         },
         fallback: {
             zlib: false,

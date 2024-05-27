@@ -156,6 +156,20 @@ export type UnblockSessionExpired = {
 
 export type PasskeyOperationCancelled = { type: 'passkey_operation_cancelled' }
 export type BiometricPromptCancelled = { type: 'biometric_prompt_cancelled' }
+export type AppNotAssociatedWithDomain = {
+    type: 'app_not_associated_with_domain'
+}
+export class UnknownMerchantCode extends Error {
+    type: 'unknown_merchant_code' = 'unknown_merchant_code' as const
+    name: string = 'UnknownMerchantCode' as const
+
+    code: number
+
+    constructor(code: number) {
+        super()
+        this.code = code
+    }
+}
 
 export type AppError =
     | UnexpectedFailureError
@@ -186,3 +200,5 @@ export type AppError =
     | PasskeyOperationCancelled
     | PasskeySignerNotFoundError
     | BiometricPromptCancelled
+    | AppNotAssociatedWithDomain
+    | UnknownMerchantCode

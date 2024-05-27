@@ -182,7 +182,7 @@ export const WithdrawalForm = ({
 
                             case 'transaction_submited':
                             case 'cancel_submitted':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'transaction_request_replaced':
                                 // We do not want a widget for the crypto transaction, since the withdrawal itself is tracked already
                                 break

@@ -25,8 +25,9 @@ import { parseTrezorError } from '@zeal/domains/Error/domains/Trezor/parsers/par
 import { parseHttpError } from '@zeal/domains/Error/parsers/parseHttpError'
 import { parseRPCRequestParseError } from '@zeal/domains/Error/parsers/parseRPCRequestParseError'
 import { parseFailedToFetchGoogleAuthToken } from '@zeal/domains/GoogleDriveFile'
-import { parsePasskeyOperationCancelled } from '@zeal/domains/KeyStore/parsers/parsePasskeyOperationCancelled'
-import { parsePasskeySignerNotFoundError } from '@zeal/domains/KeyStore/parsers/parsePasskeySignerNotFoundError'
+import { parseAppNotAssociatedWithDomain } from '@zeal/domains/KeyStore/domains/Passkey/parsers/parseAppNotAssociatedWithDomain'
+import { parsePasskeyOperationCancelled } from '@zeal/domains/KeyStore/domains/Passkey/parsers/parsePasskeyOperationCancelled'
+import { parsePasskeySignerNotFoundError } from '@zeal/domains/KeyStore/domains/Passkey/parsers/parsePasskeySignerNotFoundError'
 import { parseBiometricPromptCancelledError } from '@zeal/domains/Password/parsers/parseBiometricPromptCancelledError'
 
 import { parseImperativeError } from './parseImperativeError'
@@ -72,6 +73,7 @@ export const parseAppError = (error: unknown): AppError => {
             parsePasskeyOperationCancelled(error),
             parseBiometricPromptCancelledError(error),
         ]),
+        parseAppNotAssociatedWithDomain(error),
         parseHttpError(error), // This is more generic error, we would like to keep it at the end
     ])
 

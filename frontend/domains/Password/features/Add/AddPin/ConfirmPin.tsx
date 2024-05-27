@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
-import { Column } from '@zeal/uikit/Column'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { KeyPad } from '@zeal/uikit/Keypad'
@@ -11,7 +10,6 @@ import { Steps } from '@zeal/uikit/Steps'
 import { Text } from '@zeal/uikit/Text'
 
 import { notReachable, useLiveRef } from '@zeal/toolkit'
-import { useLazyLoadableData } from '@zeal/toolkit/LoadableData/LazyLoadableData'
 import { match, Result } from '@zeal/toolkit/Result'
 
 import {
@@ -20,10 +18,11 @@ import {
     validatePin,
     ValidatePinError,
 } from '@zeal/domains/Password'
-import { encryptPassword } from '@zeal/domains/Password/helpers/encryptPassword'
+import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
 
 type Props = {
     createdPin: Pin
+    installationId: string
     onMsg: (msg: Msg) => void
 }
 
@@ -32,77 +31,80 @@ type Msg =
     | {
           type: 'pin_confirmed'
           pin: Pin
-          sessionPassword: string
-          encryptedPassword: string
       }
 
-const encryptPin = ({
+type NotSamePinError = { type: 'pin_is_not_same' }
+
+const validateSamePin = ({
+    createdPin,
     pin,
 }: {
-    pin: Pin
-}): Promise<{
-    sessionPassword: string
-    encryptedPassword: string
-}> => encryptPassword({ password: pin })
+    pin: string
+    createdPin: Pin
+}): Result<NotSamePinError, Pin> =>
+    match(pin, createdPin, { type: 'pin_is_not_same' as const })
 
 const validate = ({
     createdPin,
-    input,
+    pin,
 }: {
-    input: string
+    pin: string
     createdPin: Pin
-}): Result<{ type: 'pin_is_not_same' } | ValidatePinError, Pin> =>
-    validatePin(input).andThen((pin) =>
-        match(pin, createdPin, { type: 'pin_is_not_same' })
-    )
+}): Result<NotSamePinError | ValidatePinError, Pin> =>
+    validatePin(pin).andThen((pin) => validateSamePin({ createdPin, pin }))
 
-export const ConfirmPin = ({ onMsg, createdPin }: Props) => {
+const PIN_CLEAR_TIMEOUT_MS = 1000
+
+export const ConfirmPin = ({ onMsg, createdPin, installationId }: Props) => {
     const { formatMessage } = useIntl()
     const [pin, setPin] = useState<string>('')
-    const [loadable, setLoadable] = useLazyLoadableData(encryptPin)
+
+    const error = validate({ createdPin, pin }).getFailureReason() || null
 
     const liveMsg = useLiveRef(onMsg)
 
     useEffect(() => {
-        const validationResult = validate({ createdPin, input: pin })
+        const validationResult = validate({ createdPin, pin })
 
         switch (validationResult.type) {
             case 'Failure':
-                break
+                switch (validationResult.reason.type) {
+                    case 'wrong_pin_length':
+                    case 'wrong_characters_in_pin':
+                        return
+                    case 'pin_is_not_same':
+                        const timeout = setTimeout(
+                            () => setPin(''),
+                            PIN_CLEAR_TIMEOUT_MS
+                        )
+                        return () => clearTimeout(timeout)
+
+                    default:
+                        return notReachable(validationResult.reason)
+                }
+
             case 'Success':
-                setLoadable({
-                    type: 'loading',
-                    params: { pin: validationResult.data },
+                postUserEvent({
+                    type: 'PasswordConfirmedEvent',
+                    installationId,
                 })
-                break
-            /* istanbul ignore next */
+                liveMsg.current({
+                    type: 'pin_confirmed',
+                    pin: validationResult.data,
+                })
+                return
+
             default:
                 return notReachable(validationResult)
         }
-    }, [createdPin, liveMsg, pin, setLoadable])
-
-    useEffect(() => {
-        switch (loadable.type) {
-            case 'not_asked':
-            case 'loading':
-            case 'error':
-                break
-            case 'loaded':
-                liveMsg.current({
-                    type: 'pin_confirmed',
-                    pin: loadable.params.pin,
-                    sessionPassword: loadable.data.sessionPassword,
-                    encryptedPassword: loadable.data.encryptedPassword,
-                })
-                break
-            /* istanbul ignore next */
-            default:
-                return notReachable(loadable)
-        }
-    }, [createdPin, liveMsg, loadable])
+    }, [pin, createdPin, liveMsg, installationId])
 
     return (
-        <Screen padding="pin" background="light">
+        <Screen
+            padding="pin"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -117,41 +119,91 @@ export const ConfirmPin = ({ onMsg, createdPin }: Props) => {
                     </IconButton>
                 }
             />
-
-            <Column spacing={32} alignX="center" alignY="center" fill>
-                <Text variant="title3" color="textPrimary" weight="medium">
-                    <FormattedMessage
-                        id="password.re_enter_pin"
-                        defaultMessage="Re-enter PIN"
-                    />
-                </Text>
-
-                <Steps
-                    length={PIN_LENGTH}
-                    progress={pin.length}
-                    state="primary"
-                />
-
-                {/* FIXME @resetko-zeal how to render validation? Spilled during IP */}
-            </Column>
-
-            <KeyPad
-                leftAction={null}
-                disabled={false}
-                rightAction={
-                    <KeyPad.BackSpaceButton
-                        aria-label={formatMessage({
-                            id: 'password.removeLastDigit',
-                            defaultMessage: 'Remove last digit',
-                        })}
-                        disabled={false}
-                        onPress={() => setPin((prev) => prev.slice(0, -1))}
+            <KeyPad.Layout
+                keyPad={
+                    <KeyPad
+                        leftAction={null}
+                        disabled={pin.length === PIN_LENGTH}
+                        rightAction={
+                            <KeyPad.BackSpaceButton
+                                aria-label={formatMessage({
+                                    id: 'password.removeLastDigit',
+                                    defaultMessage: 'Remove last digit',
+                                })}
+                                disabled={false}
+                                onPress={() =>
+                                    setPin((prev) =>
+                                        prev.length === PIN_LENGTH
+                                            ? ''
+                                            : prev.slice(0, -1)
+                                    )
+                                }
+                            />
+                        }
+                        onPress={(digit) =>
+                            setPin((prev) =>
+                                `${prev}${digit}`.substring(0, PIN_LENGTH)
+                            )
+                        }
                     />
                 }
-                onPress={(digit) =>
-                    setPin((prev) => `${prev}${digit}`.substring(0, PIN_LENGTH))
-                }
-            />
+            >
+                <KeyPad.Content>
+                    <Text variant="title3" color="textPrimary" weight="medium">
+                        <FormattedMessage
+                            id="password.re_enter_pin"
+                            defaultMessage="Re-enter PIN"
+                        />
+                    </Text>
+
+                    <Steps
+                        length={PIN_LENGTH}
+                        progress={pin.length}
+                        state={(() => {
+                            if (!error) {
+                                return 'primary'
+                            }
+
+                            switch (error.type) {
+                                case 'wrong_pin_length':
+                                case 'wrong_characters_in_pin':
+                                    return 'primary'
+                                case 'pin_is_not_same':
+                                    return 'warning'
+                                default:
+                                    return notReachable(error)
+                            }
+                        })()}
+                    />
+
+                    <Text
+                        variant="callout"
+                        color="textStatusWarning"
+                        weight="regular"
+                    >
+                        {(() => {
+                            if (!error) {
+                                return <>&nbsp;</>
+                            }
+
+                            switch (error.type) {
+                                case 'wrong_pin_length':
+                                case 'wrong_characters_in_pin':
+                                    return <>&nbsp;</>
+                                case 'pin_is_not_same':
+                                    return (
+                                        <FormattedMessage
+                                            id="password.pin_is_not_same"
+                                            defaultMessage="PIN doesn't match"
+                                        />
+                                    )
+                                default:
+                                    return notReachable(error)
+                            }
+                        })()}
+                    </Text>
+                </KeyPad.Content>
+            </KeyPad.Layout>
         </Screen>
     )
 }

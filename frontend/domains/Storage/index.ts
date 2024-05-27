@@ -1,5 +1,6 @@
 import { AccountsMap } from '@zeal/domains/Account'
 import { Address } from '@zeal/domains/Address'
+import { CardConfig } from '@zeal/domains/Card'
 import { CountryISOCode } from '@zeal/domains/Country'
 import {
     CryptoCurrency,
@@ -44,7 +45,7 @@ export type Storage = {
     currencyHiddenMap: CurrencyHiddenMap
     currencyPinMap: CurrencyPinMap
     gasCurrencyPresetMap: GasCurrencyPresetMap
-    userMadeActionOnNextBestActionIds: string[]
+    cardConfig: CardConfig
 }
 
 // TODO :: maybe to move to BankTransfer domain?

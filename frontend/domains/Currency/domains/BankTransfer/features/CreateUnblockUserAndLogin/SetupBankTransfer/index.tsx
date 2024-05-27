@@ -123,14 +123,15 @@ export const SetupBankTransfer = ({
                     installationId={installationId}
                     onMsg={(msg) => {
                         switch (msg.type) {
-                            case 'on_next_click':
-                                break
                             case 'on_stories_completed':
                                 setState({ type: 'choose_wallet_to_connect' })
+                                break
+                            case 'on_next_slide_shown':
                                 break
                             case 'on_stories_dismissed':
                                 onMsg({ type: 'close' })
                                 break
+
                             /* istanbul ignore next */
                             default:
                                 return notReachable(msg)

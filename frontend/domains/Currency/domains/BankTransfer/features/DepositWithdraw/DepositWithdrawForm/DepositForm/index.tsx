@@ -123,14 +123,13 @@ export const DepositForm = ({
                     form={state.form}
                     onMsg={(msg) => {
                         switch (msg.type) {
-                            case 'close':
                             case 'on_on_ramp_transfer_success_close_click':
                             case 'on_contact_support_clicked':
                             case 'kyc_applicant_created':
                                 onMsg(msg)
                                 break
 
-                            case 'on_back_button_clicked':
+                            case 'close':
                                 setState({ type: 'form' })
                                 break
                             /* istanbul ignore next */

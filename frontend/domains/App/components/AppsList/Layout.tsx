@@ -7,7 +7,7 @@ import { Clickable } from '@zeal/uikit/Clickable'
 import { Column } from '@zeal/uikit/Column'
 import { EmptyStateWidget } from '@zeal/uikit/EmptyStateWidget'
 import { Group } from '@zeal/uikit/Group'
-import { ArrowLeft2 } from '@zeal/uikit/Icon/ArrowLeft2'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { BoldStarWithinCircle } from '@zeal/uikit/Icon/BoldStarWithinCircle'
 import { Input } from '@zeal/uikit/Input'
 import { Row } from '@zeal/uikit/Row'
@@ -16,6 +16,7 @@ import { Text } from '@zeal/uikit/Text'
 
 import { noop, notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
+import { openExternalURL } from '@zeal/toolkit/Window'
 
 import { Account } from '@zeal/domains/Account'
 import { ActionBarAccountSelector } from '@zeal/domains/Account/components/ActionBarAccountSelector'
@@ -26,6 +27,8 @@ import { CurrentNetwork, NetworkMap } from '@zeal/domains/Network'
 import { NetworkSelector } from '@zeal/domains/Network/components/NetworkSelector'
 import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
 
+import { BROWSE_MORE_DAPPS_URL } from '../../constants'
+import { DiscoverMoreAppsListItem } from '../DiscoverMoreAppsListItem'
 import { ListItem } from '../ListItem'
 
 type Props = {
@@ -74,7 +77,11 @@ export const Layout = ({
               })
 
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 top={
                     <ActionBarAccountSelector account={account} onMsg={onMsg} />
@@ -82,7 +89,7 @@ export const Layout = ({
                 left={
                     <Clickable onClick={() => onMsg({ type: 'close' })}>
                         <Row spacing={4} shrink>
-                            <ArrowLeft2 size={24} color="iconDefault" />
+                            <BackIcon size={24} color="iconDefault" />
                             <Text
                                 variant="title3"
                                 weight="medium"
@@ -124,34 +131,68 @@ export const Layout = ({
                 />
 
                 {!filteredApps.length ? (
-                    <EmptyStateWidget
-                        size="regular"
-                        icon={({ size }) => (
-                            <BoldStarWithinCircle size={size} />
-                        )}
-                        title={
-                            <FormattedMessage
-                                id="apps_list.page.emptyState"
-                                defaultMessage="We found no apps here"
-                            />
-                        }
-                    />
-                ) : (
-                    <Group variant="default">
-                        <FlatList
-                            showsVerticalScrollIndicator={false}
-                            data={filteredApps}
-                            renderItem={({ item: app }) => (
-                                <ListItem
-                                    networkMap={networkMap}
-                                    key={`${app.networkHexId}-${app.name}`}
-                                    app={app}
-                                    knownCurrencies={currincies}
-                                    onMsg={onMsg}
-                                />
+                    <>
+                        <EmptyStateWidget
+                            size="regular"
+                            icon={({ size }) => (
+                                <BoldStarWithinCircle size={size} />
                             )}
+                            title={
+                                <FormattedMessage
+                                    id="apps_list.page.emptyState"
+                                    defaultMessage="We found no apps here"
+                                />
+                            }
                         />
-                    </Group>
+                        <Group variant="default">
+                            <DiscoverMoreAppsListItem
+                                onClick={() => {
+                                    postUserEvent({
+                                        type: 'DappLinkClickedEvent',
+                                        dapp: 'Browse more',
+                                        location: 'defi',
+                                        installationId,
+                                    })
+                                    openExternalURL(BROWSE_MORE_DAPPS_URL)
+                                }}
+                            />
+                        </Group>
+                    </>
+                ) : (
+                    <>
+                        <Column spacing={12}>
+                            <Group variant="default">
+                                <FlatList
+                                    keyboardShouldPersistTaps="handled"
+                                    showsVerticalScrollIndicator={false}
+                                    data={filteredApps}
+                                    renderItem={({ item: app }) => (
+                                        <ListItem
+                                            networkMap={networkMap}
+                                            key={`${app.networkHexId}-${app.name}`}
+                                            app={app}
+                                            knownCurrencies={currincies}
+                                            onMsg={onMsg}
+                                        />
+                                    )}
+                                />
+                            </Group>
+
+                            <Group variant="default">
+                                <DiscoverMoreAppsListItem
+                                    onClick={() => {
+                                        postUserEvent({
+                                            type: 'DappLinkClickedEvent',
+                                            dapp: 'Browse more',
+                                            location: 'defi',
+                                            installationId,
+                                        })
+                                        openExternalURL(BROWSE_MORE_DAPPS_URL)
+                                    }}
+                                />
+                            </Group>
+                        </Column>
+                    </>
                 )}
             </Column>
         </Screen>

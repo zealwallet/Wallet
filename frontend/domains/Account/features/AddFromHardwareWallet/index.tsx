@@ -78,7 +78,11 @@ export const AddFromHardwareWallet = ({
     switch (state.type) {
         case 'select_type_of_wallet':
             return (
-                <Screen background="light" padding="form">
+                <Screen
+                    background="light"
+                    padding="form"
+                    onNavigateBack={() => onMsg({ type: 'close' })}
+                >
                     <ActionBar
                         left={
                             closable && (

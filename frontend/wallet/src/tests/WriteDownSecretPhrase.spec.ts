@@ -23,7 +23,7 @@ test(`As a user I should be able to reveal my secret phrase, so I can write it d
     env.chromeMocks.storages.session = {}
 
     await renderPage(
-        '/index.html?type=setup_recovery_kit&address=0x83f1caAdaBeEC2945b73087F803d404F054Cc2B7'
+        '/index.html?type=setup_recovery_kit&address=0x83f1caadabeec2945b73087f803d404f054cc2b7'
     )
 
     await userEvent.type(

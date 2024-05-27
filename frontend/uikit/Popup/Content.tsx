@@ -5,5 +5,10 @@ type Props = {
     children: React.ReactNode
 }
 export const Content = ({ children }: Props) => (
-    <ScrollView showsVerticalScrollIndicator={false}>{children}</ScrollView>
+    <ScrollView
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}
+    >
+        {children}
+    </ScrollView>
 )

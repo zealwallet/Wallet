@@ -11,8 +11,11 @@ import {
     onRampOutsideTransferReceived,
 } from '@zeal/domains/Currency/domains/BankTransfer/api/fixtures/webhookEvents'
 import { testPassword } from '@zeal/domains/KeyStore/api/fixtures/testPassword'
-import { bankTransferOnboarded } from '@zeal/domains/Storage/api/fixtures/localStorage'
-import { LS_KEY } from '@zeal/domains/Storage/constants'
+import {
+    bankTransferOnboarded,
+    portfolioMap,
+} from '@zeal/domains/Storage/api/fixtures/localStorage'
+import { LS_KEY, PORTFOLIO_MAP_KEY } from '@zeal/domains/Storage/constants'
 
 import { cleanEnv, mockEnv, TestEnvironment } from 'src/tests/env'
 import { runLottieListeners } from 'src/tests/mocks/lottie'
@@ -35,6 +38,8 @@ test(`As a user, I should be able to setup onramp, so I can learn how to top up 
     env.chromeMocks.storages.local[LS_KEY] = JSON.stringify(
         bankTransferOnboarded
     )
+    env.chromeMocks.storages.local[PORTFOLIO_MAP_KEY] =
+        JSON.stringify(portfolioMap)
 
     env.api['/wallet/smart-wallet/unblock/']['/exchange-rates/'].get = () => [
         200,

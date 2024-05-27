@@ -229,62 +229,6 @@ export const WalletWidgetFork = ({ manifest }: Props) => {
                             switch (entryPoint.mode) {
                                 case 'fullscreen':
                                     switch (msg.type) {
-                                        case 'on_nba_cta_click': {
-                                            switch (msg.slide.id) {
-                                                case 'connectToDapp':
-                                                    openExternalURL(
-                                                        'https://app.uniswap.org/'
-                                                    )
-                                                    break
-                                                case 'addRead-only':
-                                                    setEntrypoint({
-                                                        type: 'create_contact',
-                                                    })
-                                                    break
-
-                                                case 'onRamp':
-                                                    setEntrypoint({
-                                                        type: 'bank_transfer',
-                                                    })
-                                                    break
-                                                case 'swap':
-                                                    setEntrypoint({
-                                                        type: 'swap',
-                                                        fromAddress:
-                                                            msg.account.address,
-                                                        fromCurrencyId: null,
-                                                    })
-                                                    break
-                                                case 'activateWallet':
-                                                    setEntrypoint({
-                                                        type: 'add_account',
-                                                    })
-                                                    break
-                                                case 'createSmartWallet':
-                                                    setEntrypoint({
-                                                        type: 'create_safe',
-                                                    })
-                                                    break
-                                                case 'receiveTokens':
-                                                    openTopUpDapp(msg.account)
-                                                    break
-                                                case 'setUpRecovery':
-                                                    setEntrypoint({
-                                                        type: 'setup_recovery_kit',
-                                                        address:
-                                                            msg.account.address,
-                                                    })
-                                                    break
-
-                                                /* istanbul ignore next */
-                                                default:
-                                                    return notReachable(
-                                                        msg.slide.id
-                                                    )
-                                            }
-
-                                            break
-                                        }
                                         case 'on_open_fullscreen_view_click':
                                             captureError(
                                                 new ImperativeError(
@@ -364,6 +308,7 @@ export const WalletWidgetFork = ({ manifest }: Props) => {
 
                                         case 'on_add_private_key_click':
                                         case 'add_wallet_clicked':
+                                        case 'card_tab_choose_wallet_on_import_new_wallet_clicked':
                                             setEntrypoint({
                                                 type: 'add_account',
                                             })
@@ -392,6 +337,12 @@ export const WalletWidgetFork = ({ manifest }: Props) => {
                                             window.close()
                                             break
 
+                                        case 'import_keys_button_clicked':
+                                            setEntrypoint({
+                                                type: 'add_account',
+                                            })
+                                            break
+
                                         /* istanbul ignore next */
                                         default:
                                             notReachable(msg)
@@ -400,49 +351,6 @@ export const WalletWidgetFork = ({ manifest }: Props) => {
 
                                 case 'popup':
                                     switch (msg.type) {
-                                        case 'on_nba_cta_click': {
-                                            switch (msg.slide.id) {
-                                                case 'connectToDapp':
-                                                    openExternalURL(
-                                                        'https://app.uniswap.org/'
-                                                    )
-                                                    break
-                                                case 'addRead-only':
-                                                    openCreateContactPage()
-                                                    break
-                                                case 'onRamp':
-                                                    openBankTransferPage()
-                                                    break
-                                                case 'swap':
-                                                    openSwap({
-                                                        fromAddress:
-                                                            msg.account.address,
-                                                        fromCurrencyId: null,
-                                                    })
-                                                    break
-                                                case 'activateWallet':
-                                                    openAddAccountPageTab()
-                                                    break
-                                                case 'createSmartWallet':
-                                                    openCreateSafePage()
-                                                    break
-                                                case 'receiveTokens':
-                                                    openTopUpDapp(msg.account)
-                                                    break
-                                                case 'setUpRecovery':
-                                                    openRecoveryKitSetup(
-                                                        msg.account.address
-                                                    )
-                                                    break
-
-                                                /* istanbul ignore next */
-                                                default:
-                                                    return notReachable(
-                                                        msg.slide.id
-                                                    )
-                                            }
-                                            break
-                                        }
                                         case 'on_open_fullscreen_view_click':
                                             openExtensionInFullScreen()
                                             break
@@ -496,6 +404,7 @@ export const WalletWidgetFork = ({ manifest }: Props) => {
 
                                         case 'on_add_private_key_click':
                                         case 'add_wallet_clicked':
+                                        case 'card_tab_choose_wallet_on_import_new_wallet_clicked':
                                             openAddAccountPageTab()
                                             break
 
@@ -516,6 +425,12 @@ export const WalletWidgetFork = ({ manifest }: Props) => {
                                                 type: 'extension_to_zwidget_expand_zwidget',
                                             })
                                             window.close()
+                                            break
+
+                                        case 'import_keys_button_clicked':
+                                            setEntrypoint({
+                                                type: 'add_account',
+                                            })
                                             break
 
                                         /* istanbul ignore next */
@@ -598,7 +513,7 @@ const openBridge = ({
         ? `page_entrypoint.html?type=bridge&fromAddress=${fromAddress}&fromCurrencyId=${fromCurrencyIdEncoded}`
         : `page_entrypoint.html?type=bridge&fromAddress=${fromAddress}`
 
-    chrome.runtime.getURL(chrome.runtime.getURL(url))
+    openExternalURL(chrome.runtime.getURL(url))
 }
 
 const openSendERC20 = ({

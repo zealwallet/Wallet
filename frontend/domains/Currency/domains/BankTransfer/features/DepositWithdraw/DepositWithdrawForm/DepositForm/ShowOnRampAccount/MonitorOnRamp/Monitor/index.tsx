@@ -100,7 +100,6 @@ export const Monitor = ({
                 onMsg={(msg) => {
                     switch (msg.type) {
                         case 'close':
-                        case 'on_back_button_clicked':
                         case 'kyc_data_updated':
                         case 'on_do_bank_transfer_clicked':
                             setModal({ type: 'closed' })

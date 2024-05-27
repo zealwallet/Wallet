@@ -6,6 +6,7 @@ import { Column } from '@zeal/uikit/Column'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 
 import { PollableData } from '@zeal/toolkit/LoadableData/PollableData'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
@@ -61,6 +62,7 @@ export const Layout = ({
                 id: 'EditFeeModal.ariaLabel',
                 defaultMessage: 'Edit network fee',
             })}
+            onNavigateBack={() => onMsg({ type: 'close' })}
         >
             <ActionBar
                 left={
@@ -76,32 +78,35 @@ export const Layout = ({
                     </IconButton>
                 }
             />
+            <ScrollContainer>
+                <Column spacing={16} fill shrink>
+                    <Header
+                        pollableData={pollableData}
+                        pollingInterval={pollingInterval}
+                        pollingStartedAt={pollingStartedAt}
+                        transactionRequest={transactionRequest}
+                        onMsg={onMsg}
+                    />
 
-            <Column spacing={16} fill shrink>
-                <Header
-                    pollableData={pollableData}
-                    pollingInterval={pollingInterval}
-                    pollingStartedAt={pollingStartedAt}
-                    transactionRequest={transactionRequest}
-                    onMsg={onMsg}
-                />
+                    <SelectPreset
+                        onMsg={onMsg}
+                        transactionRequest={transactionRequest}
+                        pollableData={pollableData}
+                    />
 
-                <SelectPreset
-                    onMsg={onMsg}
-                    transactionRequest={transactionRequest}
-                    pollableData={pollableData}
-                />
-
-                <Custom
-                    keyStoreMap={keystoreMap}
-                    nonce={nonce}
-                    gasEstimate={gasEstimate}
-                    transactionRequest={transactionRequest}
-                    simulateTransactionResponse={simulateTransactionResponse}
-                    pollableData={pollableData}
-                    onMsg={onMsg}
-                />
-            </Column>
+                    <Custom
+                        keyStoreMap={keystoreMap}
+                        nonce={nonce}
+                        gasEstimate={gasEstimate}
+                        transactionRequest={transactionRequest}
+                        simulateTransactionResponse={
+                            simulateTransactionResponse
+                        }
+                        pollableData={pollableData}
+                        onMsg={onMsg}
+                    />
+                </Column>
+            </ScrollContainer>
         </Screen>
     )
 }

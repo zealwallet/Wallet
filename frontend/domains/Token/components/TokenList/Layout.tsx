@@ -7,7 +7,7 @@ import { Column } from '@zeal/uikit/Column'
 import { EmptyStateWidget } from '@zeal/uikit/EmptyStateWidget'
 import { Group } from '@zeal/uikit/Group'
 import { GroupList } from '@zeal/uikit/GroupList'
-import { ArrowLeft2 } from '@zeal/uikit/Icon/ArrowLeft2'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { Tokens } from '@zeal/uikit/Icon/Empty'
 import { Plus } from '@zeal/uikit/Icon/Plus'
 import { SpamFolder } from '@zeal/uikit/Icon/SpamFolder'
@@ -69,7 +69,11 @@ export const Layout = ({
         filterByHideMap(currencyHiddenMap)
     )
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 top={
                     <ActionBarAccountSelector account={account} onMsg={onMsg} />
@@ -77,7 +81,7 @@ export const Layout = ({
                 left={
                     <Clickable onClick={() => onMsg({ type: 'close' })}>
                         <Row spacing={4} shrink>
-                            <ArrowLeft2 size={24} color="iconDefault" />
+                            <BackIcon size={24} color="iconDefault" />
 
                             <Text
                                 variant="title3"

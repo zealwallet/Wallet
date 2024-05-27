@@ -1,7 +1,8 @@
 import React from 'react'
-import Svg, { Mask, Path } from 'react-native-svg'
+import { Mask, Path } from 'react-native-svg'
 
 import { Color, colors } from '@zeal/uikit/colors'
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
@@ -10,8 +11,7 @@ type Props = {
 
 export const Checkbox = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 24 24"
             width={size}
             height={size}
@@ -29,6 +29,6 @@ export const Checkbox = ({ size, color }: Props) => {
                 fill="currentColor"
                 mask="url(#path-1-inside-1_2378_119876)"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

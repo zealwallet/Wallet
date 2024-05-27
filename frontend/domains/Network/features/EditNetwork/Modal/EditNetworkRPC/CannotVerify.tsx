@@ -45,7 +45,11 @@ export const CannotVerify = ({
         case 'cannot_verify':
             return (
                 <Modal>
-                    <Screen background="light" padding="form">
+                    <Screen
+                        background="light"
+                        padding="form"
+                        onNavigateBack={() => onMsg({ type: 'close' })}
+                    >
                         <ActionBar
                             left={
                                 <IconButton

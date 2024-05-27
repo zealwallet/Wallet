@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         rowGap: 4,
         flexWrap: 'nowrap',
         justifyContent: 'space-between',
+        padding: 8,
     },
     content: {
         flexDirection: 'row',

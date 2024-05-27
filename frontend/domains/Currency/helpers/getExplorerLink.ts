@@ -21,9 +21,12 @@ export const getExplorerLink = (
                 case 'BSC':
                 case 'Polygon':
                 case 'PolygonZkevm':
+                case 'Linea':
                 case 'Fantom':
                 case 'Optimism':
                 case 'Base':
+                case 'Blast':
+                case 'OPBNB':
                 case 'Gnosis':
                 case 'Celo':
                 case 'Avalanche':

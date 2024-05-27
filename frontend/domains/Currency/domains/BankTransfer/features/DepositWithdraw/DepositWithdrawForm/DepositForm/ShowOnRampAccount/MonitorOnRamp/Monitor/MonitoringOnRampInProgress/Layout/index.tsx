@@ -1,5 +1,5 @@
 import { Column } from '@zeal/uikit/Column'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { Screen } from '@zeal/uikit/Screen'
 
@@ -52,7 +52,11 @@ export const Layout = ({
     keyStatus,
 }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 network={network}
                 account={account}
@@ -60,12 +64,12 @@ export const Layout = ({
                     keyStoreMap,
                     address: account.address,
                 })}
-                right={
+                left={
                     <IconButton
                         variant="on_light"
                         onClick={() => onMsg({ type: 'close' })}
                     >
-                        {({ color }) => <CloseCross size={24} color={color} />}
+                        {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
             />
@@ -79,6 +83,7 @@ export const Layout = ({
                         case 'unblock_onramp_transfer_in_review':
                         case 'unblock_onramp_transfer_on_hold_compliance':
                         case 'unblock_onramp_transfer_received':
+                        case 'unblock_onramp_pending':
                             return (
                                 <CryptoTransferInProgress
                                     networkMap={networkMap}

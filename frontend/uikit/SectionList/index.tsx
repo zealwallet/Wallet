@@ -13,7 +13,10 @@ import { styles as groupStyles } from '../Group'
 
 const styles = StyleSheet.create({
     list: {
-        flex: 1,
+        flexGrow: 1,
+    },
+    content: {
+        paddingBottom: 16,
     },
     group_item: {
         paddingHorizontal: groupStyles.variant_default.padding,
@@ -52,6 +55,7 @@ type Props<I, S> = {
         section: SectionListData<I, S>
     }) => ReactElement
     renderItem: SectionListRenderItem<I, S>
+    keyboardShouldPersistTaps?: 'handled'
     onEndReached?: (info: { distanceFromEnd: number }) => void
 }
 
@@ -66,13 +70,16 @@ export const SectionList = function <I, S>({
     renderSectionHeader,
     renderItem,
     onEndReached,
+    keyboardShouldPersistTaps,
     footer,
 }: Props<I, S>) {
     return (
         <NativeSectionList
+            contentContainerStyle={styles.content}
             stickySectionHeadersEnabled={false}
             style={styles.list}
             sections={sections}
+            keyboardShouldPersistTaps={keyboardShouldPersistTaps}
             renderSectionHeader={renderSectionHeader}
             renderItem={(itemRenderProps) => {
                 switch (variant) {
@@ -103,9 +110,12 @@ export const SectionList = function <I, S>({
             ItemSeparatorComponent={() => (
                 <ItemSeparator spacing={itemSpacing} variant={variant} />
             )}
-            SectionSeparatorComponent={() => (
-                <SectionSeparator spacing={sectionSpacing} />
-            )}
+            SectionSeparatorComponent={({ leadingItem }) => {
+                if (leadingItem === undefined) {
+                    return null
+                }
+                return <SectionSeparator spacing={sectionSpacing} />
+            }}
             ListEmptyComponent={emptyState}
             ListFooterComponent={footer}
             showsVerticalScrollIndicator={false}

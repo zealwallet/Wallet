@@ -1,19 +1,15 @@
-import { set } from '@zeal/toolkit/Storage/localStorage'
+import * as storage from '@zeal/toolkit/Storage'
 
 import { Storage } from '@zeal/domains/Storage'
-import { LS_KEY } from '@zeal/domains/Storage/constants'
+import { LS_KEY, PORTFOLIO_MAP_KEY } from '@zeal/domains/Storage/constants'
 
-const serialize = (storage: Storage): string =>
-    JSON.stringify(storage, (_, value) => {
-        switch (true) {
-            case typeof value === 'bigint':
-                return value.toString()
-            case value instanceof Map:
-                return Object.fromEntries(value)
-            default:
-                return value
-        }
-    })
+export const toLocalStorage = async (current: Storage): Promise<void> => {
+    const { portfolios, ...rest } = current
 
-export const toLocalStorage = async (storage: Storage): Promise<void> =>
-    set(LS_KEY, serialize(storage))
+    await storage.local.set(LS_KEY, storage.serialize(rest))
+
+    await storage.local.setChunked(
+        PORTFOLIO_MAP_KEY,
+        storage.serialize(portfolios)
+    )
+}

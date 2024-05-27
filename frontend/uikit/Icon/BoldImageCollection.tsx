@@ -1,5 +1,7 @@
 import React from 'react'
-import { ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg'
+import { ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const BoldImageCollection = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             color={color && colors[color]}
             viewBox="0 0 32 32"
             width={size}
@@ -55,6 +56,6 @@ export const BoldImageCollection = ({ size, color }: Props) => {
                     />
                 </ClipPath>
             </Defs>
-        </Svg>
+        </SvgIcon>
     )
 }

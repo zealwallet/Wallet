@@ -2,6 +2,7 @@ import React from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { colors } from '@zeal/uikit/colors'
+import { BackNavigator } from '@zeal/uikit/GestureDetectors/BackNavigator'
 
 import { Column } from '../Column'
 import { Overlay } from '../Overlay'
@@ -24,15 +25,18 @@ const styles = StyleSheet.create({
 })
 
 export const Drawer = ({ children, onClose }: Props) => (
-    <Overlay onClick={onClose}>
-        <Column spacing={0}>
-            <ScrollView
-                style={[styles.scrollView]}
-                contentContainerStyle={[styles.content]}
-                showsVerticalScrollIndicator={false}
-            >
-                <View style={{ paddingHorizontal: 16 }}>{children}</View>
-            </ScrollView>
-        </Column>
-    </Overlay>
+    <BackNavigator onNavigateBack={onClose} enableSwipeIos={false}>
+        <Overlay onClick={onClose}>
+            <Column spacing={0}>
+                <ScrollView
+                    style={[styles.scrollView]}
+                    contentContainerStyle={[styles.content]}
+                    showsVerticalScrollIndicator={false}
+                    alwaysBounceVertical={false}
+                >
+                    <View style={{ paddingHorizontal: 16 }}>{children}</View>
+                </ScrollView>
+            </Column>
+        </Overlay>
+    </BackNavigator>
 )

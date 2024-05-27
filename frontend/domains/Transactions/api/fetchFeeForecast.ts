@@ -79,13 +79,6 @@ const PREDEFINED_OP_STACK_CUSTOM_NETWORKS: {
         ).getSuccessResultOrThrow('failed to parse Scroll gas oracle address'),
     },
     {
-        // opBNB
-        networkHexId: parseNetworkHexId('0xcc').getSuccessResultOrThrow(
-            'failed to parse network hex ID for opBNB network'
-        ),
-        gasOracleAddress: OP_STACK_GAS_PRICE_ORACLE_ADDRESS,
-    },
-    {
         // Zora
         networkHexId: parseNetworkHexId('0x76adf1').getSuccessResultOrThrow(
             'failed to parse network hex ID for Zora network'
@@ -96,13 +89,6 @@ const PREDEFINED_OP_STACK_CUSTOM_NETWORKS: {
         // Mantle
         networkHexId: parseNetworkHexId('0x1388').getSuccessResultOrThrow(
             'failed to parse network hex ID for Mantle network'
-        ),
-        gasOracleAddress: OP_STACK_GAS_PRICE_ORACLE_ADDRESS,
-    },
-    {
-        // Blast mainnet
-        networkHexId: parseNetworkHexId('0xee').getSuccessResultOrThrow(
-            'failed to parse network hex ID for Blast mainnet'
         ),
         gasOracleAddress: OP_STACK_GAS_PRICE_ORACLE_ADDRESS,
     },

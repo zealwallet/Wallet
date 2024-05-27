@@ -99,6 +99,7 @@ const getProgress = (event: OffRampTransactionEvent): RangeInt<0, 100> => {
     switch (event.type) {
         case 'unblock_offramp_in_progress':
         case 'unblock_offramp_failed':
+        case 'unblock_offramp_pending':
             return 60
         case 'unblock_offramp_fiat_transfer_issued':
             return 80
@@ -119,6 +120,7 @@ const getProgressColour = (
         case 'unblock_offramp_in_progress':
         case 'unblock_offramp_failed':
         case 'unblock_offramp_fiat_transfer_issued':
+        case 'unblock_offramp_pending':
             return 'neutral'
         case 'unblock_offramp_on_hold_compliance':
         case 'unblock_offramp_on_hold_kyc':
@@ -202,6 +204,7 @@ const Status = ({
     switch (event.type) {
         case 'unblock_offramp_in_progress':
         case 'unblock_offramp_failed':
+        case 'unblock_offramp_pending':
             return (
                 <Row spacing={8}>
                     <Text

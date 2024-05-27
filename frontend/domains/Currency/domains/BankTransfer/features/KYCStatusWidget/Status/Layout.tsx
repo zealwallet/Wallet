@@ -61,7 +61,7 @@ export const Layout = ({ status, onMsg }: Props) => {
 
                                 <Spacer />
 
-                                <OutOfFlow align="bottomRight">
+                                <OutOfFlow align="iconButtonRight">
                                     {(() => {
                                         switch (status.type) {
                                             case 'not_started':

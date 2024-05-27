@@ -1,3 +1,5 @@
+import { Modal as UIModal } from '@zeal/uikit/Modal'
+
 import { notReachable } from '@zeal/toolkit'
 import { MsgOf } from '@zeal/toolkit/MsgOf'
 
@@ -40,13 +42,15 @@ export const Modal = ({
             return null
         case 'form':
             return (
-                <Form
-                    originalEthSendTransaction={originalEthSendTransaction}
-                    transaction={transaction}
-                    network={network}
-                    networkRPCMap={networkRPCMap}
-                    onMsg={onMsg}
-                />
+                <UIModal>
+                    <Form
+                        originalEthSendTransaction={originalEthSendTransaction}
+                        transaction={transaction}
+                        network={network}
+                        networkRPCMap={networkRPCMap}
+                        onMsg={onMsg}
+                    />
+                </UIModal>
             )
         case 'spend_limit_info':
             return <SpendLimitInfo onMsg={onMsg} />

@@ -7,12 +7,82 @@ export const localStorageOnboarded: unknown = {
             address: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
         },
     },
-    portfolios: {},
     keystoreMap: {},
     encryptedPassword:
         '{"data":"xUj8jWkxJzY5ykrN2XO6fxni1Ee3GJ23Y1mUuIi4asdjG+n04A2kh7Uv1sAmxuEFGctF+/m/jHRlEdwQDMmZo2qjbjsCLzFt1VPb5aYzeWSSFtdO1//taT47athyIEjd4z85686sLw34QDMXcWMD","iv":"AkZbCXliPDuXoNuOPxP7OQ==","salt":"rsJMJo949lv+pgk0jBcCpAEnFtPzrGLPA+ku0aSeIzk="}',
     dApps: {},
     transactionRequests: {},
+}
+
+export const portfolioMap: unknown = {
+    '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932': {
+        currencies: {
+            'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174': {
+                type: 'CryptoCurrency',
+                id: 'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+                network: 'Polygon',
+                address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+                symbol: 'USDC',
+                code: 'USDC',
+                fraction: 6,
+                rateFraction: 6,
+                icon: 'https://iw8i6d52oi.execute-api.eu-west-2.amazonaws.com/wallet/image/currency/Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+                name: 'USD Coin (PoS)',
+            },
+            USD: {
+                type: 'FiatCurrency',
+                id: 'USD',
+                symbol: '$',
+                code: 'USD',
+                fraction: 18,
+                rateFraction: 18,
+                icon: 'TODO',
+                name: 'USD',
+            },
+        },
+        tokens: [
+            {
+                network: 'Polygon',
+                rate: {
+                    base: 'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+                    quote: 'USD',
+                    rate: '1000000000000000000',
+                },
+                address: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+                balance: {
+                    amount: '157223311',
+                    currencyId:
+                        'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+                },
+                priceInDefaultCurrency: {
+                    amount: '157223311000000004096',
+                    currencyId: 'USD',
+                },
+            },
+        ],
+        apps: [],
+        nftCollections: [],
+    },
+}
+
+export const emptyPortfolioMap: unknown = {
+    '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932': {
+        currencies: {
+            USD: {
+                type: 'FiatCurrency',
+                id: 'USD',
+                symbol: '$',
+                code: 'USD',
+                fraction: 18,
+                rateFraction: 18,
+                icon: 'TODO',
+                name: 'USD',
+            },
+        },
+        tokens: [],
+        apps: [],
+        nftCollections: [],
+    },
 }
 
 export const localStorageConnected: unknown = {
@@ -24,7 +94,6 @@ export const localStorageConnected: unknown = {
             address: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
         },
     },
-    portfolios: {},
     keystoreMap: {},
     encryptedPassword:
         '{"data":"xUj8jWkxJzY5ykrN2XO6fxni1Ee3GJ23Y1mUuIi4asdjG+n04A2kh7Uv1sAmxuEFGctF+/m/jHRlEdwQDMmZo2qjbjsCLzFt1VPb5aYzeWSSFtdO1//taT47athyIEjd4z85686sLw34QDMXcWMD","iv":"AkZbCXliPDuXoNuOPxP7OQ==","salt":"rsJMJo949lv+pgk0jBcCpAEnFtPzrGLPA+ku0aSeIzk="}',
@@ -82,7 +151,6 @@ export const firstSignUp: unknown = {
         '0x89': { type: 'Fast' },
         '0xa': { type: 'Fast' },
     },
-    portfolios: {},
     keystoreMap: {
         '0x83f1caAdaBeEC2945b73087F803d404F054Cc2B7': {
             type: 'secret_phrase_key',
@@ -106,56 +174,6 @@ export const onlyPKAccount: unknown = {
             address: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
             label: 'Private Key 1',
             avatarSrc: null,
-        },
-    },
-    portfolios: {
-        '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932': {
-            currencies: {
-                'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174': {
-                    type: 'CryptoCurrency',
-                    id: 'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    network: 'Polygon',
-                    address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-                    symbol: 'USDC',
-                    code: 'USDC',
-                    fraction: 6,
-                    rateFraction: 6,
-                    icon: 'https://iw8i6d52oi.execute-api.eu-west-2.amazonaws.com/wallet/image/currency/Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    name: 'USD Coin (PoS)',
-                },
-                USD: {
-                    type: 'FiatCurrency',
-                    id: 'USD',
-                    symbol: '$',
-                    code: 'USD',
-                    fraction: 18,
-                    rateFraction: 18,
-                    icon: 'TODO',
-                    name: 'USD',
-                },
-            },
-            tokens: [
-                {
-                    network: 'Polygon',
-                    rate: {
-                        base: 'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                        quote: 'USD',
-                        rate: '1000000000000000000',
-                    },
-                    address: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    balance: {
-                        amount: '157223311',
-                        currencyId:
-                            'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    },
-                    priceInDefaultCurrency: {
-                        amount: '157223311000000004096',
-                        currencyId: 'USD',
-                    },
-                },
-            ],
-            apps: [],
-            nftCollections: [],
         },
     },
     keystoreMap: {
@@ -182,25 +200,6 @@ export const onlyPKAccountEmptyPortfolio: unknown = {
             avatarSrc: null,
         },
     },
-    portfolios: {
-        '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932': {
-            currencies: {
-                USD: {
-                    type: 'FiatCurrency',
-                    id: 'USD',
-                    symbol: '$',
-                    code: 'USD',
-                    fraction: 18,
-                    rateFraction: 18,
-                    icon: 'TODO',
-                    name: 'USD',
-                },
-            },
-            tokens: [],
-            apps: [],
-            nftCollections: [],
-        },
-    },
     keystoreMap: {
         '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932': {
             type: 'private_key_store',
@@ -224,56 +223,6 @@ export const pendingBridge: unknown = {
             label: 'Private Key 1',
             address: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
             avatarSrc: null,
-        },
-    },
-    portfolios: {
-        '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932': {
-            currencies: {
-                'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174': {
-                    type: 'CryptoCurrency',
-                    id: 'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    networkHexChainId: '0x89',
-                    address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-                    symbol: 'USDC',
-                    code: 'USDC',
-                    fraction: 6,
-                    rateFraction: 6,
-                    icon: 'https://iw8i6d52oi.execute-api.eu-west-2.amazonaws.com/wallet/image/currency/Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    name: 'USD Coin (PoS)',
-                },
-                USD: {
-                    type: 'FiatCurrency',
-                    id: 'USD',
-                    symbol: '$',
-                    code: 'USD',
-                    fraction: 18,
-                    rateFraction: 18,
-                    icon: 'TODO',
-                    name: 'USD',
-                },
-            },
-            tokens: [
-                {
-                    networkHexId: '0x89',
-                    rate: {
-                        base: 'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                        quote: 'USD',
-                        rate: '1000000000000000000',
-                    },
-                    address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-                    balance: {
-                        amount: '157223311',
-                        currencyId:
-                            'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    },
-                    priceInDefaultCurrency: {
-                        amount: '157223311000000004096',
-                        currencyId: 'USD',
-                    },
-                },
-            ],
-            apps: [],
-            nftCollections: [],
         },
     },
     keystoreMap: {
@@ -440,7 +389,6 @@ export const pendingTransaction: unknown = {
             avatarSrc: null,
         },
     },
-    portfolios: {},
     keystoreMap: {
         '0x83f1caAdaBeEC2945b73087F803d404F054Cc2B7': {
             type: 'secret_phrase_key',
@@ -656,58 +604,6 @@ export const bankTransferOnboarded: unknown = {
             label: 'Private Key 1',
             address: '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932',
             avatarSrc: null,
-        },
-    },
-    portfolios: {
-        '0x26D0d88fFe184b1BA244D08Fb2a0c695e65c8932': {
-            currencies: {
-                'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174': {
-                    type: 'CryptoCurrency',
-                    id: 'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    networkHexChainId: '0x89',
-                    address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-                    symbol: 'USDC',
-                    code: 'USDC',
-                    fraction: 6,
-                    rateFraction: 6,
-                    icon: 'https://iw8i6d52oi.execute-api.eu-west-2.amazonaws.com/wallet/image/currency/Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    name: 'USD Coin (PoS)',
-                },
-                USD: {
-                    type: 'FiatCurrency',
-                    id: 'USD',
-                    symbol: '$',
-                    code: 'USD',
-                    fraction: 18,
-                    rateFraction: 18,
-                    icon: 'TODO',
-                    name: 'USD',
-                },
-            },
-            tokens: [
-                {
-                    networkHexId: '0x89',
-                    scam: false,
-                    rate: {
-                        base: 'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                        quote: 'USD',
-                        rate: '1000000000000000000',
-                    },
-                    address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-                    balance: {
-                        amount: '157223311',
-                        currencyId:
-                            'Polygon|0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-                    },
-                    priceInDefaultCurrency: {
-                        amount: '157223311000000004096',
-                        currencyId: 'USD',
-                    },
-                    marketData: null,
-                },
-            ],
-            apps: [],
-            nftCollections: [],
         },
     },
     keystoreMap: {

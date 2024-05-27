@@ -1,7 +1,8 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
 
 import { Color, colors } from '@zeal/uikit/colors'
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
@@ -10,8 +11,7 @@ type Props = {
 
 export const SpamFolder = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             fill="transparent"
             viewBox="0 0 28 28"
             width={size}
@@ -31,6 +31,6 @@ export const SpamFolder = ({ size, color }: Props) => {
                 d="M12.832 9.19268C12.832 8.63385 13.2987 8.16602 13.8587 8.16602C14.4187 8.16602 14.8737 8.63385 14.8737 9.19268V14.3493C14.8737 14.9105 14.4187 15.3643 13.8587 15.3643C13.2987 15.3643 12.832 14.9105 12.832 14.3493V9.19268Z"
                 fill="currentColor"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

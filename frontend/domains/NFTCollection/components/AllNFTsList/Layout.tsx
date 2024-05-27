@@ -1,14 +1,14 @@
 import { FormattedMessage } from 'react-intl'
-import { ScrollView } from 'react-native'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Clickable } from '@zeal/uikit/Clickable'
 import { Column } from '@zeal/uikit/Column'
 import { EmptyStateWidget } from '@zeal/uikit/EmptyStateWidget'
-import { ArrowLeft2 } from '@zeal/uikit/Icon/ArrowLeft2'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { NFT } from '@zeal/uikit/Icon/Empty'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Text } from '@zeal/uikit/Text'
 
 import { MsgOf } from '@zeal/toolkit/MsgOf'
@@ -62,7 +62,11 @@ export const Layout = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 top={
                     <ActionBarAccountSelector account={account} onMsg={onMsg} />
@@ -70,7 +74,7 @@ export const Layout = ({
                 left={
                     <Clickable onClick={() => onMsg({ type: 'close' })}>
                         <Row spacing={4} shrink>
-                            <ArrowLeft2 size={24} color="iconDefault" />
+                            <BackIcon size={24} color="iconDefault" />
 
                             <Text
                                 variant="title3"
@@ -97,7 +101,7 @@ export const Layout = ({
                 }
             />
 
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollContainer>
                 <Column spacing={30}>
                     {nftCollections.length === 0 ? (
                         <EmptyStateWidget
@@ -146,7 +150,7 @@ export const Layout = ({
                         })
                     )}
                 </Column>
-            </ScrollView>
+            </ScrollContainer>
         </Screen>
     )
 }

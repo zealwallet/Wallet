@@ -51,6 +51,7 @@ export const Layout = ({ pollable, keystoreMap, onMsg }: Props) => {
             background="light"
             padding="form"
             aria-labelledby="swap-provider-modal"
+            onNavigateBack={() => onMsg({ type: 'close' })}
         >
             <ActionBar
                 top={

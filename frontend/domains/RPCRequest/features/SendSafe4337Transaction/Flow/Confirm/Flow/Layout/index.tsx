@@ -14,13 +14,17 @@ import { Result } from '@zeal/toolkit/Result'
 
 import { AccountsMap } from '@zeal/domains/Account'
 import { CryptoCurrency, KnownCurrencies } from '@zeal/domains/Currency'
+import { OffRampTransactionView } from '@zeal/domains/Currency/domains/BankTransfer/components/OffRampTransactionView'
 import { DAppSiteInfo } from '@zeal/domains/DApp'
 import { ConnectedMinimized } from '@zeal/domains/DApp/domains/ConnectionState/features/ConnectedMinimized'
 import { KeyStoreMap } from '@zeal/domains/KeyStore'
 import { ActionSource } from '@zeal/domains/Main'
-import { NetworkMap } from '@zeal/domains/Network'
+import { Network, NetworkMap, NetworkRPCMap } from '@zeal/domains/Network'
 import { findNetworkByHexChainId } from '@zeal/domains/Network/constants'
+import { NftCollectionListItem } from '@zeal/domains/NFTCollection/components/NftCollectionListItem'
+import { NftListItem } from '@zeal/domains/NFTCollection/components/NftListItem'
 import { Portfolio } from '@zeal/domains/Portfolio'
+import { EthSendTransaction } from '@zeal/domains/RPCRequest'
 import { FailedTransactionSafetyCheck } from '@zeal/domains/SafetyCheck'
 import { TransactionStatusButton } from '@zeal/domains/SafetyCheck/components/TransactionStatusButton'
 import { calculateTransactionSafetyChecksResult } from '@zeal/domains/SafetyCheck/helpers/calculateTransactionSafetyChecksResult'
@@ -28,12 +32,16 @@ import { ListItem } from '@zeal/domains/SmartContract/components/ListItem'
 import { SimulatedUserOperationRequest } from '@zeal/domains/TransactionRequest'
 import { ActionBar } from '@zeal/domains/Transactions/components/ActionBar'
 import { SimulateTransactionResponse } from '@zeal/domains/Transactions/domains/SimulatedTransaction'
+import { BridgeTrxView } from '@zeal/domains/Transactions/domains/SimulatedTransaction/components/BridgeTrx'
+import { EditableApprove } from '@zeal/domains/Transactions/domains/SimulatedTransaction/components/EditableApprove'
+import { Failed } from '@zeal/domains/Transactions/domains/SimulatedTransaction/components/Failed'
+import { P2PTransactionView } from '@zeal/domains/Transactions/domains/SimulatedTransaction/components/P2PTransactionView'
 import { SimulatedTransactionContentHeader } from '@zeal/domains/Transactions/domains/SimulatedTransaction/components/SimulatedTransactionContentHeader'
+import { Unknown } from '@zeal/domains/Transactions/domains/SimulatedTransaction/components/Unknown'
 import { GasAbstractionTransactionFee } from '@zeal/domains/UserOperation'
 
 import { FeeForecastWidget } from './FeeForecastWidget'
 
-import { SafeTransactionInfo } from '../../../SafeTransactionInfo'
 import { FeeForecastError, validateSubmit } from '../validation'
 
 type Props = {
@@ -47,6 +55,7 @@ type Props = {
     accountsMap: AccountsMap
     keyStoreMap: KeyStoreMap
     networkMap: NetworkMap
+    networkRPCMap: NetworkRPCMap
     pollingInterval: number
     pollingStartedAt: number
     feeForecastValidation: Result<
@@ -79,6 +88,7 @@ type Msg =
     | MsgOf<typeof SafeTransactionFooter>
     | MsgOf<typeof FeeForecastWidget>
     | MsgOf<typeof ConnectedMinimized>
+    | MsgOf<typeof EditableApprove>
 
 export const Layout = ({
     userOperationRequest,
@@ -88,6 +98,7 @@ export const Layout = ({
     portfolio,
     keyStoreMap,
     networkMap,
+    networkRPCMap,
     onMsg,
     pollingStartedAt,
     pollingInterval,
@@ -111,7 +122,11 @@ export const Layout = ({
 
         case 'maximised':
             return (
-                <Screen padding="form" background="light">
+                <Screen
+                    padding="form"
+                    background="light"
+                    onNavigateBack={() => onMsg({ type: 'on_minimize_click' })}
+                >
                     <ActionBar
                         title={
                             <FormattedMessage
@@ -147,12 +162,18 @@ export const Layout = ({
                             }
                         >
                             <SafeTransactionInfo
+                                rpcRequestToBundle={
+                                    userOperationRequest.rpcRequest
+                                }
                                 installationId={installationId}
                                 simulation={simulation}
                                 dApp={dApp}
                                 accounts={accountsMap}
                                 keyStores={keyStoreMap}
                                 networkMap={networkMap}
+                                networkRPCMap={networkRPCMap}
+                                network={userOperationRequest.network}
+                                onMsg={onMsg}
                             />
                         </Content>
                         <Column spacing={12}>
@@ -267,6 +288,108 @@ const SafeTransactionFooter = ({
                             simulation,
                         })
                     }
+                />
+            )
+        /* istanbul ignore next */
+        default:
+            return notReachable(transaction)
+    }
+}
+
+const SafeTransactionInfo = ({
+    simulation,
+    rpcRequestToBundle,
+    dApp,
+    accounts,
+    network,
+    keyStores,
+    networkRPCMap,
+    networkMap,
+    onMsg,
+    installationId,
+}: {
+    rpcRequestToBundle: EthSendTransaction
+    simulation: SimulateTransactionResponse
+    dApp: DAppSiteInfo | null
+    accounts: AccountsMap
+    keyStores: KeyStoreMap
+    networkMap: NetworkMap
+    networkRPCMap: NetworkRPCMap
+    onMsg: (msg: Msg) => void
+    network: Network
+    installationId: string
+}) => {
+    const { transaction, checks, currencies } = simulation
+
+    switch (transaction.type) {
+        case 'BridgeTrx':
+            return (
+                <BridgeTrxView
+                    networkMap={networkMap}
+                    transaction={transaction}
+                    knownCurrencies={currencies}
+                />
+            )
+        case 'WithdrawalTrx':
+            return (
+                <OffRampTransactionView
+                    variant={{ type: 'no_status' }}
+                    networkMap={networkMap}
+                    withdrawalRequest={transaction.withdrawalRequest}
+                />
+            )
+        case 'ApprovalTransaction':
+            return (
+                <EditableApprove
+                    transaction={transaction}
+                    originalEthSendTransaction={rpcRequestToBundle}
+                    checks={checks}
+                    knownCurrencies={currencies}
+                    network={network}
+                    networkRPCMap={networkRPCMap}
+                    onMsg={onMsg}
+                />
+            )
+        case 'UnknownTransaction':
+            return (
+                <Unknown
+                    networkMap={networkMap}
+                    checks={checks}
+                    knownCurrencies={currencies}
+                    transaction={transaction}
+                />
+            )
+        case 'FailedTransaction':
+            return <Failed dApp={dApp} transaction={transaction} />
+        case 'SingleNftApprovalTransaction':
+            return (
+                <NftListItem
+                    networkMap={networkMap}
+                    nft={transaction.nft}
+                    checks={checks}
+                    rightNode={null}
+                />
+            )
+        case 'NftCollectionApprovalTransaction':
+            return (
+                <NftCollectionListItem
+                    networkMap={networkMap}
+                    checks={checks}
+                    nftCollection={transaction.nftCollectionInfo}
+                />
+            )
+        case 'P2PTransaction':
+        case 'P2PNftTransaction':
+            return (
+                <P2PTransactionView
+                    installationId={installationId}
+                    networkMap={networkMap}
+                    transaction={transaction}
+                    dApp={dApp}
+                    knownCurrencies={currencies}
+                    checks={checks}
+                    accounts={accounts}
+                    keystores={keyStores}
                 />
             )
         /* istanbul ignore next */

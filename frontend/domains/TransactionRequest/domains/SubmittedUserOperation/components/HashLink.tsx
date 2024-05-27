@@ -70,6 +70,7 @@ const Link = ({
                         </Text>
                     ) : (
                         <IconButton
+                            size="small"
                             variant="on_light"
                             onClick={() => openExternalURL(link)}
                         >
@@ -99,6 +100,7 @@ const Link = ({
         case 'no_address':
             return !link ? null : (
                 <IconButton
+                    size="small"
                     variant="on_light"
                     onClick={() => openExternalURL(link)}
                 >

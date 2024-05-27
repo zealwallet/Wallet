@@ -32,7 +32,7 @@ export const CryptoCurrencySelector = ({
     onMsg,
 }: Props) => {
     return (
-        <Screen padding="form" background="light">
+        <Screen padding="form" background="light" onNavigateBack={null}>
             <ActionBar
                 left={
                     <Clickable onClick={() => onMsg({ type: 'close' })}>

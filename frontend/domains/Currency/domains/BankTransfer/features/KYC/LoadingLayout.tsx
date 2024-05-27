@@ -24,6 +24,7 @@ export const LoadingLayout = ({
     onMsg,
 }: Props) => (
     <UILoadingLayout
+        onClose={() => onMsg({ type: 'close' })}
         actionBar={
             <ActionBar
                 account={account}

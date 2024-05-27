@@ -56,11 +56,16 @@ export type Msg =
                   | 'import_keys_button_clicked'
                   | 'keystore_added'
                   | 'message_signed'
+                  | 'on_4337_gas_currency_selected'
                   | 'on_cancel_confirm_transaction_clicked'
+                  | 'on_close_transaction_status_not_found_modal'
+                  | 'on_completed_safe_transaction_close_click'
                   | 'on_completed_transaction_close_click'
                   | 'on_gas_currency_selected'
                   | 'on_network_add_clicked'
+                  | 'on_pre_sign_safe_deployment_error_popup_cancel_clicked'
                   | 'on_predefined_fee_preset_selected'
+                  | 'on_safe_4337_transaction_completed_splash_animation_screen_competed'
                   | 'on_safe_deployemnt_cancelled'
                   | 'on_safe_transaction_completed_splash_animation_screen_competed'
                   | 'on_safe_transaction_failure_accepted'
@@ -69,15 +74,11 @@ export type Msg =
                   | 'on_wrong_network_accepted'
                   | 'session_password_decrypted'
                   | 'transaction_cancel_failure_accepted'
-                  | 'transaction_cancel_success'
+                  | 'on_transaction_cancelled_successfully_close_clicked'
                   | 'transaction_cancelled_accepted'
                   | 'transaction_failure_accepted'
-                  | 'transaction_submited'
                   | 'transaction_request_replaced'
-                  | 'on_close_transaction_status_not_found_modal'
-                  | 'on_completed_safe_transaction_close_click'
-                  | 'on_safe_4337_transaction_completed_splash_animation_screen_competed'
-                  | 'on_4337_gas_currency_selected'
+                  | 'transaction_submited'
           }
       >
     | { type: 'expanded' }
@@ -166,7 +167,7 @@ export const VisualState = ({
                         case 'session_password_decrypted':
                         case 'transaction_cancel_failure_accepted':
                         case 'on_safe_transaction_failure_accepted':
-                        case 'transaction_cancel_success':
+                        case 'on_transaction_cancelled_successfully_close_clicked':
                         case 'on_completed_transaction_close_click':
                         case 'on_completed_safe_transaction_close_click':
                         case 'transaction_failure_accepted':
@@ -178,6 +179,7 @@ export const VisualState = ({
                         case 'on_transaction_completed_splash_animation_screen_competed':
                         case 'on_safe_4337_transaction_completed_splash_animation_screen_competed':
                         case 'close':
+                        case 'on_pre_sign_safe_deployment_error_popup_cancel_clicked':
                         case 'on_network_add_clicked':
                         case 'on_predefined_fee_preset_selected':
                         case 'on_4337_gas_currency_selected':

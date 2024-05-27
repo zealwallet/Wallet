@@ -60,7 +60,11 @@ export const Layout = ({
     networkMap,
 }: Props) => {
     return (
-        <Screen padding="form" background="default">
+        <Screen
+            padding="form"
+            background="default"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton

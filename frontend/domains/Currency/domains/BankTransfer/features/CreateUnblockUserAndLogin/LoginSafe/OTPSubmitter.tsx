@@ -93,6 +93,7 @@ export const OtpSubmitter = ({
         case 'loading':
             return (
                 <LoadingLayout
+                    onClose={() => onMsg({ type: 'close' })}
                     actionBar={
                         <ActionBar
                             account={account}
@@ -117,7 +118,7 @@ export const OtpSubmitter = ({
             const error = parseAppError(loadable.error)
             return (
                 <>
-                    <LoadingLayout actionBar={null} />
+                    <LoadingLayout actionBar={null} onClose={null} />
                     <AppErrorPopup
                         error={error}
                         onMsg={(msg) => {

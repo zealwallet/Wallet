@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const SolidZeal = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             color={color && colors[color]}
             height={size}
             viewBox="0 0 28 28"
@@ -25,6 +26,6 @@ export const SolidZeal = ({ size, color }: Props) => {
                 d="M24.5 3.5H3.5V12.95H20.3C22.6196 12.95 24.5 11.0696 24.5 8.75V3.5Z"
                 fill="#01C9C9"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

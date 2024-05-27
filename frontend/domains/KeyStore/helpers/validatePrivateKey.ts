@@ -1,4 +1,4 @@
-import Web3 from 'web3'
+import { privateKeyToAccount } from 'viem/accounts'
 
 import { failure, Result, success } from '@zeal/toolkit/Result'
 
@@ -9,7 +9,7 @@ export const validatePrivateKey = (
 ): Result<NotValidPrivateKey, string> => {
     const trimmedPK = cleanPK(privateKey)
     try {
-        new Web3().eth.accounts.privateKeyToAccount('0x' + trimmedPK)
+        privateKeyToAccount(`0x${trimmedPK}`)
 
         return success(trimmedPK)
     } catch (e) {

@@ -41,7 +41,7 @@ type Msg =
           MsgOf<typeof Cancel>,
           {
               type:
-                  | 'transaction_cancel_success'
+                  | 'on_transaction_cancelled_successfully_close_clicked'
                   | 'transaction_cancel_failure_accepted'
                   | 'cancel_submitted'
           }
@@ -162,7 +162,7 @@ export const SignAndSubmit = ({
                                         ),
                                 })
                                 break
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'on_expand_request':
                             case 'transaction_cancel_failure_accepted':
                             case 'on_minimize_click':

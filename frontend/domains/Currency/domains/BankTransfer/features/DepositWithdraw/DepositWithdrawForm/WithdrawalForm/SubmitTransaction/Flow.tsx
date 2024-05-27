@@ -65,7 +65,7 @@ export type Msg =
                   | 'transaction_failure_accepted'
                   | 'on_safe_transaction_failure_accepted'
                   | 'on_sign_cancel_button_clicked'
-                  | 'transaction_cancel_success'
+                  | 'on_transaction_cancelled_successfully_close_clicked'
                   | 'transaction_cancel_failure_accepted'
                   | 'transaction_submited'
                   | 'cancel_submitted'
@@ -193,7 +193,7 @@ export const Flow = ({
                             case 'transaction_failure_accepted':
                             case 'on_safe_transaction_failure_accepted':
                             case 'on_sign_cancel_button_clicked':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'transaction_cancel_failure_accepted':
                             case 'transaction_submited':
                             case 'cancel_submitted':

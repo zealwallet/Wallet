@@ -134,7 +134,6 @@ export const Flow = ({
                                 })
                                 break
 
-                            case 'on_back_button_clicked':
                             case 'close':
                                 onMsg(msg)
                                 break

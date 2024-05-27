@@ -1,17 +1,14 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
 }
 
 export const CustomMetamask = ({ size }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
-        viewBox="0 0 32 32"
-        width={size}
-        height={size}
-    >
+    <SvgIcon viewBox="0 0 32 32" width={size} height={size}>
         <Path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -186,5 +183,5 @@ export const CustomMetamask = ({ size }: Props) => (
             d="M26.6517 5.2832L27.8068 8.81253L27.1651 12.6628L27.6142 12.9195L26.9725 13.497L27.4859 13.9462L26.7801 14.5879L27.2292 14.9729L26.2025 16.2563L21.3897 14.7805C19.0368 12.8981 17.8817 11.9355 17.9245 11.8927C17.9673 11.8499 20.8764 9.64681 26.6517 5.2832Z"
             fill="#8E5A30"
         />
-    </Svg>
+    </SvgIcon>
 )

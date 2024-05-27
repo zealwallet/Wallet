@@ -17,7 +17,6 @@ export const USD: FiatCurrency = {
     icon: 'TODO',
     name: 'USD',
 }
-
 export const BANK_TRANSFER_NETWORK: Network = POLYGON
 
 export const PRE_KYC_TRANSFER_LIMIT_IN_DEFAULT_CURRENCY: Money = {

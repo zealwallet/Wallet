@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
+import { Actions } from '@zeal/uikit/Actions'
 import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
 import { Header } from '@zeal/uikit/Header'
@@ -96,7 +97,11 @@ export const AddForm = ({ initialPassword, onMsg }: Props) => {
         }
     }
     return (
-        <Screen padding="form" background="light">
+        <Screen
+            padding="form"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -228,17 +233,19 @@ export const AddForm = ({ initialPassword, onMsg }: Props) => {
                     }
                 />
 
-                <Button
-                    onClick={onSubmit}
-                    size="regular"
-                    variant="primary"
-                    disabled={!!error?.password}
-                >
-                    <FormattedMessage
-                        id="action.continue"
-                        defaultMessage="Continue"
-                    />
-                </Button>
+                <Actions>
+                    <Button
+                        onClick={onSubmit}
+                        size="regular"
+                        variant="primary"
+                        disabled={!!error?.password}
+                    >
+                        <FormattedMessage
+                            id="action.continue"
+                            defaultMessage="Continue"
+                        />
+                    </Button>
+                </Actions>
                 <Row spacing={0} alignX="center">
                     <Text
                         variant="caption1"

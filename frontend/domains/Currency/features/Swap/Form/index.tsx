@@ -397,7 +397,7 @@ export const Form = ({
                                 case 'transaction_failure_accepted':
                                 case 'on_safe_transaction_failure_accepted':
                                 case 'on_sign_cancel_button_clicked':
-                                case 'transaction_cancel_success':
+                                case 'on_transaction_cancelled_successfully_close_clicked':
                                 case 'transaction_cancel_failure_accepted':
                                 case 'close':
                                 case 'on_close_transaction_status_not_found_modal':

@@ -1,13 +1,18 @@
 import { ComponentPropsWithoutRef, useEffect } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import { Copy } from '@zeal/uikit/Icon/Copy'
+import { Tick } from '@zeal/uikit/Icon/Tick'
 import { TickSquare } from '@zeal/uikit/Icon/TickSquare'
 import { IconButton } from '@zeal/uikit/IconButton'
+import { Modal } from '@zeal/uikit/Modal'
+import { Toast, ToastContainer, ToastText } from '@zeal/uikit/Toast'
 
 import { noop, notReachable } from '@zeal/toolkit'
 import { useCopyTextToClipboard } from '@zeal/toolkit/Clipboard/hooks/useCopyTextToClipboard'
 
 import { Address } from '@zeal/domains/Address'
+import { format } from '@zeal/domains/Address/helpers/format'
 import { captureError } from '@zeal/domains/Error/helpers/captureError'
 import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
 
@@ -75,9 +80,28 @@ export const CopyAddressIconButton = ({
 
         case 'loaded':
             return (
-                <IconButton variant={variant} onClick={noop}>
-                    {({ color }) => <TickSquare color={color} size={size} />}
-                </IconButton>
+                <>
+                    <IconButton variant={variant} onClick={noop}>
+                        {({ color }) => (
+                            <TickSquare color={color} size={size} />
+                        )}
+                    </IconButton>
+                    <Modal isAnimated>
+                        <ToastContainer>
+                            <Toast>
+                                <Tick size={20} color="backgroundLight" />
+                                <ToastText>
+                                    <FormattedMessage
+                                        id="accounts.view.copiedAddress"
+                                        defaultMessage={`Copied ${format(
+                                            address
+                                        )}`}
+                                    />
+                                </ToastText>
+                            </Toast>
+                        </ToastContainer>
+                    </Modal>
+                </>
             )
 
         /* istanbul ignore next */

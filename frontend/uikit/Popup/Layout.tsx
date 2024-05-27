@@ -1,6 +1,19 @@
-import React from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import {
+    KeyboardAvoidingView,
+    LayoutChangeEvent,
+    Pressable,
+    StyleSheet,
+    View,
+} from 'react-native'
+import Animated from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { BackNavigator } from '@zeal/uikit/GestureDetectors/BackNavigator'
+import {
+    DragToCloseGestureDetector,
+    useDragToCloseGesture,
+} from '@zeal/uikit/GestureDetectors/DragToCloseGestureDetector'
 
 import { notReachable } from '@zeal/toolkit'
 import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
@@ -8,9 +21,10 @@ import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
 import { colors } from '../colors'
 import { Extractor } from '../Extractor'
 import { Modal } from '../Modal'
+import absoluteFill = StyleSheet.absoluteFill
 
 const styles = StyleSheet.create({
-    container: {
+    innerContainer: {
         flexDirection: 'column',
         width: '100%',
         flexGrow: 1,
@@ -67,6 +81,7 @@ type Props = {
     'aria-labelledby'?: string
     'aria-describedby'?: string
     fixedViewPort?: boolean
+    variant?: 'screen' | 'modal'
     onMsg: (msg: Msg) => void
 }
 
@@ -79,33 +94,114 @@ export const Layout = ({
     fixedViewPort,
     'aria-labelledby': ariaLabelledby,
     'aria-describedby': ariaDescribedby,
+    variant = 'modal',
 }: Props) => {
     const inset = useSafeAreaInsets()
+    const [modalHeight, setModalHeight] = useState(0)
+
+    const { backgroundTransition, popupTransform, handlePopupGesture } =
+        useDragToCloseGesture(modalHeight, () => {
+            onMsg({ type: 'close' })
+        })
+
     return (
-        <Modal
+        <Wrapper
+            variant={variant}
             aria-labelledby={ariaLabelledby}
             aria-describedby={ariaDescribedby}
         >
-            <View
-                style={[
-                    styles.container,
-                    fixedViewPort && styles.fixedViewPort,
-                ]}
+            <BackNavigator
+                onNavigateBack={() => onMsg({ type: 'close' })}
+                enableSwipeIos={false}
             >
-                <Pressable
-                    style={styles.stopper}
-                    onPress={() => onMsg({ type: 'close' })}
-                />
-                <View
-                    style={[
-                        styles.dynamic,
-                        inset.bottom > 0 && { paddingBottom: inset.bottom },
-                        background && styles[`background_${background}`],
-                    ]}
-                >
-                    <View style={styles.contentContainer}>{children}</View>
-                </View>
-            </View>
-        </Modal>
+                <DragToCloseGestureDetector gesture={handlePopupGesture}>
+                    <Animated.View
+                        role="dialog"
+                        aria-labelledby={ariaLabelledby}
+                        aria-describedby={ariaDescribedby}
+                        style={[
+                            styles.innerContainer,
+                            fixedViewPort && styles.fixedViewPort,
+                            backgroundTransition,
+                        ]}
+                    >
+                        <Pressable
+                            style={styles.stopper}
+                            onPress={() => onMsg({ type: 'close' })}
+                        />
+                        <Animated.View
+                            onLayout={(event: LayoutChangeEvent) => {
+                                setModalHeight(event.nativeEvent.layout.height)
+                            }}
+                            style={[
+                                styles.dynamic,
+                                inset.bottom > 0 && {
+                                    paddingBottom: inset.bottom,
+                                },
+                                background &&
+                                    styles[`background_${background}`],
+                                popupTransform,
+                            ]}
+                        >
+                            <View style={styles.contentContainer}>
+                                {children}
+                            </View>
+                        </Animated.View>
+                    </Animated.View>
+                </DragToCloseGestureDetector>
+            </BackNavigator>
+        </Wrapper>
     )
+}
+
+type WrapperProps = {
+    children: React.ReactNode
+    'aria-labelledby'?: string
+    'aria-describedby'?: string
+    variant?: 'screen' | 'modal'
+}
+
+export const Wrapper = ({
+    children,
+    'aria-labelledby': ariaLabelledby,
+    'aria-describedby': ariaDescribedby,
+    variant = 'modal',
+}: WrapperProps) => {
+    switch (variant) {
+        case 'screen':
+            return (
+                <View style={[absoluteFill]}>
+                    <KeyboardAvoidingView
+                        style={[StyleSheet.absoluteFill]}
+                        behavior={(() => {
+                            switch (ZealPlatform.OS) {
+                                case 'ios':
+                                    return 'padding'
+                                case 'android':
+                                    return 'height'
+                                case 'web':
+                                    return undefined
+                                default:
+                                    return notReachable(ZealPlatform.OS)
+                            }
+                        })()}
+                    >
+                        {children}
+                    </KeyboardAvoidingView>
+                </View>
+            )
+        case 'modal':
+            return (
+                <Modal
+                    aria-labelledby={ariaLabelledby}
+                    aria-describedby={ariaDescribedby}
+                >
+                    {children}
+                </Modal>
+            )
+
+        /* istanbul ignore next */
+        default:
+            return notReachable(variant)
+    }
 }

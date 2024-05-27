@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import { Address } from '@zeal/domains/Address'
 import { Money } from '@zeal/domains/Money'
 import { NetworkHexId } from '@zeal/domains/Network'
@@ -79,4 +81,11 @@ export type AppNft = {
     decimals: number
     priceInDefaultCurrency: Money | null
     uri: string | null
+}
+
+export type PlaceholderApp = {
+    logo: (size: number) => ReactNode
+    name: string
+    description: ReactNode
+    link: string
 }

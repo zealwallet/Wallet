@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { ScrollView } from 'react-native'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Actions } from '@zeal/uikit/Actions'
@@ -13,6 +12,7 @@ import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { Connections } from '@zeal/uikit/Icon/Empty/Connections'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Spacer } from '@zeal/uikit/Spacer'
 import { Tertiary } from '@zeal/uikit/Tertiary'
 import { Text } from '@zeal/uikit/Text'
@@ -59,6 +59,7 @@ export const Layout = ({ connections, onMsg }: Props) => {
             background="light"
             padding="form"
             aria-labelledby="connections-layout-label"
+            onNavigateBack={() => onMsg({ type: 'close' })}
         >
             <Column spacing={12} fill shrink>
                 <Column spacing={16} shrink>
@@ -134,7 +135,7 @@ export const Layout = ({ connections, onMsg }: Props) => {
                             }
                         />
                         <Group variant="default">
-                            <ScrollView showsVerticalScrollIndicator={false}>
+                            <ScrollContainer>
                                 {!!activeConnections.length ? (
                                     activeConnections.map((connection) => {
                                         const selected = dAppHostNames.has(
@@ -179,7 +180,7 @@ export const Layout = ({ connections, onMsg }: Props) => {
                                         }
                                     />
                                 )}
-                            </ScrollView>
+                            </ScrollContainer>
                         </Group>
                     </Section>
                 </Column>

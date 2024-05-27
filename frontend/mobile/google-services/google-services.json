@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "333702958483",
+    "project_id": "zeal-wallet-6e3fb",
+    "storage_bucket": "zeal-wallet-6e3fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333702958483:android:35c698f366b373c9f8ac66",
+        "android_client_info": {
+          "package_name": "app.zeal.wallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJvyI-9yjviGFuRVOep5G1y0EnFvFvj3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333702958483:android:3cafbdbf19ca973ff8ac66",
+        "android_client_info": {
+          "package_name": "app.zeal.wallet.development"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJvyI-9yjviGFuRVOep5G1y0EnFvFvj3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333702958483:android:73c93c2a73ddb918f8ac66",
+        "android_client_info": {
+          "package_name": "app.zeal.wallet.local"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJvyI-9yjviGFuRVOep5G1y0EnFvFvj3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,7 @@
 import React from 'react'
-import Svg, { Path } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -9,8 +11,7 @@ type Props = {
 }
 
 export const BoldSave = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         viewBox="0 0 24 24"
         fill="none"
         width={size}
@@ -29,5 +30,5 @@ export const BoldSave = ({ size, color }: Props) => (
             d="M15.2507 4.5C15.2507 4.22386 15.0268 4 14.7507 4H9.25067C8.97453 4 8.75067 4.22386 8.75067 4.5V7.59998C8.75067 7.73805 8.8626 7.84998 9.00067 7.84998H15.0007C15.1387 7.84998 15.2507 7.73805 15.2507 7.59998V4.5Z"
             fill="currentColor"
         />
-    </Svg>
+    </SvgIcon>
 )

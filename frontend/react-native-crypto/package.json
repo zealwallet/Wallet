@@ -1,0 +1,31 @@
+{
+  "name": "@zeal/react-native-crypto",
+  "version": "0.1.0",
+  "description": "Zeal native crypto bindings",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "xed example/ios",
+    "open:android": "open -a \"Android Studio\" example/android"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mdx}": [
+      "eslint --ignore-pattern '!.storybook' --max-warnings 0"
+    ]
+  },
+  "devDependencies": {
+    "@types/react": "18.0.25",
+    "expo-module-scripts": "3.5.1",
+    "expo-modules-core": "1.12.9"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  }
+}

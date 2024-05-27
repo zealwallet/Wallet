@@ -1,7 +1,8 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
 
 import { Color, colors } from '@zeal/uikit/colors'
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 type Props = {
     size: number
@@ -9,8 +10,7 @@ type Props = {
 }
 
 export const LightArrowUp2 = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         viewBox="0 0 24 24"
         fill="none"
         width={size}
@@ -24,5 +24,5 @@ export const LightArrowUp2 = ({ size, color }: Props) => (
             strokeLinecap="round"
             strokeLinejoin="round"
         />
-    </Svg>
+    </SvgIcon>
 )

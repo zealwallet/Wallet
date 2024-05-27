@@ -20,8 +20,9 @@ import { CustomCurrencyMap } from '@zeal/domains/Storage'
 
 import { Add4337SafeFromPasskey } from './Add4337SafeFromPasskey'
 import { AddFromGoogleDriveRecovery } from './AddFromGoogleDriveRecovery'
+import { AddFromNewSecretPhrase } from './AddFromNewSecretPhrase'
+import { AddFromPrivateKey } from './AddFromPrivateKey'
 import { ChooseImportOrCreateSecretPhrase } from './ChooseImportOrCreateSecretPhrase'
-import { RestoreAccount } from './RestoreAccount'
 
 type Props = {
     state: State
@@ -43,7 +44,8 @@ export type Msg =
     | { type: 'close' }
     | MsgOf<typeof AddFromHardwareWallet>
     | MsgOf<typeof ChooseImportOrCreateSecretPhrase>
-    | MsgOf<typeof RestoreAccount>
+    | MsgOf<typeof AddFromNewSecretPhrase>
+    | MsgOf<typeof AddFromPrivateKey>
     | MsgOf<typeof CreateNewAccount>
     | MsgOf<typeof AddFromGoogleDriveRecovery>
     | MsgOf<typeof AddFromGoogleDriveRecovery>
@@ -105,10 +107,9 @@ export const Modal = ({
             )
 
         case 'import_secret_phrase':
-        case 'import_private_key':
             return (
                 <UIModal>
-                    <RestoreAccount
+                    <AddFromNewSecretPhrase
                         currencyHiddenMap={currencyHiddenMap}
                         networkMap={networkMap}
                         networkRPCMap={networkRPCMap}
@@ -120,6 +121,18 @@ export const Modal = ({
                     />
                 </UIModal>
             )
+
+        case 'import_private_key':
+            return (
+                <UIModal>
+                    <AddFromPrivateKey
+                        accounts={values(accountsMap)}
+                        sessionPassword={sessionPassword}
+                        onMsg={onMsg}
+                    />
+                </UIModal>
+            )
+
         case 'create_new_secret_phrase':
             return (
                 <UIModal>

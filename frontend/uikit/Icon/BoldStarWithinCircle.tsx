@@ -1,5 +1,7 @@
 import React from 'react'
-import { Circle, ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg'
+import { Circle, ClipPath, Defs, G, Path, Rect } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -9,8 +11,7 @@ type Props = {
 }
 
 export const BoldStarWithinCircle = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         viewBox="0 0 24 24"
         height={size}
         width={size}
@@ -28,5 +29,5 @@ export const BoldStarWithinCircle = ({ size, color }: Props) => (
                 <Rect width="24" height="24" fill="white" />
             </ClipPath>
         </Defs>
-    </Svg>
+    </SvgIcon>
 )

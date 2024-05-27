@@ -14,11 +14,9 @@ import { AlternativeProvider } from '@zeal/domains/Main'
 import { Network } from '@zeal/domains/Network'
 import { ConnectionSafetyCheck } from '@zeal/domains/SafetyCheck'
 import { ConnectionSafetyChecksResponse } from '@zeal/domains/SafetyCheck/api/fetchConnectionSafetyChecks'
-import { calculateConnectionSafetyChecksResult } from '@zeal/domains/SafetyCheck/helpers/calculateConnectionSafetyChecksResult'
+import { calculateConnectionSafetyChecksUserConfirmation } from '@zeal/domains/SafetyCheck/helpers/calculateConnectionSafetyChecksUserConfirmation'
 import { keystoreToUserEventType } from '@zeal/domains/UserEvents'
 import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
-
-import { shouldWeConfirmSafetyCheck } from '../../helpers'
 
 type Props = {
     selectedNetwork: Network
@@ -48,160 +46,75 @@ export const Layout = ({
     alternativeProvider,
     installationId,
     onMsg,
-}: Props) => {
-    switch (safetyChecksLoadable.type) {
-        case 'error':
-        case 'loading':
-            return (
-                <Column spacing={12}>
-                    <MetaMaskButton
-                        installationId={installationId}
-                        alternativeProvider={alternativeProvider}
-                        onMsg={onMsg}
-                    />
+}: Props) => (
+    <Column spacing={12}>
+        <MetaMaskButton
+            installationId={installationId}
+            alternativeProvider={alternativeProvider}
+            onMsg={onMsg}
+        />
 
-                    <Actions>
-                        <Button
-                            size="regular"
-                            variant="secondary"
-                            onClick={() =>
-                                onMsg({
-                                    type: 'reject_connection_button_click',
-                                })
-                            }
-                        >
-                            <FormattedMessage
-                                id="connection_state.connect.cancel"
-                                defaultMessage="Cancel"
-                            />
-                        </Button>
-                        <Button
-                            size="regular"
-                            variant="primary"
-                            onClick={() => {
-                                postUserEvent({
-                                    type: 'ConnectionAcceptedEvent',
-                                    keystoreType:
-                                        keystoreToUserEventType(keystore),
-                                    network: selectedNetwork.hexChainId,
-                                    installationId,
-                                    keystoreId: keystore.id,
-                                })
-                                onMsg({
-                                    type: 'connect_button_click',
-                                    account: selectedAccount,
-                                    network: selectedNetwork,
-                                })
-                            }}
-                        >
-                            <FormattedMessage
-                                id="connection_state.connect.connect_button"
-                                defaultMessage="Connect Zeal"
-                            />
-                        </Button>
-                    </Actions>
-                </Column>
-            )
+        <Actions>
+            <Button
+                size="regular"
+                variant="secondary"
+                onClick={() =>
+                    onMsg({
+                        type: 'reject_connection_button_click',
+                    })
+                }
+            >
+                <FormattedMessage
+                    id="connection_state.connect.cancel"
+                    defaultMessage="Cancel"
+                />
+            </Button>
+            <Button
+                size="regular"
+                variant="primary"
+                onClick={() => {
+                    const safetyCheckConfirmationResult =
+                        calculateConnectionSafetyChecksUserConfirmation({
+                            safetyChecksLoadable,
+                        })
 
-        case 'loaded':
-            const checkResult = calculateConnectionSafetyChecksResult(
-                safetyChecksLoadable.data.checks
-            )
-            return (
-                <Column spacing={12}>
-                    <MetaMaskButton
-                        installationId={installationId}
-                        alternativeProvider={alternativeProvider}
-                        onMsg={onMsg}
-                    />
-                    <Actions>
-                        <Button
-                            size="regular"
-                            variant="secondary"
-                            onClick={() =>
-                                onMsg({
-                                    type: 'reject_connection_button_click',
-                                })
-                            }
-                        >
-                            <FormattedMessage
-                                id="connection_state.connect.cancel"
-                                defaultMessage="Cancel"
-                            />
-                        </Button>
-                        <Button
-                            size="regular"
-                            variant="primary"
-                            onClick={() => {
-                                switch (checkResult.type) {
-                                    case 'Failure': {
-                                        shouldWeConfirmSafetyCheck(
-                                            checkResult.reason.failedChecks
-                                        )
-                                            ? onMsg({
-                                                  type: 'connect_confirmation_requested',
-                                                  safetyChecks:
-                                                      safetyChecksLoadable.data
-                                                          .checks,
-                                              })
-                                            : (() => {
-                                                  postUserEvent({
-                                                      type: 'ConnectionAcceptedEvent',
-                                                      keystoreType:
-                                                          keystoreToUserEventType(
-                                                              keystore
-                                                          ),
-                                                      network:
-                                                          selectedNetwork.hexChainId,
-                                                      installationId,
-                                                      keystoreId: keystore.id,
-                                                  })
-                                                  onMsg({
-                                                      type: 'connect_button_click',
-                                                      account: selectedAccount,
-                                                      network: selectedNetwork,
-                                                  })
-                                              })()
+                    switch (safetyCheckConfirmationResult.type) {
+                        case 'Failure':
+                            postUserEvent({
+                                type: 'ConnectionAcceptedEvent',
+                                keystoreType: keystoreToUserEventType(keystore),
+                                network: selectedNetwork.hexChainId,
+                                installationId,
+                                keystoreId: keystore.id,
+                            })
+                            onMsg({
+                                type: 'connect_button_click',
+                                account: selectedAccount,
+                                network: selectedNetwork,
+                            })
+                            break
 
-                                        break
-                                    }
-                                    case 'Success':
-                                        postUserEvent({
-                                            type: 'ConnectionAcceptedEvent',
-                                            keystoreType:
-                                                keystoreToUserEventType(
-                                                    keystore
-                                                ),
-                                            network: selectedNetwork.hexChainId,
-                                            installationId,
-                                            keystoreId: keystore.id,
-                                        })
-                                        onMsg({
-                                            type: 'connect_button_click',
-                                            account: selectedAccount,
-                                            network: selectedNetwork,
-                                        })
-                                        break
+                        case 'Success':
+                            onMsg({
+                                type: 'connect_confirmation_requested',
+                                safetyChecks:
+                                    safetyCheckConfirmationResult.data,
+                            })
+                            break
 
-                                    default:
-                                        notReachable(checkResult)
-                                }
-                            }}
-                        >
-                            <FormattedMessage
-                                id="connection_state.connect.connect_button"
-                                defaultMessage="Connect Zeal"
-                            />
-                        </Button>
-                    </Actions>
-                </Column>
-            )
-
-        /* istanbul ignore next */
-        default:
-            return notReachable(safetyChecksLoadable)
-    }
-}
+                        default:
+                            return notReachable(safetyCheckConfirmationResult)
+                    }
+                }}
+            >
+                <FormattedMessage
+                    id="connection_state.connect.connect_button"
+                    defaultMessage="Connect Zeal"
+                />
+            </Button>
+        </Actions>
+    </Column>
+)
 
 const MetaMaskButton = ({
     alternativeProvider,

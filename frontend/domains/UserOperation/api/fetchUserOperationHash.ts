@@ -1,6 +1,7 @@
 import Web3 from 'web3'
 
 import { bigIntToHex } from '@zeal/toolkit/BigInt'
+import * as Hexadecimal from '@zeal/toolkit/Hexadecimal'
 import { generateRandomNumber } from '@zeal/toolkit/Number'
 import { string } from '@zeal/toolkit/Result'
 
@@ -165,9 +166,9 @@ export const fetchUserOperationHash = async ({
         },
     })
 
-    const hash = string(hashResponse).getSuccessResultOrThrow(
-        'Failed to parse user operation hash response'
-    )
+    const hash = string(hashResponse)
+        .andThen(Hexadecimal.parseFromString)
+        .getSuccessResultOrThrow('Failed to parse user operation hash response')
 
     return {
         type: 'user_operation_hash',

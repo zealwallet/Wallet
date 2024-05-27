@@ -12,12 +12,15 @@ import {
     Aurora,
     Avalanche,
     Base as BaseIcon,
+    Blast,
     BNB,
     Celo,
     Cronos,
     Eth,
     Fantom,
     Gnosis,
+    Linea,
+    OPBNB,
     Optimism,
     Polygon,
     PolygonZkevm,
@@ -77,6 +80,12 @@ export const Badge = ({ network, size }: Props) => {
                             <PolygonZkevm size={size} />
                         </UIBadge>
                     )
+                case 'Linea':
+                    return (
+                        <UIBadge size={size}>
+                            <Linea size={size} />
+                        </UIBadge>
+                    )
                 case 'Fantom':
                     return (
                         <UIBadge size={size}>
@@ -93,6 +102,18 @@ export const Badge = ({ network, size }: Props) => {
                     return (
                         <UIBadge size={size}>
                             <BaseIcon size={size} />
+                        </UIBadge>
+                    )
+                case 'Blast':
+                    return (
+                        <UIBadge size={size}>
+                            <Blast size={size} />
+                        </UIBadge>
+                    )
+                case 'OPBNB':
+                    return (
+                        <UIBadge size={size}>
+                            <OPBNB size={size} />
                         </UIBadge>
                     )
                 case 'Gnosis':

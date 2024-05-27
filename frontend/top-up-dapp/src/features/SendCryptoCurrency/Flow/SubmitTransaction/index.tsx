@@ -23,7 +23,8 @@ import { format } from '@zeal/domains/Address/helpers/format'
 import { Network, NetworkRPCMap } from '@zeal/domains/Network'
 import { fetchRPCResponse } from '@zeal/domains/RPCRequest/api/fetchRPCResponse'
 import { SubmitedTransactionQueued } from '@zeal/domains/TransactionRequest/domains/SubmitedTransaction'
-import { postUserEvent } from '@zeal/domains/UserEvents/api/postUserEvent'
+
+import { postUserEvent } from 'src/features/UserEvents'
 
 import { ExternalWalletAvatar } from '../../components/ExternalWalletAvatar'
 import { TopUpRequest } from '../TopUpRequest'
@@ -107,7 +108,6 @@ export const SubmitTransaction = ({ topUpRequest, onMsg }: Props) => {
                 postUserEvent({
                     type: 'TopUpTransactionSubmittedEvent',
                     network: topUpRequest.network.hexChainId,
-                    installationId: 'dapp-no-installation-id',
                 })
 
                 onMsgLive.current({
@@ -133,7 +133,7 @@ export const SubmitTransaction = ({ topUpRequest, onMsg }: Props) => {
     }, [loadable, onMsgLive, topUpRequest.network.hexChainId])
 
     return (
-        <Screen padding="form" background="light">
+        <Screen padding="form" background="light" onNavigateBack={null}>
             <UIActionBar
                 left={
                     <Row spacing={8}>

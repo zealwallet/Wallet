@@ -195,6 +195,13 @@ module.exports = {
         'use-isnan': 'warn',
         'valid-typeof': 'warn',
         'getter-return': 'warn',
+        'react-hooks/exhaustive-deps': [
+            'warn',
+            {
+                additionalHooks:
+                    '(useAnimatedStyle|useDerivedValue|useAnimatedProps)',
+            },
+        ],
 
         // Custom syntax restrictions
         'no-restricted-syntax': [

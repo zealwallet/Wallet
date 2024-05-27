@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { ScrollView } from 'react-native'
 
 import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Actions } from '@zeal/uikit/Actions'
@@ -18,6 +17,7 @@ import { Input } from '@zeal/uikit/Input'
 import { ListItem } from '@zeal/uikit/ListItem'
 import { Row } from '@zeal/uikit/Row'
 import { Screen } from '@zeal/uikit/Screen'
+import { ScrollContainer } from '@zeal/uikit/ScrollContainer'
 import { Spacer } from '@zeal/uikit/Spacer'
 import { Text } from '@zeal/uikit/Text'
 
@@ -74,7 +74,6 @@ export const Layout = ({
     const [search, setSearch] = useState<string>('')
 
     const { formatMessage } = useIntl()
-
     const searchResult = validateAccountSearch({
         accountsMap: accounts,
         keystoreMap: keystores,
@@ -83,274 +82,266 @@ export const Layout = ({
         currencyHiddenMap,
     })
     return (
-        <Screen background="light" padding="form">
-            <Column spacing={0} shrink>
-                <ActionBar
-                    left={
-                        <Clickable onClick={() => onMsg({ type: 'close' })}>
-                            <Row spacing={4}>
-                                <BackIcon size={24} color="iconDefault" />
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
+            <ActionBar
+                left={
+                    <Clickable onClick={() => onMsg({ type: 'close' })}>
+                        <Row spacing={4}>
+                            <BackIcon size={24} color="iconDefault" />
 
-                                <Text
-                                    variant="title3"
-                                    weight="semi_bold"
-                                    color="textPrimary"
-                                    id="accounts-layout-label"
-                                >
-                                    <FormattedMessage
-                                        id="storage.manageAccounts.title"
-                                        defaultMessage="Wallets"
-                                    />
-                                </Text>
-                            </Row>
-                        </Clickable>
-                    }
-                    right={
-                        <IconButton
-                            variant="on_light"
-                            onClick={() =>
-                                onMsg({
-                                    type: 'add_new_account_click',
-                                })
-                            }
-                        >
-                            {({ color }) => <Plus size={24} color={color} />}
-                        </IconButton>
-                    }
-                />
-                <Column spacing={16} shrink>
-                    <Input
-                        keyboardType="default"
-                        onSubmitEditing={noop}
-                        leftIcon={
-                            <OutlineSearch size={24} color="iconDefault" />
+                            <Text
+                                variant="title3"
+                                weight="semi_bold"
+                                color="textPrimary"
+                                id="accounts-layout-label"
+                            >
+                                <FormattedMessage
+                                    id="storage.manageAccounts.title"
+                                    defaultMessage="Wallets"
+                                />
+                            </Text>
+                        </Row>
+                    </Clickable>
+                }
+                right={
+                    <IconButton
+                        variant="on_light"
+                        onClick={() =>
+                            onMsg({
+                                type: 'add_new_account_click',
+                            })
                         }
-                        rightIcon={<RightIcon searchResult={searchResult} />}
-                        variant="regular"
-                        value={search}
-                        onChange={(e) => {
-                            setSearch(e.nativeEvent.text)
-                        }}
-                        state="normal"
-                        placeholder={formatMessage({
-                            id: 'address_book.change_account.search_placeholder',
-                            defaultMessage: 'Add or search address',
-                        })}
-                    />
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        {(() => {
-                            switch (searchResult.type) {
-                                case 'accounts_not_found':
-                                    return <EmptySearch />
+                    >
+                        {({ color }) => <Plus size={24} color={color} />}
+                    </IconButton>
+                }
+            />
+            <Column spacing={16} shrink fill>
+                <Input
+                    keyboardType="default"
+                    onSubmitEditing={noop}
+                    leftIcon={<OutlineSearch size={24} color="iconDefault" />}
+                    rightIcon={<RightIcon searchResult={searchResult} />}
+                    variant="regular"
+                    value={search}
+                    onChange={(e) => {
+                        setSearch(e.nativeEvent.text)
+                    }}
+                    state="normal"
+                    placeholder={formatMessage({
+                        id: 'address_book.change_account.search_placeholder',
+                        defaultMessage: 'Add or search address',
+                    })}
+                />
+                <ScrollContainer>
+                    {(() => {
+                        switch (searchResult.type) {
+                            case 'accounts_not_found':
+                                return <EmptySearch />
 
-                                case 'accounts_not_found_search_valid_address':
-                                    return <EmptySearchForValidAddress />
+                            case 'accounts_not_found_search_valid_address':
+                                return <EmptySearchForValidAddress />
 
-                                case 'grouped_accounts': {
-                                    const { active, tracked } = searchResult
+                            case 'grouped_accounts': {
+                                const { active, tracked } = searchResult
 
-                                    return (
-                                        <Column spacing={24}>
-                                            <ActiveAccountsSection
-                                                accounts={active}
-                                                listItem={({ account }) => (
-                                                    <UnlockedListItem
-                                                        installationId={
-                                                            installationId
+                                return (
+                                    <Column spacing={24}>
+                                        <ActiveAccountsSection
+                                            accounts={active}
+                                            listItem={({ account }) => (
+                                                <UnlockedListItem
+                                                    installationId={
+                                                        installationId
+                                                    }
+                                                    currencyHiddenMap={
+                                                        currencyHiddenMap
+                                                    }
+                                                    selectionVariant="default"
+                                                    key={account.address}
+                                                    account={account}
+                                                    selected={(() => {
+                                                        switch (
+                                                            selectedProvider.type
+                                                        ) {
+                                                            case 'metamask':
+                                                                return false
+                                                            case 'zeal':
+                                                                return (
+                                                                    selectedProvider
+                                                                        .account
+                                                                        .address ===
+                                                                    account.address
+                                                                )
+
+                                                            default:
+                                                                return notReachable(
+                                                                    selectedProvider
+                                                                )
                                                         }
-                                                        currencyHiddenMap={
-                                                            currencyHiddenMap
-                                                        }
-                                                        selectionVariant="default"
-                                                        key={account.address}
-                                                        account={account}
-                                                        selected={(() => {
-                                                            switch (
-                                                                selectedProvider.type
-                                                            ) {
-                                                                case 'metamask':
-                                                                    return false
-                                                                case 'zeal':
-                                                                    return (
-                                                                        selectedProvider
-                                                                            .account
-                                                                            .address ===
-                                                                        account.address
-                                                                    )
+                                                    })()}
+                                                    keyStore={getKeyStore({
+                                                        keyStoreMap: keystores,
+                                                        address:
+                                                            account.address,
+                                                    })}
+                                                    portfolio={getPortfolio({
+                                                        address:
+                                                            account.address,
+                                                        portfolioMap,
+                                                    })}
+                                                    onMsg={onMsg}
+                                                />
+                                            )}
+                                            onMsg={onMsg}
+                                        />
 
-                                                                default:
-                                                                    return notReachable(
-                                                                        selectedProvider
-                                                                    )
-                                                            }
-                                                        })()}
-                                                        keyStore={getKeyStore({
-                                                            keyStoreMap:
-                                                                keystores,
-                                                            address:
-                                                                account.address,
-                                                        })}
-                                                        portfolio={getPortfolio(
-                                                            {
-                                                                address:
-                                                                    account.address,
-                                                                portfolioMap,
-                                                            }
-                                                        )}
-                                                        onMsg={onMsg}
-                                                    />
-                                                )}
-                                                onMsg={onMsg}
-                                            />
+                                        {(() => {
+                                            switch (alternativeProvider) {
+                                                case 'metamask':
+                                                    return (
+                                                        <Section>
+                                                            <GroupHeader
+                                                                right={null}
+                                                                left={({
+                                                                    color,
+                                                                    textVariant,
+                                                                    textWeight,
+                                                                }) => (
+                                                                    <Text
+                                                                        color={
+                                                                            color
+                                                                        }
+                                                                        variant={
+                                                                            textVariant
+                                                                        }
+                                                                        weight={
+                                                                            textWeight
+                                                                        }
+                                                                    >
+                                                                        <FormattedMessage
+                                                                            id="account.other_providers"
+                                                                            defaultMessage="Other providers"
+                                                                        />
+                                                                    </Text>
+                                                                )}
+                                                            />
 
-                                            {(() => {
-                                                switch (alternativeProvider) {
-                                                    case 'metamask':
-                                                        return (
-                                                            <Section>
-                                                                <GroupHeader
-                                                                    right={null}
-                                                                    left={({
-                                                                        color,
-                                                                        textVariant,
-                                                                        textWeight,
+                                                            <Group variant="default">
+                                                                <ListItem
+                                                                    size="regular"
+                                                                    aria-current={(() => {
+                                                                        switch (
+                                                                            selectedProvider.type
+                                                                        ) {
+                                                                            case 'zeal':
+                                                                                return false
+                                                                            case 'metamask':
+                                                                                return true
+
+                                                                            default:
+                                                                                return notReachable(
+                                                                                    selectedProvider
+                                                                                )
+                                                                        }
+                                                                    })()}
+                                                                    avatar={({
+                                                                        size,
                                                                     }) => (
-                                                                        <Text
-                                                                            color={
-                                                                                color
+                                                                        <CustomMetamask
+                                                                            size={
+                                                                                size
                                                                             }
-                                                                            variant={
-                                                                                textVariant
-                                                                            }
-                                                                            weight={
-                                                                                textWeight
-                                                                            }
-                                                                        >
-                                                                            <FormattedMessage
-                                                                                id="account.other_providers"
-                                                                                defaultMessage="Other providers"
-                                                                            />
-                                                                        </Text>
+                                                                        />
                                                                     )}
+                                                                    primaryText="MetaMask"
+                                                                    shortText={
+                                                                        <FormattedMessage
+                                                                            id="account.connect_with_metamask"
+                                                                            defaultMessage="Connect with MetaMask"
+                                                                        />
+                                                                    }
+                                                                    onClick={() =>
+                                                                        onMsg({
+                                                                            type: 'other_provider_selected',
+                                                                        })
+                                                                    }
                                                                 />
+                                                            </Group>
+                                                        </Section>
+                                                    )
+                                                case 'provider_unavailable':
+                                                    return null
 
-                                                                <Group variant="default">
-                                                                    <ListItem
-                                                                        size="regular"
-                                                                        aria-current={(() => {
-                                                                            switch (
-                                                                                selectedProvider.type
-                                                                            ) {
-                                                                                case 'zeal':
-                                                                                    return false
-                                                                                case 'metamask':
-                                                                                    return true
+                                                default:
+                                                    return notReachable(
+                                                        alternativeProvider
+                                                    )
+                                            }
+                                        })()}
 
-                                                                                default:
-                                                                                    return notReachable(
-                                                                                        selectedProvider
-                                                                                    )
-                                                                            }
-                                                                        })()}
-                                                                        avatar={({
-                                                                            size,
-                                                                        }) => (
-                                                                            <CustomMetamask
-                                                                                size={
-                                                                                    size
-                                                                                }
-                                                                            />
-                                                                        )}
-                                                                        primaryText="MetaMask"
-                                                                        shortText={
-                                                                            <FormattedMessage
-                                                                                id="account.connect_with_metamask"
-                                                                                defaultMessage="Connect with MetaMask"
-                                                                            />
-                                                                        }
-                                                                        onClick={() =>
-                                                                            onMsg(
-                                                                                {
-                                                                                    type: 'other_provider_selected',
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                </Group>
-                                                            </Section>
-                                                        )
-                                                    case 'provider_unavailable':
-                                                        return null
+                                        <TrackedAccountsSection
+                                            accounts={tracked}
+                                            listItem={({ account }) => (
+                                                <UnlockedListItem
+                                                    installationId={
+                                                        installationId
+                                                    }
+                                                    currencyHiddenMap={
+                                                        currencyHiddenMap
+                                                    }
+                                                    selectionVariant="default"
+                                                    key={account.address}
+                                                    account={account}
+                                                    selected={(() => {
+                                                        switch (
+                                                            selectedProvider.type
+                                                        ) {
+                                                            case 'metamask':
+                                                                return false
+                                                            case 'zeal':
+                                                                return (
+                                                                    selectedProvider
+                                                                        .account
+                                                                        .address ===
+                                                                    account.address
+                                                                )
 
-                                                    default:
-                                                        return notReachable(
-                                                            alternativeProvider
-                                                        )
-                                                }
-                                            })()}
-
-                                            <TrackedAccountsSection
-                                                accounts={tracked}
-                                                listItem={({ account }) => (
-                                                    <UnlockedListItem
-                                                        installationId={
-                                                            installationId
+                                                            default:
+                                                                return notReachable(
+                                                                    selectedProvider
+                                                                )
                                                         }
-                                                        currencyHiddenMap={
-                                                            currencyHiddenMap
-                                                        }
-                                                        selectionVariant="default"
-                                                        key={account.address}
-                                                        account={account}
-                                                        selected={(() => {
-                                                            switch (
-                                                                selectedProvider.type
-                                                            ) {
-                                                                case 'metamask':
-                                                                    return false
-                                                                case 'zeal':
-                                                                    return (
-                                                                        selectedProvider
-                                                                            .account
-                                                                            .address ===
-                                                                        account.address
-                                                                    )
-
-                                                                default:
-                                                                    return notReachable(
-                                                                        selectedProvider
-                                                                    )
-                                                            }
-                                                        })()}
-                                                        keyStore={getKeyStore({
-                                                            keyStoreMap:
-                                                                keystores,
-                                                            address:
-                                                                account.address,
-                                                        })}
-                                                        portfolio={getPortfolio(
-                                                            {
-                                                                address:
-                                                                    account.address,
-                                                                portfolioMap,
-                                                            }
-                                                        )}
-                                                        onMsg={onMsg}
-                                                    />
-                                                )}
-                                                onMsg={onMsg}
-                                            />
-                                        </Column>
-                                    )
-                                }
-
-                                /* istanbul ignore next */
-                                default:
-                                    return notReachable(searchResult)
+                                                    })()}
+                                                    keyStore={getKeyStore({
+                                                        keyStoreMap: keystores,
+                                                        address:
+                                                            account.address,
+                                                    })}
+                                                    portfolio={getPortfolio({
+                                                        address:
+                                                            account.address,
+                                                        portfolioMap,
+                                                    })}
+                                                    onMsg={onMsg}
+                                                />
+                                            )}
+                                            onMsg={onMsg}
+                                        />
+                                    </Column>
+                                )
                             }
-                        })()}
-                    </ScrollView>
-                </Column>
+
+                            /* istanbul ignore next */
+                            default:
+                                return notReachable(searchResult)
+                        }
+                    })()}
+                </ScrollContainer>
             </Column>
             <Spacer />
             <CTA onMsg={onMsg} searchResult={searchResult} />

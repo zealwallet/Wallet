@@ -132,7 +132,7 @@ export const Layout = ({
     }
 
     return (
-        <Screen padding="form" background="light">
+        <Screen padding="form" background="light" onNavigateBack={null}>
             <UIActionBar
                 top={
                     <Row spacing={8}>

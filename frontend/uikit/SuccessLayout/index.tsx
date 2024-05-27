@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 
 export const SuccessLayout = ({ title, onAnimationComplete }: Props) => {
     return (
-        <Screen padding="main" background="light">
+        <Screen padding="main" background="light" onNavigateBack={null}>
             <View style={styles.spacer} />
 
             <Column spacing={16} shrink alignX="center">

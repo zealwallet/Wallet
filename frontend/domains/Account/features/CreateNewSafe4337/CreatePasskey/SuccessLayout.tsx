@@ -19,6 +19,9 @@ import { Screen } from '@zeal/uikit/Screen'
 import { Spacer } from '@zeal/uikit/Spacer'
 import { Text } from '@zeal/uikit/Text'
 
+import { notReachable } from '@zeal/toolkit'
+import { ZealPlatform } from '@zeal/toolkit/OS/ZealPlatform'
+
 type Props = {
     onMsg: (msg: Msg) => void
 }
@@ -26,7 +29,11 @@ type Props = {
 type Msg = { type: 'close' }
 
 export const SuccessLayout = ({ onMsg }: Props) => (
-    <Screen padding="form" background="light">
+    <Screen
+        padding="form"
+        background="light"
+        onNavigateBack={() => onMsg({ type: 'close' })}
+    >
         <ActionBar
             left={
                 <IconButton
@@ -126,10 +133,28 @@ export const SuccessLayout = ({ onMsg }: Props) => (
             </Row>
             <Actions>
                 <Button size="regular" variant="primary" disabled>
-                    <FormattedMessage
-                        id="create-passkey.cta"
-                        defaultMessage="Enable biometrics"
-                    />
+                    {(() => {
+                        switch (ZealPlatform.OS) {
+                            case 'ios':
+                            case 'android':
+                                return (
+                                    <FormattedMessage
+                                        id="create-passkey.mobile.cta"
+                                        defaultMessage="Enable biometrics"
+                                    />
+                                )
+                            case 'web':
+                                return (
+                                    <FormattedMessage
+                                        id="create-passkey.extension.cta"
+                                        defaultMessage="Continue"
+                                    />
+                                )
+                            /* istanbul ignore next */
+                            default:
+                                return notReachable(ZealPlatform.OS)
+                        }
+                    })()}
                 </Button>
             </Actions>
         </Column>

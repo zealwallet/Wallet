@@ -7,7 +7,7 @@ import { CurrencyHiddenMap, CurrencyPinMap } from '@zeal/domains/Currency'
 import { SubmittedOfframpTransaction } from '@zeal/domains/Currency/domains/BankTransfer'
 import { SubmitedBridgesMap } from '@zeal/domains/Currency/domains/Bridge'
 import { BridgeWidget } from '@zeal/domains/Currency/features/BridgeWidget'
-import { KeyStore, KeyStoreMap } from '@zeal/domains/KeyStore'
+import { KeyStoreMap } from '@zeal/domains/KeyStore'
 import {
     CurrentNetwork,
     NetworkMap,
@@ -21,7 +21,6 @@ import { MainNetOrAllNetworks } from './MainNetOrAllNetworks'
 import { TestNetworkView } from './TestNetworkView'
 
 type Props = {
-    keystore: KeyStore
     account: Account
     portfolio: Portfolio
     fetchedAt: Date
@@ -36,14 +35,12 @@ type Props = {
     bankTransferInfo: BankTransferInfo
     currencyHiddenMap: CurrencyHiddenMap
     currencyPinMap: CurrencyPinMap
-    userMadeActionOnNextBestActionIds: string[]
     installationId: string
     onMsg: (msg: Msg) => void
 }
 
 export type Msg =
     | { type: 'reload_button_click' }
-    | { type: 'on_recovery_kit_setup'; address: Address }
     | MsgOf<typeof TestNetworkView>
     | MsgOf<typeof BridgeWidget>
     | MsgOf<typeof MainNetOrAllNetworks>
@@ -51,7 +48,6 @@ export type Msg =
 export const View = ({
     portfolio,
     fetchedAt,
-    keystore,
     account,
     currentNetwork,
     keyStoreMap,
@@ -64,7 +60,6 @@ export const View = ({
     bankTransferInfo,
     currencyHiddenMap,
     currencyPinMap,
-    userMadeActionOnNextBestActionIds,
     installationId,
     onMsg,
 }: Props) => {
@@ -73,9 +68,6 @@ export const View = ({
             return (
                 <MainNetOrAllNetworks
                     installationId={installationId}
-                    userMadeActionOnNextBestActionIds={
-                        userMadeActionOnNextBestActionIds
-                    }
                     currencyHiddenMap={currencyHiddenMap}
                     currencyPinMap={currencyPinMap}
                     bankTransferInfo={bankTransferInfo}
@@ -87,7 +79,6 @@ export const View = ({
                     onMsg={onMsg}
                     account={account}
                     portfolio={portfolio}
-                    keystore={keystore}
                     fetchedAt={fetchedAt}
                     submitedBridgesMap={submitedBridgesMap}
                     submittedOffRampTransactions={submittedOffRampTransactions}
@@ -100,9 +91,6 @@ export const View = ({
                     return (
                         <MainNetOrAllNetworks
                             installationId={installationId}
-                            userMadeActionOnNextBestActionIds={
-                                userMadeActionOnNextBestActionIds
-                            }
                             currencyHiddenMap={currencyHiddenMap}
                             currencyPinMap={currencyPinMap}
                             bankTransferInfo={bankTransferInfo}
@@ -114,7 +102,6 @@ export const View = ({
                             onMsg={onMsg}
                             account={account}
                             portfolio={portfolio}
-                            keystore={keystore}
                             fetchedAt={fetchedAt}
                             submitedBridgesMap={submitedBridgesMap}
                             submittedOffRampTransactions={

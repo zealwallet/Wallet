@@ -17,6 +17,7 @@ export type AvatarSize =
     | 24
     | 28
     | 32
+    | 40
     | 48
     | 64
     | 72
@@ -35,6 +36,7 @@ const AVATAR_SIZE_TO_BADGE_SIZE: Record<AvatarSize, BadgeSize> = {
     24: 10,
     28: 12,
     32: 16,
+    40: 16,
     48: 16,
     64: 16,
     72: 48,

@@ -19,7 +19,7 @@ export const NextStepSeparator = () => {
             <Avatar
                 backgroundColor="surfaceDefault"
                 border="borderSecondary"
-                size={28}
+                size={40}
             >
                 <LightArrowDown3 color="iconDefault" size={16} />
             </Avatar>

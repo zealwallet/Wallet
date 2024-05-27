@@ -35,7 +35,11 @@ type Msg = { type: 'close' } | { type: 'on_supported_networks_click' }
 export const Layout = ({ account, installationId, onMsg }: Props) => {
     const [state, setState] = useCopyTextToClipboard()
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
                 left={
                     <IconButton

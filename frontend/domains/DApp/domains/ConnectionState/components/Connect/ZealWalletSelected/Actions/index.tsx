@@ -91,7 +91,6 @@ export const Actions = ({
                             onMsg(msg)
                             break
 
-                        case 'close':
                         case 'confirmation_modal_close_clicked':
                             setModalState({ type: 'closed' })
                             break

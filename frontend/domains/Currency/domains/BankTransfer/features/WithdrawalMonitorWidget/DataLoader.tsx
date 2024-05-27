@@ -82,6 +82,7 @@ export const DataLoader = ({
                             case 'unblock_offramp_on_hold_compliance':
                             case 'unblock_offramp_on_hold_kyc':
                             case 'unblock_offramp_fiat_transfer_issued':
+                            case 'unblock_offramp_pending':
                                 return false
                             /* istanbul ignore next */
                             default:
@@ -122,6 +123,7 @@ export const DataLoader = ({
                     case 'unblock_offramp_on_hold_compliance':
                     case 'unblock_offramp_on_hold_kyc':
                     case 'unblock_offramp_fiat_transfer_issued':
+                    case 'unblock_offramp_pending':
                         break
                     /* istanbul ignore next */
                     default:

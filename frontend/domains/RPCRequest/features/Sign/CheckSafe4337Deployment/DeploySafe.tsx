@@ -5,7 +5,7 @@ import { Actions } from '@zeal/uikit/Actions'
 import { Button } from '@zeal/uikit/Button'
 import { Column } from '@zeal/uikit/Column'
 import { Header } from '@zeal/uikit/Header'
-import { BoldDangerTriangle } from '@zeal/uikit/Icon/BoldDangerTriangle'
+import { Setting } from '@zeal/uikit/Icon/Setting'
 import { Screen } from '@zeal/uikit/Screen'
 import { Spacer } from '@zeal/uikit/Spacer'
 
@@ -58,6 +58,9 @@ type Msg =
                   | 'drag'
                   | 'on_expand_request'
                   | 'on_4337_gas_currency_selected'
+                  | 'on_cancel_confirm_transaction_clicked'
+                  | 'on_safe_transaction_failure_accepted'
+                  | 'on_wrong_network_accepted'
           }
       >
 
@@ -98,7 +101,13 @@ export const DeploySafe = ({
                     )
                 case 'maximised':
                     return (
-                        <Screen background="light" padding="form">
+                        <Screen
+                            background="light"
+                            padding="form"
+                            onNavigateBack={() =>
+                                onMsg({ type: 'on_minimize_click' })
+                            }
+                        >
                             <ActionBar
                                 title={null}
                                 account={account}
@@ -112,21 +121,17 @@ export const DeploySafe = ({
                                     title={
                                         <FormattedMessage
                                             id="Sign.CheckSafeDeployment.title"
-                                            defaultMessage="Smart Wallet is not active on this network yet"
+                                            defaultMessage="Activate device on this network"
                                         />
                                     }
                                     subtitle={
                                         <FormattedMessage
                                             id="Sign.CheckSafeDeployment.subtitle"
-                                            defaultMessage="You’re trying to sign in to an app or sign an off-chain message.{br}{br}You need to activate your wallet on this network before you can do this."
-                                            values={{ br: '\n' }}
+                                            defaultMessage="Before you can sign in to an app or sign an off-chain message, you need to activate your device on this network. This happens after you have installed or recovered a smart wallet."
                                         />
                                     }
-                                    icon={({ size }) => (
-                                        <BoldDangerTriangle
-                                            size={size}
-                                            color="iconStatusWarning"
-                                        />
+                                    icon={({ size, color }) => (
+                                        <Setting size={size} color={color} />
                                     )}
                                 />
 
@@ -207,6 +212,9 @@ export const DeploySafe = ({
                             case 'drag':
                             case 'on_expand_request':
                             case 'on_4337_gas_currency_selected':
+                            case 'on_safe_transaction_failure_accepted':
+                            case 'on_wrong_network_accepted':
+                            case 'on_cancel_confirm_transaction_clicked':
                                 onMsg(msg)
                                 break
 
@@ -215,10 +223,6 @@ export const DeploySafe = ({
                                 onMsg({ type: 'on_safe_deployed' })
                                 break
 
-                            case 'on_safe_transaction_failure_accepted':
-                            case 'on_wrong_network_accepted':
-                            case 'on_cancel_confirm_transaction_clicked':
-                                onMsg({ type: 'on_safe_deployemnt_cancelled' })
                                 break
 
                             default:

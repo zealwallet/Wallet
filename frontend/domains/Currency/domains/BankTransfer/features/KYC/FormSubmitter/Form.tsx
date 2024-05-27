@@ -36,7 +36,7 @@ type Msg =
     | Extract<
           MsgOf<typeof PersonalDetailsForm>,
           {
-              type: 'close' | 'on_back_button_clicked'
+              type: 'close'
           }
       >
 
@@ -79,7 +79,6 @@ export const Form = ({
                     keyStoreMap={keyStoreMap}
                     onMsg={(msg) => {
                         switch (msg.type) {
-                            case 'on_back_button_clicked':
                             case 'close':
                                 onMsg(msg)
                                 break
@@ -111,7 +110,7 @@ export const Form = ({
                     initialResidenceDetails={state.initialForm}
                     onMsg={(msg) => {
                         switch (msg.type) {
-                            case 'on_back_button_clicked':
+                            case 'close':
                                 setState({
                                     type: 'personal_details',
                                     initialForm: state.personalDetails,
@@ -123,9 +122,6 @@ export const Form = ({
                                     personalDetails: state.personalDetails,
                                     residenceDetails: msg.completedForm,
                                 })
-                                break
-                            case 'close':
-                                onMsg(msg)
                                 break
                             /* istanbul ignore next */
                             default:
@@ -153,15 +149,12 @@ export const Form = ({
                                     },
                                 })
                                 break
-                            case 'on_back_button_clicked':
+                            case 'close':
                                 setState({
                                     type: 'residence_details',
                                     personalDetails: state.personalDetails,
                                     initialForm: state.residenceDetails,
                                 })
-                                break
-                            case 'close':
-                                onMsg(msg)
                                 break
                             /* istanbul ignore next */
                             default:

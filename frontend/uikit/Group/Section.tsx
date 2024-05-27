@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         flexShrink: 1,
         flexGrow: 1,
         flexBasis: 'auto',
-        rowGap: 8,
+        rowGap: 0,
     },
 })
 

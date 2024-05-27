@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const CheckMarkCircle = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 16 16"
             width={size}
             height={size}
@@ -26,6 +27,6 @@ export const CheckMarkCircle = ({ size, color }: Props) => {
                 fill="currentColor"
                 fillOpacity="0.7"
             />
-        </Svg>
+        </SvgIcon>
     )
 }

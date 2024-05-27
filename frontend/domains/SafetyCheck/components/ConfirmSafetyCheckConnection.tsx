@@ -18,7 +18,6 @@ type Props = {
 }
 
 export type Msg =
-    | { type: 'close' }
     | { type: 'on_user_confirmed_connection_with_safety_checks' }
     | { type: 'confirmation_modal_close_clicked' }
 

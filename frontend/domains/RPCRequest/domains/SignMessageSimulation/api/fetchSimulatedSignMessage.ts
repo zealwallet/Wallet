@@ -93,7 +93,14 @@ const parseSignMessageSimulationResponse = (
                     type: match(messageDto.type, 'Permit2SignMessage' as const),
                     approveTo: parseSmartContract(messageDto.approveTo),
                     allowances: array(messageDto.allowances).andThen((arr) =>
-                        combine(arr.map(parsePermitAllowance))
+                        combine(
+                            arr.map((allowance) =>
+                                parsePermitAllowance(
+                                    allowance,
+                                    input.currencies
+                                )
+                            )
+                        )
                     ),
                 }),
             ])

@@ -101,7 +101,6 @@ export const Modal = ({
                 <UIModal>
                     <DetailsView
                         installationId={installationId}
-                        networkRPCMap={networkRPCMap}
                         currencyHiddenMap={currencyHiddenMap}
                         keystoreMap={keystoreMap}
                         accounts={accounts}

@@ -188,7 +188,7 @@ export const TokenSelected = ({
 
                             case 'on_completed_transaction_close_click':
                             case 'on_completed_safe_transaction_close_click':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                                 onMsg({ type: 'close' })
                                 break
                             case 'on_expand_request':

@@ -46,7 +46,7 @@ As a user I should be able to click on a transaction to see more details about i
 
     expect(await within(detailModal).findAllByText('$0.01')).toHaveLength(2)
     expect(
-        await within(detailModal).findByText('To 0x2b5D...605C')
+        await within(detailModal).findByText('To 0x2b5d...605c')
     ).toBeInTheDocument()
 
     expect(await within(detailModal).findByText('Sent to')).toBeInTheDocument()
@@ -58,7 +58,7 @@ As a user I should be able to click on a transaction to see more details about i
         await within(detailModal).findByText('Transaction hash')
     ).toBeInTheDocument()
     expect(
-        await within(detailModal).findByText('0x2b5D...605C')
+        await within(detailModal).findByText('0x2b5d...605c')
     ).toBeInTheDocument()
 
     expect(await within(detailModal).findByText('Network')).toBeInTheDocument()
@@ -194,14 +194,14 @@ As a user I should be able to click on a transaction to see more details about i
     detailModal = await screen.findByRole('dialog')
 
     expect(
-        await within(detailModal).findByText('From 0x2c29...B299')
+        await within(detailModal).findByText('From 0x2c29...b299')
     ).toBeInTheDocument()
 
     expect(
         await within(detailModal).findByText('Received from')
     ).toBeInTheDocument()
     expect(
-        await within(detailModal).findByText('0x2c29...B299')
+        await within(detailModal).findByText('0x2c29...b299')
     ).toBeInTheDocument()
 
     expect(

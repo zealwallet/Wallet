@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { SectionListData } from 'react-native'
 
@@ -6,7 +6,7 @@ import { ActionBar } from '@zeal/uikit/ActionBar'
 import { Column } from '@zeal/uikit/Column'
 import { EmptyStateWidget } from '@zeal/uikit/EmptyStateWidget'
 import { Header } from '@zeal/uikit/Header'
-import { CloseCross } from '@zeal/uikit/Icon/Actions/CloseCross'
+import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { OutlineSearch } from '@zeal/uikit/Icon/OutlineSearch'
 import { QuestionCircle } from '@zeal/uikit/Icon/QuestionCircle'
 import { IconButton } from '@zeal/uikit/IconButton'
@@ -20,17 +20,19 @@ import { Country, CountryISOCode } from '@zeal/domains/Country'
 
 import { Item } from './Item'
 
-const PRIORITY_COUNTRIES = new Set<CountryISOCode>([
+export const PRIORITY_COUNTRIES = new Set<CountryISOCode>([
     'GB',
     'US',
     'DE',
     'JP',
     'NG',
-]) // TODO: Does it make sense for this to be on a domain level?
+])
 
 type Props = {
     selectedCountry: CountryISOCode | null
+    title: ReactNode
     countries: Country[]
+    priorityCountries: Set<CountryISOCode>
     onMsg: (msg: Msg) => void
 }
 
@@ -38,8 +40,17 @@ type Msg =
     | { type: 'close' }
     | { type: 'on_country_selected'; countryCode: CountryISOCode }
 
+export const Title = () => (
+    <FormattedMessage
+        id="countrySelector.title"
+        defaultMessage="Choose country"
+    />
+)
+
 export const CountrySelector = ({
     selectedCountry,
+    priorityCountries,
+    title,
     countries,
     onMsg,
 }: Props) => {
@@ -47,7 +58,7 @@ export const CountrySelector = ({
     const [search, setSearch] = useState<string>('')
 
     const priorityCountriesList = countries
-        .filter((country) => PRIORITY_COUNTRIES.has(country.code))
+        .filter((country) => priorityCountries.has(country.code))
         .filter((country) => {
             return (
                 !search ||
@@ -59,7 +70,7 @@ export const CountrySelector = ({
         const passesSearch =
             !search || country.name.toLowerCase().includes(search.toLowerCase())
 
-        return passesSearch && !PRIORITY_COUNTRIES.has(country.code)
+        return passesSearch && !priorityCountries.has(country.code)
     })
 
     const sections: SectionListData<Country>[] = [
@@ -68,27 +79,24 @@ export const CountrySelector = ({
     ]
 
     return (
-        <Screen background="light" padding="form">
+        <Screen
+            background="light"
+            padding="form"
+            onNavigateBack={() => onMsg({ type: 'close' })}
+        >
             <ActionBar
-                right={
+                left={
                     <IconButton
                         variant="on_light"
                         onClick={() => onMsg({ type: 'close' })}
                     >
-                        {({ color }) => <CloseCross size={24} color={color} />}
+                        {({ color }) => <BackIcon size={24} color={color} />}
                     </IconButton>
                 }
             />
 
             <Column spacing={24} fill shrink>
-                <Header
-                    title={
-                        <FormattedMessage
-                            id="countrySelector.title"
-                            defaultMessage="Choose country"
-                        />
-                    }
-                />
+                <Header title={title} />
                 <Column spacing={12} fill shrink>
                     <Input
                         keyboardType="default"
@@ -128,6 +136,7 @@ export const CountrySelector = ({
 
                     <SectionList
                         variant="grouped"
+                        keyboardShouldPersistTaps="handled"
                         itemSpacing={8}
                         sectionSpacing={8}
                         sections={sections}

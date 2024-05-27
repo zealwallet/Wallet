@@ -1,6 +1,7 @@
 import { generateRandomBigint } from '@zeal/toolkit/Number'
 
 import { Account } from '@zeal/domains/Account'
+import { checksum } from '@zeal/domains/Address/helpers/checksum'
 import { Network } from '@zeal/domains/Network'
 
 type Params = {
@@ -29,7 +30,7 @@ export const generateUnblockLoginRequest = ({
     ).toISOString()
 
     const message = `${UNBLOCK_DOMAIN} wants you to sign in with your Ethereum account:
-${account.address}
+${checksum(account.address)}
 
 Sign in with Ethereum
 

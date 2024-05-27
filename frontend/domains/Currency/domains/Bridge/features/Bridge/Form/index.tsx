@@ -18,11 +18,16 @@ import { DEFAULT_SWAP_SLIPPAGE_PERCENT } from '@zeal/domains/Currency/domains/Sw
 import { ImperativeError } from '@zeal/domains/Error'
 import { captureError } from '@zeal/domains/Error/helpers/captureError'
 import { KeyStoreMap } from '@zeal/domains/KeyStore'
-import { Network, NetworkMap, NetworkRPCMap } from '@zeal/domains/Network'
 import {
-    ETHEREUM,
+    Network,
+    NetworkMap,
+    NetworkRPCMap,
+    PredefinedNetwork,
+} from '@zeal/domains/Network'
+import {
+    ARBITRUM,
+    BASE,
     findNetworkByHexChainId,
-    POLYGON,
 } from '@zeal/domains/Network/constants'
 import { getNativeTokenAddress } from '@zeal/domains/Network/helpers/getNativeTokenAddress'
 import { Portfolio } from '@zeal/domains/Portfolio'
@@ -31,6 +36,9 @@ import { Layout } from './Layout'
 import { Modal, State as ModalState } from './Modal'
 
 import { getCryptoCurrency } from '../helpers/getCryptoCurrency'
+
+const DEFAULT_FROM_NETWORK: PredefinedNetwork = ARBITRUM
+const DEFAULT_TO_NETWORK: PredefinedNetwork = BASE
 
 type Props = {
     account: Account
@@ -115,9 +123,9 @@ const initForm = ({
         })
 
         const toNetwork: Network =
-            fromCurrency.networkHexChainId === ETHEREUM.hexChainId
-                ? POLYGON
-                : ETHEREUM
+            fromCurrency.networkHexChainId === DEFAULT_FROM_NETWORK.hexChainId
+                ? DEFAULT_TO_NETWORK
+                : DEFAULT_FROM_NETWORK
 
         const toCurrencyIds =
             currencies[fromCurrency.networkHexChainId][toNetwork.hexChainId].to
@@ -146,10 +154,12 @@ const initForm = ({
             networkMap,
         }
     } else {
-        const fromNetwork: Network = ETHEREUM
+        const fromNetwork: Network = DEFAULT_FROM_NETWORK
 
         const toNetwork: Network =
-            fromNetwork.hexChainId === ETHEREUM.hexChainId ? POLYGON : ETHEREUM
+            fromNetwork.hexChainId === DEFAULT_FROM_NETWORK.hexChainId
+                ? DEFAULT_TO_NETWORK
+                : DEFAULT_FROM_NETWORK
 
         const { from, to } =
             currencies[fromNetwork.hexChainId][toNetwork.hexChainId]
@@ -205,9 +215,9 @@ const setFromNetwork = ({
         newFromNetwork.hexChainId
     ][currentToNetworkHexId]
         ? currentToNetworkHexId
-        : newFromNetwork.hexChainId === ETHEREUM.hexChainId
-        ? POLYGON.hexChainId
-        : ETHEREUM.hexChainId
+        : newFromNetwork.hexChainId === DEFAULT_FROM_NETWORK.hexChainId
+        ? DEFAULT_TO_NETWORK.hexChainId
+        : DEFAULT_FROM_NETWORK.hexChainId
 
     const { from, to } =
         currenciesMatrix.currencies[newFromNetwork.hexChainId][

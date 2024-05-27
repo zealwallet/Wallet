@@ -120,7 +120,6 @@ export const ShowOnRampAccountDetails = ({
                 onMsg={(msg) => {
                     switch (msg.type) {
                         case 'on_sent_from_bank_click':
-                        case 'on_back_button_clicked':
                         case 'close':
                             onMsg(msg)
                             break

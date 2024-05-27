@@ -49,16 +49,20 @@ export const SimulateCancel = ({
                 case 'Optimism':
                 case 'OptimismGoerli':
                 case 'Base':
+                case 'OPBNB':
+                case 'Blast':
                     return (
                         <StopIsNotSupportedPopup
                             network={network}
                             onMsg={onMsg}
                         />
                     )
+
                 case 'Ethereum':
                 case 'BSC':
                 case 'Polygon':
                 case 'PolygonZkevm':
+                case 'Linea':
                 case 'Fantom':
                 case 'Gnosis':
                 case 'Celo':

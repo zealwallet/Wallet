@@ -40,7 +40,7 @@ export const Route = ({ pollable, onMsg }: Props) => {
     switch (pollable.type) {
         case 'reloading':
             return (
-                <Column spacing={12}>
+                <Column spacing={8}>
                     <Header
                         onMsg={onMsg}
                         swapSlippagePercent={
@@ -70,7 +70,7 @@ export const Route = ({ pollable, onMsg }: Props) => {
 
         case 'subsequent_failed':
             return (
-                <Column spacing={12}>
+                <Column spacing={8}>
                     <Header
                         onMsg={onMsg}
                         swapSlippagePercent={
@@ -122,7 +122,7 @@ export const Route = ({ pollable, onMsg }: Props) => {
         case 'loaded': {
             return (
                 route && (
-                    <Column spacing={12}>
+                    <Column spacing={8}>
                         <Header
                             onMsg={onMsg}
                             swapSlippagePercent={

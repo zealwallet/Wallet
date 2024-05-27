@@ -7,7 +7,11 @@ import { Account, AccountsMap } from '@zeal/domains/Account'
 import { SelectTypeOfAccountToAdd } from '@zeal/domains/Account/components/SelectTypeOfAccountToAdd'
 import { AddFromSecretPhrase } from '@zeal/domains/Account/features/AddFromSecretPhrase'
 import { Receive } from '@zeal/domains/Account/features/Receive'
-import { CurrencyHiddenMap, CurrencyPinMap } from '@zeal/domains/Currency'
+import {
+    CurrencyHiddenMap,
+    CurrencyPinMap,
+    GasCurrencyPresetMap,
+} from '@zeal/domains/Currency'
 import { TransfersSetupWithDifferentWallet } from '@zeal/domains/Currency/domains/BankTransfer/components/TransfersSetupWithDifferentWallet'
 import { BridgeSubmitted } from '@zeal/domains/Currency/domains/Bridge'
 import { CheckBridgeSubmittedStatus } from '@zeal/domains/Currency/domains/Bridge/features/CheckBridgeSubmittedStatus'
@@ -27,8 +31,7 @@ import { CustomCurrencyMap } from '@zeal/domains/Storage'
 import { Token } from '@zeal/domains/Token'
 import { Submited } from '@zeal/domains/TransactionRequest'
 import { SignAndSubmit } from '@zeal/domains/TransactionRequest/features/SignAndSubmit'
-
-import { ThisWalletIsTrackedOnly } from './ThisWalletIsTrackedOnly'
+import { FeePresetMap } from '@zeal/domains/Transactions/api/fetchFeeForecast'
 
 type Props = {
     state: State
@@ -44,6 +47,8 @@ type Props = {
     networkRPCMap: NetworkRPCMap
     currencyHiddenMap: CurrencyHiddenMap
     currencyPinMap: CurrencyPinMap
+    feePresetMap: FeePresetMap
+    gasCurrencyPresetMap: GasCurrencyPresetMap
     onMsg: (msg: Msg) => void
 }
 
@@ -73,9 +78,6 @@ export type State =
           >
       }
     | {
-          type: 'tracked_only_wallet_selected'
-      }
-    | {
           type: 'receive_token'
       }
     | {
@@ -88,7 +90,6 @@ type Msg =
     | MsgOf<typeof CheckBridgeSubmittedStatus>
     | MsgOf<typeof SelectTypeOfAccountToAdd>
     | MsgOf<typeof AddFromSecretPhrase>
-    | MsgOf<typeof ThisWalletIsTrackedOnly>
     | MsgOf<typeof TransfersSetupWithDifferentWallet>
     | Extract<
           MsgOf<typeof SignAndSubmit>,
@@ -115,6 +116,8 @@ export const Modal = ({
     networkMap,
     currencyHiddenMap,
     currencyPinMap,
+    feePresetMap,
+    gasCurrencyPresetMap,
     onMsg,
 }: Props) => {
     switch (state.type) {
@@ -142,7 +145,7 @@ export const Modal = ({
                                     onMsg(msg)
                                     break
                                 case 'on_sign_cancel_button_clicked':
-                                case 'transaction_cancel_success':
+                                case 'on_transaction_cancelled_successfully_close_clicked':
                                 case 'on_minimize_click':
                                 case 'on_completed_transaction_close_click':
                                 case 'transaction_failure_accepted':
@@ -226,9 +229,6 @@ export const Modal = ({
                     />
                 </UIModal>
             )
-
-        case 'tracked_only_wallet_selected':
-            return <ThisWalletIsTrackedOnly onMsg={onMsg} />
 
         case 'receive_token':
             return (

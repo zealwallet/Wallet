@@ -1,5 +1,7 @@
 import React from 'react'
-import { ClipPath, Defs, G, Path, Svg } from 'react-native-svg'
+import { ClipPath, Defs, G, Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -10,8 +12,7 @@ type Props = {
 
 export const Fingerprint = ({ size, color }: Props) => {
     return (
-        <Svg
-            style={{ flexShrink: 0 }}
+        <SvgIcon
             viewBox="0 0 24 24"
             width={size}
             height={size}
@@ -29,6 +30,6 @@ export const Fingerprint = ({ size, color }: Props) => {
                     <Path fill="#fff" d="M2 2h20v20H2z" />
                 </ClipPath>
             </Defs>
-        </Svg>
+        </SvgIcon>
     )
 }

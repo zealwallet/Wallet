@@ -86,7 +86,7 @@ export const injectProvider = ({
     }
     const provider = state.currentProvider
 
-    sendMsgTo.addEventListener('message', (event: MessageEvent<unknown>) => {
+    window.addEventListener('message', (event: MessageEvent<unknown>) => {
         const msg = parseZwidgetToProvider(event.data).getSuccessResult()
         if (!msg) {
             return

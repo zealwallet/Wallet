@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
+import * as Haptics from 'expo-haptics'
+
 import { ActionBar } from '@zeal/uikit/ActionBar'
-import { Column } from '@zeal/uikit/Column'
 import { BackIcon } from '@zeal/uikit/Icon/BackIcon'
 import { IconButton } from '@zeal/uikit/IconButton'
 import { KeyPad } from '@zeal/uikit/Keypad'
@@ -35,6 +36,8 @@ type Msg =
     | { type: 'session_password_decrypted'; sessionPassword: string }
     | { type: 'lock_screen_close_click' }
 
+const PIN_CLEAR_TIMEOUT_MS = 1000
+
 export const PinLockScreen = ({ encryptedPassword, onMsg }: Props) => {
     const { formatMessage } = useIntl()
     const [pin, setPin] = useState<string>('')
@@ -46,7 +49,7 @@ export const PinLockScreen = ({ encryptedPassword, onMsg }: Props) => {
 
         switch (validationResult.type) {
             case 'Failure':
-                break
+                return
             case 'Success':
                 setDecryptLoadable({
                     type: 'loading',
@@ -55,7 +58,7 @@ export const PinLockScreen = ({ encryptedPassword, onMsg }: Props) => {
                         userPassword: validationResult.data,
                     },
                 })
-                break
+                return
             /* istanbul ignore next */
             default:
                 return notReachable(validationResult)
@@ -68,24 +71,35 @@ export const PinLockScreen = ({ encryptedPassword, onMsg }: Props) => {
         switch (decryptLoadable.type) {
             case 'not_asked':
             case 'loading':
-                break
+                return
             case 'error':
-                setPin('')
-                break
+                Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Error
+                )
+                const timeout = setTimeout(() => {
+                    setPin('')
+                    setDecryptLoadable({ type: 'not_asked' })
+                }, PIN_CLEAR_TIMEOUT_MS)
+
+                return () => clearTimeout(timeout)
             case 'loaded':
                 liveMsg.current({
                     type: 'session_password_decrypted',
                     sessionPassword: decryptLoadable.data.sessionPassword,
                 })
-                break
+                return
             /* istanbul ignore next */
             default:
                 return notReachable(decryptLoadable)
         }
-    }, [decryptLoadable, liveMsg])
+    }, [decryptLoadable, setDecryptLoadable, liveMsg])
 
     return (
-        <Screen padding="pin" background="light">
+        <Screen
+            padding="pin"
+            background="light"
+            onNavigateBack={() => onMsg({ type: 'lock_screen_close_click' })}
+        >
             <ActionBar
                 left={
                     <IconButton
@@ -103,54 +117,83 @@ export const PinLockScreen = ({ encryptedPassword, onMsg }: Props) => {
                 }
             />
 
-            <Column spacing={32} alignX="center" alignY="center" fill>
-                <Text variant="title3" color="textPrimary" weight="medium">
-                    <FormattedMessage
-                        id="password.enter_pin"
-                        defaultMessage="Enter PIN"
+            <KeyPad.Layout
+                keyPad={
+                    <KeyPad
+                        leftAction={
+                            <BiometricButton
+                                onMsg={(msg) => {
+                                    switch (msg.type) {
+                                        case 'on_pin_retrieved':
+                                            setPin(msg.savedPin)
+                                            break
+                                        /* istanbul ignore next */
+                                        default:
+                                            return notReachable(msg.type)
+                                    }
+                                }}
+                            />
+                        }
+                        disabled={pin.length === PIN_LENGTH}
+                        rightAction={
+                            <KeyPad.BackSpaceButton
+                                aria-label={formatMessage({
+                                    id: 'password.removeLastDigit',
+                                    defaultMessage: 'Remove last digit',
+                                })}
+                                disabled={(() => {
+                                    switch (decryptLoadable.type) {
+                                        case 'not_asked':
+                                        case 'loaded':
+                                            return false
+                                        case 'loading':
+                                        case 'error':
+                                            return true
+                                        default:
+                                            return notReachable(decryptLoadable)
+                                    }
+                                })()}
+                                onPress={() =>
+                                    setPin((prev) => prev.slice(0, -1))
+                                }
+                            />
+                        }
+                        onPress={(digit) =>
+                            setPin((prev) =>
+                                `${prev}${digit}`.substring(0, PIN_LENGTH)
+                            )
+                        }
                     />
-                </Text>
+                }
+            >
+                <KeyPad.Content>
+                    <Text variant="title3" color="textPrimary" weight="medium">
+                        <FormattedMessage
+                            id="password.enter_pin"
+                            defaultMessage="Enter PIN"
+                        />
+                    </Text>
 
-                <Steps
-                    length={PIN_LENGTH}
-                    progress={pin.length}
-                    state="primary"
-                />
-
-                <Subtitle decryptionLoadable={decryptLoadable} />
-            </Column>
-
-            {/*FIXME @Nicvaniek BiometricButton makes the leftAction jump in KeyPad due to conditional null */}
-            <KeyPad
-                leftAction={
-                    <BiometricButton
-                        onMsg={(msg) => {
-                            switch (msg.type) {
-                                case 'on_pin_retrieved':
-                                    setPin(msg.savedPin)
-                                    break
-                                /* istanbul ignore next */
+                    <Steps
+                        length={PIN_LENGTH}
+                        progress={pin.length}
+                        state={(() => {
+                            switch (decryptLoadable.type) {
+                                case 'not_asked':
+                                case 'loading':
+                                case 'loaded':
+                                    return 'primary'
+                                case 'error':
+                                    return 'warning'
                                 default:
-                                    return notReachable(msg.type)
+                                    return notReachable(decryptLoadable)
                             }
-                        }}
+                        })()}
                     />
-                }
-                disabled={false}
-                rightAction={
-                    <KeyPad.BackSpaceButton
-                        aria-label={formatMessage({
-                            id: 'password.removeLastDigit',
-                            defaultMessage: 'Remove last digit',
-                        })}
-                        disabled={false}
-                        onPress={() => setPin((prev) => prev.slice(0, -1))}
-                    />
-                }
-                onPress={(digit) =>
-                    setPin((prev) => `${prev}${digit}`.substring(0, PIN_LENGTH))
-                }
-            />
+
+                    <Subtitle decryptionLoadable={decryptLoadable} />
+                </KeyPad.Content>
+            </KeyPad.Layout>
         </Screen>
     )
 }

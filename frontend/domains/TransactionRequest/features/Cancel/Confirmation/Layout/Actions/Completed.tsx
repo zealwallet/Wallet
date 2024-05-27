@@ -28,7 +28,7 @@ type Props = {
 }
 
 export type Msg = {
-    type: 'transaction_cancel_success'
+    type: 'on_transaction_cancelled_successfully_close_clicked'
     completedTransaction: SubmitedTransactionCompleted
     transactionRequest: CancelSubmited
 }
@@ -94,7 +94,7 @@ export const Completed = ({
                             size="regular"
                             onClick={() =>
                                 onMsg({
-                                    type: 'transaction_cancel_success',
+                                    type: 'on_transaction_cancelled_successfully_close_clicked',
                                     completedTransaction,
                                     transactionRequest,
                                 })
@@ -125,7 +125,7 @@ export const Completed = ({
                             size="regular"
                             onClick={() =>
                                 onMsg({
-                                    type: 'transaction_cancel_success',
+                                    type: 'on_transaction_cancelled_successfully_close_clicked',
                                     completedTransaction,
                                     transactionRequest,
                                 })

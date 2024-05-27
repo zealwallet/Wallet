@@ -143,8 +143,6 @@ export const Flow = ({
                                             toAddress: msg.address,
                                             collection,
                                             nft,
-                                            network,
-                                            networkRPCMap,
                                         }
                                     ),
                                 })
@@ -163,8 +161,6 @@ export const Flow = ({
                                                     .account.address,
                                             collection,
                                             nft,
-                                            network,
-                                            networkRPCMap,
                                         }
                                     ),
                                 })
@@ -180,8 +176,6 @@ export const Flow = ({
                                             toAddress: msg.account.address,
                                             collection,
                                             nft,
-                                            network,
-                                            networkRPCMap,
                                         }
                                     ),
                                 })
@@ -223,7 +217,7 @@ export const Flow = ({
                             case 'on_minimize_click':
                             case 'on_completed_transaction_close_click':
                             case 'on_completed_safe_transaction_close_click':
-                            case 'transaction_cancel_success':
+                            case 'on_transaction_cancelled_successfully_close_clicked':
                             case 'transaction_cancel_failure_accepted':
                             case 'transaction_failure_accepted':
                             case 'on_safe_transaction_failure_accepted':

@@ -61,7 +61,7 @@ export const AddLabel = ({
     }
 
     return (
-        <Screen background="light" padding="form">
+        <Screen background="light" padding="form" onNavigateBack={onBackClick}>
             <ActionBar
                 left={
                     <IconButton variant="on_light" onClick={onBackClick}>

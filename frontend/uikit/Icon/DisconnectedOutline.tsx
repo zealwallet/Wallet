@@ -1,5 +1,7 @@
 import React from 'react'
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { SvgIcon } from '@zeal/uikit/SvgIcon'
 
 import { Color, colors } from '../colors'
 
@@ -9,8 +11,7 @@ type Props = {
 }
 
 export const DisconnectedOutline = ({ size, color }: Props) => (
-    <Svg
-        style={{ flexShrink: 0 }}
+    <SvgIcon
         viewBox="0 0 24 24"
         width={size}
         height={size}
@@ -29,5 +30,5 @@ export const DisconnectedOutline = ({ size, color }: Props) => (
             d="M19.9497 9.70733C21.5118 8.14524 21.5118 5.61258 19.9497 4.05048C18.3876 2.48838 15.855 2.48838 14.2929 4.05048L12.1716 6.1718L17.8284 11.8287L19.9497 9.70733ZM15.3535 5.11114L14.2929 6.1718L17.8284 9.70733L18.8891 8.64667C19.8654 7.67036 19.8654 6.08745 18.8891 5.11114C17.9128 4.13483 16.3299 4.13483 15.3535 5.11114Z"
             fill="currentColor"
         />
-    </Svg>
+    </SvgIcon>
 )

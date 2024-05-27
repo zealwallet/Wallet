@@ -1,0 +1,11 @@
+{
+    "platforms": ["ios", "android"],
+    "ios": {
+        "modules": ["ZealReactNativeCryptoModule"]
+    },
+    "android": {
+        "modules": [
+            "expo.modules.ZealReactNativeCrypto.ZealReactNativeCryptoModule"
+        ]
+    }
+}
