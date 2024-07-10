@@ -8,8 +8,9 @@ We are dedicated to building the most secure self-custodial crypto wallet in the
 
 Security is at the core of our development process. We have engaged security experts and independent researchers to audit our codebase regularly. As of now, Zeal has undergone the following security audits:
 
-1. [Doyensec Zeal Security Report - Q3 2023 (After Retest)](https://github.com/zealwallet/Wallet/blob/main/audits/Doyensec_Zeal_SecurityReport_Q32023_v5_AfterRetest.pdf)
-2. [Zeal Security Audit Report - February 2023](https://github.com/zealwallet/Wallet/blob/main/audits/Zeal%20Security%20Audit%20Report%20Feb%202023.pdf)
+1. [Zeal Security Audit Report - February 2023](https://github.com/zealwallet/Wallet/blob/main/audits/Zeal%20Security%20Audit%20Report%20Feb%202023.pdf)
+2. [Doyensec Zeal Security Report - September 2023 (after retest)](https://github.com/zealwallet/Wallet/blob/main/audits/Doyensec_Zeal_SecurityReport_Q32023_v5_AfterRetest.pdf)
+3. [Zeal Security Audit Report - December 2023](https://github.com/zealwallet/Wallet/blob/main/audits/Zeal%20Security%20Audit%20Report%20Dec%202023.pdf)
 
 We are committed to maintaining a high level of security for Zeal and plan to undergo a minimum of two security audits per year to ensure continuous improvement and adherence to best practices.
 
