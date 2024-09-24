@@ -12,6 +12,7 @@ Security is at the core of our development process. We have engaged security exp
 2. [Doyensec Zeal Security Report - September 2023 (after retest)](https://github.com/zealwallet/Wallet/blob/main/audits/Doyensec_Zeal_SecurityReport_Q32023_v5_AfterRetest.pdf)
 3. [Zeal Security Audit Report - December 2023](https://github.com/zealwallet/Wallet/blob/main/audits/Zeal%20Security%20Audit%20Report%20Dec%202023.pdf)
 4. [Zeal Security Audit Report - May 2024](https://github.com/zealwallet/Wallet/blob/main/audits/Zeal%20Security%20Audit%20Report%20May%202024.pdf)
+5. [yAudit_Qantura_rebalance - September 2024](https://github.com/zealwallet/Wallet/blob/main/audits/yAudit_Qantura_rebalance.pdf)
 
 We are committed to maintaining a high level of security for Zeal and plan to undergo a minimum of two security audits per year to ensure continuous improvement and adherence to best practices.
 
